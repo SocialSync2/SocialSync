@@ -753,11 +753,19 @@ async function submitForm(e) {
       .map(input => input.value.trim())
       .filter(value => value !== '');
     const vipGuestText = vipGuestValues.join(', ');
+
+    const organizerInputs = document.querySelectorAll('input[name="vip_guest[]"]');
+    const organizerValues = Array.from(organizerInputs)
+      .map(input => input.value.trim())
+      .filter(value => value !== '');
+    const organizerText = organizerValues.join(', ');
+
+
     
     const formData = {
       programme_name: document.getElementById('programme').value,
       programme_date: document.getElementById('date').value,
-      organizer: document.querySelector('input[name="organizer[]"]')?.value || '',
+      organizer: oganizerText,
       daerah: document.getElementById('daerah-dropdown')?.value || '',
       venue_capacity: document.getElementById('ip1-tempat')?.value || '',
       objective: document.getElementById('ip1-objektif')?.value || '',
@@ -804,7 +812,7 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxsqJ3ePkzmYzkfusskZXjemzr2qrE4TFtzG_K6MAi-MbmmkbhRrRJWMP6QRt4by0Mi/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzN5nRI9Pr8cS2pYvDeNJC0J4nZauIb5lOsEkNcNHw67v0JJQjWHvBA7xbqla0FVRHkKQ/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -960,7 +968,7 @@ function setupPrint() {
     const organizerValues = Array.from(vipGuestInputs)
       .map(input => input.value.trim())
       .filter(value => value !== '');
-    const vipGuestText = vipGuestValues.join(', ');
+    const organizerText = organizerValues.join(', ');
     
     printContent.innerHTML = `
       <div class="print-header">
