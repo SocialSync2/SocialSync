@@ -768,7 +768,7 @@ async function submitForm(e) {
       .filter(value => value !== '');
     const vipGuestText = vipGuestValues.join(', ');
 
-    const organizerInputs = document.querySelectorAll('input[name="orgnizer[]"]');
+    const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
     const organizerValues = Array.from(organizerInputs)
       .map(input => input.value.trim())
       .filter(value => value !== '');
