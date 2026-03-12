@@ -790,13 +790,13 @@ async function submitForm(e) {
       total_attendance: document.getElementById('ip1-bil-tetamu')?.value || '',
       media_present: document.getElementById('ip1-pihak-media')?.value || '',
       selected_media_channels: selectedMediaText,
-      media_coverage_percent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,cent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,
+      media_coverage_percent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,
       ip2_total_respondent: document.getElementById('ip2-total-respondent')?.value || 0,
       ip2_positive_respondent: document.getElementById('ip2-positive-respondent')?.value || 0,
       ip2_satisfaction_percent: parseFloat(document.getElementById('ip2-satisfaction-percent')?.textContent) || 0,      
       crowd_size: document.getElementById('crowd-size')?.value || 0,
       target_group: document.getElementById('target-group')?.value || 0,
-      survey_participation_percent: parseFloat(document.getElementById('survey-percent-display')?.textContent) || 0,
+      survey_participation_percent: parseFloat(document.getElementById('participation-percent')?.textContent) || 0,
       total_ip2m1_score: parseFloat(document.getElementById('total-ip2m1-2')?.textContent) || 0,
       selected_supporting_docs: selectedDocs,
       ip3_media_list: document.getElementById('ip3-media-list')?.value || '',
@@ -831,7 +831,7 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzU4gcIUBL5EeoMu_2qQjbnJ4WLFt3Z8L6VHrnouUZSTUeAgP5D9LOIwrHmHYs32YvmeQ/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzipmucPWTEHWNIeOF-PE542af2qxBdm9-uXafh6jx4JZqht55MqowJBLIx4Qtug28W1g/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -1059,7 +1059,8 @@ function setupPrint() {
           <div class="print-section-subtitle">Performance & Feedback Analysis</div>
         </div>
         ${createQAField('Information Sharing Channels', mediaItems.join(', '))}
-        ${createQAField('Channel Coverage Percentage', document.getElementById('media-coverage').textContent)}        ${createQAField('Total Respondent', document.getElementById('ip2-total-respondent').value)}
+        ${createQAField('Channel Coverage Percentage', document.getElementById('media-coverage').textContent)}        
+        ${createQAField('Total Respondent', document.getElementById('ip2-total-respondent').value)}
         ${createQAField('Positive Respondent', document.getElementById('ip2-positive-respondent').value)}
         ${createQAField('Satisfaction Percentage', document.getElementById('ip2-satisfaction-percent').textContent)}
         ${createQAField('Survey Satisfaction', document.getElementById('survey-percent-display').textContent)}
