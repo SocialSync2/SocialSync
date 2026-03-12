@@ -685,16 +685,9 @@ function updateIP2M1_2() {
     const targetGroup = num(document.getElementById('target-group').value);
     const participantPercent = targetGroup > 0 ? Math.min(100, (crowdSize / targetGroup) * 100) : 0;
     const formatted = participantPercent.toFixed(1);
-
-    // Update the Mark display (Removed reference to non-existent 'survey-percent-display')
     document.getElementById('participant-percent').textContent = formatted + '%';
-
-    // --- Total Score (FIXED) ---
-    // Formula: (Media Coverage + Satisfaction + Involvement) / 3
     const totalScore = (mediaCoverage + ip2satisfaction + participantPercent) / 3;
-    
-    // Update the Total Score display (This was missing)
-    document.getElementById('total-ip2m1-2').textContent = totalScore.toFixed(1);
+        document.getElementById('total-ip2m1-2').textContent = totalScore.toFixed(1);
 }
 
 function updateIP3M2() {
@@ -838,7 +831,7 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzipmucPWTEHWNIeOF-PE542af2qxBdm9-uXafh6jx4JZqht55MqowJBLIx4Qtug28W1g/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzU4gcIUBL5EeoMu_2qQjbnJ4WLFt3Z8L6VHrnouUZSTUeAgP5D9LOIwrHmHYs32YvmeQ/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
