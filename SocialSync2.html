@@ -661,20 +661,20 @@ function num(val) {
   return isNaN(n) ? 0 : n;
 }
 
-// Calculations
+// Calculations (FIXED)
 function updateIP2M1_2() {
   const mediaCetak = document.getElementById('media-cetak-checkbox').checked;
   const mediaElektronik = document.getElementById('media-elektronik-checkbox').checked;
   const mediaDigital = document.getElementById('media-digital-checkbox').checked;
-  const channels = [mediaCetak, mediaElektronik, mediaDigital].filter(Boolean).length;
+  const channels = [mediaCaket, mediaElektronik, mediaDigital].filter(Boolean).length;
   let mediaCoverage = 0;
   if (channels === 1) mediaCoverage = 80;
   else if (channels === 2) mediaCoverage = 90;
   else if (channels >= 3) mediaCoverage = 100;
   document.getElementById('media-coverage').textContent = mediaCoverage + '%'; 
 
-  const ip2totalRespondent = num(document.getElementById('ip2-total-respondent').value);
-  const ip2positiveRespondent = num(document.getElementById('ip2-positive-respondent').value);
+  const ip2totalRespondent = num(document.getElementById('ip2-total-respondent')?.value || 0);
+  const ip2positiveRespondent = num(document.getElementById('ip2-positive-respondent')?.value || 0);
   const ip2satisfaction = ip2totalRespondent > 0 ? Math.min(100, (ip2positiveRespondent / ip2totalRespondent) * 100) : 0;
   document.getElementById('ip2-satisfaction-percent').textContent = ip2satisfaction.toFixed(1) + '%';
   
@@ -704,12 +704,10 @@ function updateIP3M2() {
   const ip3satisfaction = ip3totalRespondent > 0 ? Math.min(100, (ip3positiveRespondent / ip3totalRespondent) * 100) : 0;
   document.getElementById('ip3-satisfaction-percent').textContent = ip3satisfaction.toFixed(1) + '%';
   
-  const targetedEntrepreneur = num(document.getElementById('ip3-targeted-enterpreneur-involvement').value);
-  const actualEntrepreneur = num(document.getElementById('ip3-actual-enterprenuer-involvement').value);
+  const revenue = num(document.getElementById('ip3-revenue').value);
+  const modal = num(document.getElementById('ip3-modal').value);
   let roi = 0;
-  if (actualEntrepreneur > 0) {
-    roi = ((targetedEntrepreneur - actualEntrepreneur) / actualEntrepreneur) * 100;
-  }
+  if (modal > 0) roi = ((revenue - modal) / modal) * 100;
   const roiDisplay = isFinite(roi) ? roi.toFixed(1) : '∞';
   document.getElementById('ip3-roi-percent').textContent = roiDisplay + '%';
 }
@@ -1121,20 +1119,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
-  
-// Attach calculation listeners (FIXED)
-['media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox', 'ip2-total-respondent', 'ip2-positive-respondent', 'crowd-size', 'target-group']
-.forEach(id => {
+
+// Add IP2M1 satisfaction listeners
+['ip2-total-respondent', 'ip2-positive-respondent'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('input', updateIP2M1_2);
 });
 
-['ip3-media-list', 'ip3-actual-attendance', 'ip3-target-attendance', 'ip3-total-respondent', 'ip3-positive-respondent', 'ip3-targeted-enterpreneur-involvement', 'ip3-actual-enterprenuer-involvement']
+// Update IP3M2 listeners to include all fields
+['ip3-media-list', 'ip3-actual-attendance', 'ip3-target-attendance', 'ip3-total-respondent', 'ip3-positive-respondent', 'ip3-revenue', 'ip3-modal']
 .forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('input', updateIP3M2);
 });
-  
+
   setupSectionSelection();
   setupImagePreview();
   document.getElementById('main-form').addEventListener('submit', submitForm);
