@@ -682,9 +682,9 @@ function updateIP2M1_2() {
   const formatted = surveyPercent.toFixed(1);
   document.getElementById('survey-percent-display').textContent = formatted + '%';
   document.getElementById('participant-percent').textContent = formatted + '%';
-  const totalScore = (mediaCoverage + ip2satisfaction + surveyPercent) / 3;
-  document.getElementById('total-ip2m1-2').textContent = totalScore.toFixed(1);
-  
+  const totalScore = (mediaCoverage + surveyPercent + surveyPercent) / 3;
+  document.getElementById('participant-percent').textContent = formatted + '%';}
+
 function updateIP3M2() {
   const mediaList = document.getElementById('ip3-media-list').value.trim();
   const mediaCount = mediaList ? mediaList.split(/\r?\n/).filter(line => line.trim() !== '').length : 0;
@@ -886,33 +886,20 @@ function addOrganizer() {
 function setupSectionSelection() {
   const sectionBtns = document.querySelectorAll('.section-btn');
   const form = document.getElementById('main-form');
-  
-  // Fix: Check if elements exist before accessing them
   const sections = {
     'ip2m1-1': document.getElementById('section-ip2m1-1'),
     'ip2m1-2': document.getElementById('section-ip2m1-2'),
     'ip3m2': document.getElementById('section-ip3m2')
   };
   
-  sections.forEach(btn => {
+  sectionBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      // Remove active state from all buttons
-      sectionBtns.forEach(b => {
-        b.classList.remove('border-cyan-400', 'bg-cyan-50');
-        b.classList.remove('active'); // Remove both styles
-      });
-      
-      // Add active state to clicked button
-      btn.classList.add('border-cyan-400', 'bg-cyan-50');
+      sectionBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      
-      // Show form and selected section
       form.classList.remove('hidden');
-      Object.values(sections).forEach(section => {
-        if (section) section.classList.add('hidden');
-      });
-      
-      const sectionId = btn.dataset.section if (sections[sectionId] && sections[sectionId].classList) {
+      Object.values(sections).forEach(section => section.classList.add('hidden'));
+      const sectionId = btn.dataset.section;
+      if (sections[sectionId]) {
         sections[sectionId].classList.remove('hidden');
       }
     });
