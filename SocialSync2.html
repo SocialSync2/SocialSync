@@ -1007,7 +1007,7 @@ function setupPrint() {
       const organizerValues = Array.from(organizerInputs)
         .map(input => input.value.trim())
         .filter(value => value !== '');
-      const organizerText = vipGuestValues.join(', ');
+      const organizerText = organizerValues.join(', ');
       
       section1.innerHTML = `
         <div class="print-section-header">
