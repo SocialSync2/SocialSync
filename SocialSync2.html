@@ -704,13 +704,16 @@ function updateIP3M2() {
   const ip3satisfaction = ip3totalRespondent > 0 ? Math.min(100, (ip3positiveRespondent / ip3totalRespondent) * 100) : 0;
   document.getElementById('ip3-satisfaction-percent').textContent = ip3satisfaction.toFixed(1) + '%';
   
-  const targetedEnterprenuerInvolvement = num(document.getElementById('ip3-targeted-enterpreneur-involvement').value);
-  const actualEnterprenuerInvolvement = num(document.getElementById('ip3-actual-enterprenuer-involvement').value);
+  const targetedEntrepreneurInvolvement = num(document.getElementById('ip3-targeted-enterpreneur-involvement').value);
+  const actualEntrepreneurInvolvement = num(document.getElementById('ip3-actual-enterprenuer-involvement').value);
   let roi = 0;
-  if (modal > 0) roi = ((targetedEnterprenuerInvolvement - actualEnterprenuerInvolvement) / actualEnterprenuerInvolvement) * 100;
+  if (actualEntrepreneurInvolvement > 0) {
+    roi = ((targetedEntrepreneurInvolvement - actualEntrepreneurInvolvement) / actualEntrepreneurInvolvement) * 100;
+  }
   const roiDisplay = isFinite(roi) ? roi.toFixed(1) : '∞';
   document.getElementById('ip3-roi-percent').textContent = roiDisplay + '%';
 }
+
 // Base64 conversion
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
