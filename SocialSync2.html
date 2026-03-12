@@ -671,7 +671,7 @@ function updateIP2M1_2() {
   if (channels === 1) mediaCoverage = 80;
   else if (channels === 2) mediaCoverage = 90;
   else if (channels >= 3) mediaCoverage = 100;
-  document.getElementById('media-coverage').textContent = mediaCoverage + '%'; 
+  document.getElementById('media-coverage').textContent = mediaCoverage + '%';
 
   const ip2totalRespondent = num(document.getElementById('ip2-total-respondent')?.value || 0);
   const ip2positiveRespondent = num(document.getElementById('ip2-positive-respondent')?.value || 0);
@@ -789,7 +789,7 @@ async function submitForm(e) {
       total_attendance: document.getElementById('ip1-bil-tetamu')?.value || '',
       media_present: document.getElementById('ip1-pihak-media')?.value || '',
       selected_media_channels: selectedMediaText,
-      media_coverage_percent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,
+      media_coverage_percent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,cent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,
       ip2_total_respondent: document.getElementById('ip2-total-respondent')?.value || 0,
       ip2_positive_respondent: document.getElementById('ip2-positive-respondent')?.value || 0,
       ip2_satisfaction_percent: parseFloat(document.getElementById('ip2-satisfaction-percent')?.textContent) || 0,      
@@ -1044,6 +1044,7 @@ function setupPrint() {
         mediaItems.push(document.getElementById('media-digital-example').value || 'Media Digital (Digital Media)');
       }
       
+      
       let docItems = [];
       if (document.getElementById('doc-kertas-kerja').checked) docItems.push('Kertas kerja program / slide pembentangan');
       if (document.getElementById('doc-surat-mesyuarat').checked) docItems.push('Surat mesyuarat penyelarasan / jemputan program');
@@ -1057,8 +1058,7 @@ function setupPrint() {
           <div class="print-section-subtitle">Performance & Feedback Analysis</div>
         </div>
         ${createQAField('Information Sharing Channels', mediaItems.join(', '))}
-        ${createQAField('Channel Coverage Percentage', document.getElementById('media-coverage').textContent)}
-        ${createQAField('Total Respondent', document.getElementById('ip2-total-respondent').value)}
+        ${createQAField('Channel Coverage Percentage', document.getElementById('media-coverage').textContent)}        ${createQAField('Total Respondent', document.getElementById('ip2-total-respondent').value)}
         ${createQAField('Positive Respondent', document.getElementById('ip2-positive-respondent').value)}
         ${createQAField('Satisfaction Percentage', document.getElementById('ip2-satisfaction-percent').textContent)}
         ${createQAField('Survey Satisfaction', document.getElementById('survey-percent-display').textContent)}
