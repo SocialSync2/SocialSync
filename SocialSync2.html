@@ -6,8 +6,6 @@
 <title>SocialSync</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 body {
   box-sizing: border-box;
@@ -195,7 +193,6 @@ body {
   }
 }
 </style>
-
 </head>
 <body class="h-full gradient-bg text-slate-800">
 <div id="app" class="h-full flex flex-col overflow-hidden">
@@ -214,19 +211,18 @@ body {
         </div>
       </div>
       <div class="flex items-center gap-3">
+        <!-- Print Button - FIXED -->
+        <button id="print-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+          Print
+        </button>
         <button id="view-records-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
           View Records
-        </button>
-      </div>
-      <div class="flex items-center gap-3">
-        <button id="export-pdf-btn" class="px-4 py-2 bg-red-100 hover:bg-red-200 border border-red-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-red-700 no-print">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-          </svg>
-          Export as PDF
         </button>
       </div>
     </div>
@@ -625,6 +621,39 @@ body {
   </main>
 </div>
 
+<!-- Print Modal -->
+<div id="print-modal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4 no-print">
+  <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+    <div class="p-6 border-b border-slate-200">
+      <h3 class="text-lg font-semibold text-slate-800">Select Sections to Print</h3>
+      <p class="text-sm text-slate-600 mt-1">Choose which report sections you want to include.</p>
+    </div>
+    <div class="p-6 space-y-4">
+      <label class="flex items-center gap-3 cursor-pointer group">
+        <input type="checkbox" id="print-ip2m1-1" class="w-5 h-5 rounded checkbox-custom">
+        <span class="text-slate-700 font-medium group-hover:text-slate-900 transition-colors">BULETIN DAERAH</span>
+      </label>
+      <label class="flex items-center gap-3 cursor-pointer group">
+        <input type="checkbox" id="print-ip2m1-2" class="w-5 h-5 rounded checkbox-custom">
+        <span class="text-slate-700 font-medium group-hover:text-slate-900 transition-colors">IP2M1:2 - Performance Metrics</span>
+      </label>
+      <label class="flex items-center gap-3 cursor-pointer group">
+        <input type="checkbox" id="print-ip3m2" class="w-5 h-5 rounded checkbox-custom">
+        <span class="text-slate-700 font-medium group-hover:text-slate-900 transition-colors">IP3M2 - Economic & Media Analysis</span>
+      </label>
+    </div>
+    <div class="p-6 border-t border-slate-200 flex gap-3">
+      <button id="print-cancel" class="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 font-medium">Cancel</button>
+      <button id="print-confirm" class="flex-1 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg text-white font-medium flex items-center justify-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        Print
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- Live Logic -->
 <script>
 function num(val) {
@@ -634,32 +663,27 @@ function num(val) {
 
 // Calculations (FIXED)
 function updateIP2M1_2() {
-    // --- Section A: Media Coverage ---
-    const mediaCetak = document.getElementById('media-cetak-checkbox').checked;
-    const mediaElektronik = document.getElementById('media-elektronik-checkbox').checked;
-    const mediaDigital = document.getElementById('media-digital-checkbox').checked;
-    const channels = [mediaCetak, mediaElektronik, mediaDigital].filter(Boolean).length;
-    let mediaCoverage = 0;
-    if (channels === 1) mediaCoverage = 80;
-    else if (channels === 2) mediaCoverage = 90;
-    else if (channels >= 3) mediaCoverage = 100;
-    document.getElementById('media-coverage').textContent = mediaCoverage + '%';
-
-    // --- Section B: Satisfaction ---
-    const ip2totalRespondent = num(document.getElementById('ip2-total-respondent')?.value || 0);
-    const ip2positiveRespondent = num(document.getElementById('ip2-positive-respondent')?.value || 0);
-    const ip2satisfaction = ip2totalRespondent > 0 ? Math.min(100, (ip2positiveRespondent / ip2totalRespondent) * 100) : 0;
-    document.getElementById('ip2-satisfaction-percent').textContent = ip2satisfaction.toFixed(1) + '%';
-
-    // --- Section C: Participant Involvement (FIXED) ---
-    const crowdSize = num(document.getElementById('crowd-size').value);
-    const targetGroup = num(document.getElementById('target-group').value);
-    const participantPercent = targetGroup > 0 ? Math.min(100, (crowdSize / targetGroup) * 100) : 0;
-    const formatted = participantPercent.toFixed(1);
-    document.getElementById('participant-percent').textContent = formatted + '%';
-    const totalScore = (mediaCoverage + ip2satisfaction + participantPercent) / 3;
-        document.getElementById('total-ip2m1-2').textContent = totalScore.toFixed(1);
-}
+  const mediaCetak = document.getElementById('media-cetak-checkbox').checked;
+  const mediaElektronik = document.getElementById('media-elektronik-checkbox').checked;
+  const mediaDigital = document.getElementById('media-digital-checkbox').checked;
+  const channels = [mediaCetak, mediaElektronik, mediaDigital].filter(Boolean).length;
+  let mediaCoverage = 0;
+  if (channels === 1) mediaCoverage = 80;
+  else if (channels === 2) mediaCoverage = 90;
+  else if (channels >= 3) mediaCoverage = 100;
+  document.getElementById('media-coverage').textContent = mediaCoverage + '%';
+  const ip2totalRespondent = num(document.getElementById('ip2-total-respondent')?.value || 0);
+  const ip2positiveRespondent = num(document.getElementById('ip2-positive-respondent')?.value || 0);
+  const ip2satisfaction = ip2totalRespondent > 0 ? Math.min(100, (ip2positiveRespondent / ip2totalRespondent) * 100) : 0;
+  document.getElementById('ip2-satisfaction-percent').textContent = ip2satisfaction.toFixed(1) + '%';
+  const crowdSize = num(document.getElementById('crowd-size').value);
+  const targetGroup = num(document.getElementById('target-group').value);
+  const surveyPercent = targetGroup > 0 ? Math.min(100, (crowdSize / targetGroup) * 100) : 0;
+  const formatted = surveyPercent.toFixed(1);
+  document.getElementById('survey-percent-display').textContent = formatted + '%';
+  document.getElementById('participant-percent').textContent = formatted + '%';
+  const totalScore = (mediaCoverage + surveyPercent + surveyPercent) / 3;
+  document.getElementById('participant-percent').textContent = formatted + '%';}
 
 function updateIP3M2() {
   const mediaList = document.getElementById('ip3-media-list').value.trim();
@@ -761,13 +785,13 @@ async function submitForm(e) {
       total_attendance: document.getElementById('ip1-bil-tetamu')?.value || '',
       media_present: document.getElementById('ip1-pihak-media')?.value || '',
       selected_media_channels: selectedMediaText,
-      media_coverage_percent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,
+      media_coverage_percent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,cent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,
       ip2_total_respondent: document.getElementById('ip2-total-respondent')?.value || 0,
       ip2_positive_respondent: document.getElementById('ip2-positive-respondent')?.value || 0,
       ip2_satisfaction_percent: parseFloat(document.getElementById('ip2-satisfaction-percent')?.textContent) || 0,      
       crowd_size: document.getElementById('crowd-size')?.value || 0,
       target_group: document.getElementById('target-group')?.value || 0,
-      survey_participation_percent: parseFloat(document.getElementById('participant-percent')?.textContent) || 0,
+      survey_participation_percent: parseFloat(document.getElementById('survey-percent-display')?.textContent) || 0,
       total_ip2m1_score: parseFloat(document.getElementById('total-ip2m1-2')?.textContent) || 0,
       selected_supporting_docs: selectedDocs,
       ip3_media_list: document.getElementById('ip3-media-list')?.value || '',
@@ -802,7 +826,7 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzipmucPWTEHWNIeOF-PE542af2qxBdm9-uXafh6jx4JZqht55MqowJBLIx4Qtug28W1g/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzTeYTjS4CN8KR-8dKogfVnb9Be-sY12_n50qt1zTWrI0AfHujuIlCyAPJNg3w4anUyYg/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -1087,157 +1111,6 @@ function setupPrint() {
     }
   });
 }
-
-// PDF Export Functionality
-function exportAsPDF() {
-  const activeSectionBtn = document.querySelector('.section-btn.active');
-  if (!activeSectionBtn) {
-    alert('❌ Please select a report type first.');
-    return;
-  }
-
-  const btn = document.getElementById('export-pdf-btn');
-  const originalText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<span>Generating PDF...</span>';
-
-  try {
-    const sectionId = activeSectionBtn.dataset.section;
-    const pdfContent = document.createElement('div');
-    pdfContent.id = 'pdf-export-content';
-    pdfContent.style.width = '800px';
-    pdfContent.style.padding = '40px';
-    pdfContent.style.fontFamily = '"DM Sans", sans-serif';
-    pdfContent.style.color = '#1e293b';
-    pdfContent.style.backgroundColor = 'white';
-    pdfContent.style.lineHeight = '1.6';
-    pdfContent.style.margin = '0 auto';
-
-    // Header
-    const programmeName = document.getElementById('programme').value || 'Programme';
-    const programmeDate = document.getElementById('date').value || 'Date';
-    const organizer = document.querySelector('input[name="organizer[]"]')?.value || 'Organizer';
-    const daerah = document.getElementById('daerah-dropdown').options[document.getElementById('daerah-dropdown').selectedIndex]?.text || 'Daerah';
-
-    pdfContent.innerHTML = `
-      <div style="text-align:center;margin-bottom:30px;border-bottom:3px solid #3b82f6;padding-bottom:20px">
-        <div style="background:linear-gradient(135deg,#3b82f6 0%,#2563eb 100%);width:80px;height:80px;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:white">
-            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h1 style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;background:linear-gradient(to right,#3b82f6,#2563eb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:10px 0 5px">SocialSync Official Report</h1>
-        <p style="color:#64748b;font-size:16px;margin:5px 0">Event & Programme Management System</p>
-        <div style="margin-top:15px;padding:12px;background:#bfdbfe;border-radius:8px;display:inline-block;min-width:300px">
-          <p style="font-weight:700;color:#1e40af;margin:4px 0;font-size:15px">${programmeName}</p>
-          <p style="font-weight:600;color:#1e40af;margin:4px 0;font-size:14px">${programmeDate} • ${daerah}</p>
-          <p style="font-weight:600;color:#1e40af;margin:4px 0;font-size:14px">${organizer}</p>
-        </div>
-      </div>
-    `;
-
-    // Helper
-    const createField = (label, value) => 
-      value ? `<div style="margin:8px 0"><strong>${label}:</strong> ${value}</div>` : '';
-
-    // Section Content
-    if (sectionId === 'ip2m1-1') {
-      const vipGuests = Array.from(document.querySelectorAll('input[name="vip_guest[]"]'))
-        .map(el => el.value.trim())
-        .filter(v => v)
-        .join(', ') || 'Tiada tetamu kehormat';
-      
-      pdfContent.innerHTML += `
-        <div style="margin-bottom:25px">
-          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">BULETIN DAERAH - Programme Details</h2>
-          ${createField('Tempat', document.getElementById('ip1-tempat').value)}
-          ${createField('Objektif/Deskripsi Program', document.getElementById('ip1-objektif').value)}
-          ${createField('Impak Program', document.getElementById('ip1-impak').value)}
-          ${createField('Tetamu Kehormat', vipGuests)}
-          ${createField('Bilangan Tetamu Yang Hadir', document.getElementById('ip1-bil-tetamu').value)}
-          ${createField('Pihak Media Yang Hadir', document.getElementById('ip1-pihak-media').value)}
-        </div>
-      `;
-    } 
-    else if (sectionId === 'ip2m1-2') {
-      pdfContent.innerHTML += `
-        <div style="margin-bottom:25px">
-          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP2M1 - Community Engagement Index</h2>
-          ${createField('Channel Coverage', document.getElementById('media-coverage').textContent)}
-          ${createField('Total Respondent', document.getElementById('ip2-total-respondent').value)}
-          ${createField('Positive Respondent', document.getElementById('ip2-positive-respondent').value)}
-          ${createField('Satisfaction %', document.getElementById('ip2-satisfaction-percent').textContent)}
-          ${createField('Crowd Size', document.getElementById('crowd-size').value)}
-          ${createField('Target Group', document.getElementById('target-group').value)}
-          ${createField('Participant Mark', document.getElementById('participant-percent').textContent)}
-          ${createField('Total Score', document.getElementById('total-ip2m1-2').textContent + '%')}
-        </div>
-      `;
-    } 
-    else if (sectionId === 'ip3m2') {
-      pdfContent.innerHTML += `
-        <div style="margin-bottom:25px">
-          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP3M2 - Event Management Effectiveness Index</h2>
-          ${createField('Media Coverage %', document.getElementById('ip3-media-percent').textContent)}
-          ${createField('Actual Attendance', document.getElementById('ip3-actual-attendance').value)}
-          ${createField('Target Attendance', document.getElementById('ip3-target-attendance').value)}
-          ${createField('Participation Mark', document.getElementById('ip3-participation-percent').textContent)}
-          ${createField('Total Respondent', document.getElementById('ip3-total-respondent').value)}
-          ${createField('Positive Respondent', document.getElementById('ip3-positive-respondent').value)}
-          ${createField('Satisfaction %', document.getElementById('ip3-satisfaction-percent').textContent)}
-          ${createField('Targeted Entrepreneur', document.getElementById('ip3-targeted-enterpreneur-involvement').value)}
-          ${createField('Actual Entrepreneur', document.getElementById('ip3-actual-enterprenuer-involvement').value)}
-          ${createField('ROI', document.getElementById('ip3-roi-percent').textContent)}
-        </div>
-      `;
-    }
-
-    // Footer
-    pdfContent.innerHTML += `
-      <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:13px">
-        <p style="font-weight:600;color:#1e40af">SocialSync Programme Management System</p>
-        <p>Dokumen Rasmi Kerajaan • Sulit</p>
-        <p style="margin-top:8px;font-size:12px;color:#64748b">Dijana pada: ${new Date().toLocaleDateString('ms-MY', {dateStyle:'full',timeStyle:'short'})}</p>
-      </div>
-    `;
-
-    document.body.appendChild(pdfContent);
-
-    // Generate PDF
-    html2canvas(pdfContent, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      logging: false
-    }).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-      const imgWidth = 210;
-      const pageHeight = 297;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      pdf.save(`${programmeName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
-      
-      alert('✅ Laporan PDF telah dijana dan dimuat turun!');
-    }).catch(err => {
-      console.error('PDF error:', err);
-      alert('⚠️ Gagal menjana PDF. Cuba semula atau guna fungsi Cetak.');
-    }).finally(() => {
-      document.body.removeChild(pdfContent);
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-    });
-  } catch (error) {
-    console.error('Export error:', error);
-    alert('⚠️ Exporting PDF may have failed. Check browser console.');
-    btn.disabled = false;
-    btn.innerHTML = originalText;
-  }
-}
-
-// Add event listener (place this INSIDE your DOMContentLoaded setup)
-document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
 document.addEventListener('DOMContentLoaded', () => {
   ['media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox'].forEach(id => {
