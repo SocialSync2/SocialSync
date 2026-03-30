@@ -1087,7 +1087,7 @@ function setupPrint() {
   });
 }
 
-// PDF Export Functionality
+// PDF Export Functionality (FIXED)
 function exportAsPDF() {
   const activeSectionBtn = document.querySelector('.section-btn.active');
   if (!activeSectionBtn) {
@@ -1115,46 +1115,46 @@ function exportAsPDF() {
     // Header
     const programmeName = document.getElementById('programme').value || 'Programme';
     const programmeDate = document.getElementById('date').value || 'Date';
-    const organizer = document.querySelector('input[name="organizer[]"]')?.value || 'Organizer';
     const daerah = document.getElementById('daerah-dropdown').options[document.getElementById('daerah-dropdown').selectedIndex]?.text || 'Daerah';
+    
+    // Get ALL organizer values
+    const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
+    const organizerValues = Array.from(organizerInputs)
+      .map(input => input.value.trim())
+      .filter(value => value !== '');
+    const organizerText = organizerValues.join(', ') || 'Organizer';
 
     pdfContent.innerHTML = `
       <div style="text-align:center;margin-bottom:30px;border-bottom:3px solid #3b82f6;padding-bottom:20px">
-        <div style="background:linear-gradient(135deg,#3b82f6 0%,#2563eb 100%);width:80px;height:80px;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:white">
-            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h1 style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;background:linear-gradient(to right,#3b82f6,#2563eb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:10px 0 5px">SocialSync Official Report</h1>
+        <div style="background:linear-gradient(135deg,#3b82f6 0%,#2563eb 100%);width:80px;height:80px;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:36px">SS</div>
+        <h1 style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:#1e40af;margin:10px 0 5px">SocialSync Official Report</h1>
         <p style="color:#64748b;font-size:16px;margin:5px 0">Event & Programme Management System</p>
         <div style="margin-top:15px;padding:12px;background:#bfdbfe;border-radius:8px;display:inline-block;min-width:300px">
           <p style="font-weight:700;color:#1e40af;margin:4px 0;font-size:15px">${programmeName}</p>
           <p style="font-weight:600;color:#1e40af;margin:4px 0;font-size:14px">${programmeDate} • ${daerah}</p>
-          <p style="font-weight:600;color:#1e40af;margin:4px 0;font-size:14px">${organizer}</p>
+          <p style="font-weight:600;color:#1e40af;margin:4px 0;font-size:14px">${organizerText}</p>
         </div>
       </div>
     `;
 
-    // Helper
-    const createField = (label, value) => 
-      value ? `<div style="margin:8px 0"><strong>${label}:</strong> ${value}</div>` : '';
-
     // Section Content
     if (sectionId === 'ip2m1-1') {
-      const vipGuests = Array.from(document.querySelectorAll('input[name="vip_guest[]"]'))
-        .map(el => el.value.trim())
-        .filter(v => v)
-        .join(', ') || 'Tiada tetamu kehormat';
+      // Get ALL VIP guests
+      const vipGuestInputs = document.querySelectorAll('input[name="vip_guest[]"]');
+      const vipGuestValues = Array.from(vipGuestInputs)
+        .map(input => input.value.trim())
+        .filter(value => value !== '');
+      const vipGuestText = vipGuestValues.join(', ') || 'Tiada tetamu kehormat';
       
       pdfContent.innerHTML += `
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">BULETIN DAERAH - Programme Details</h2>
-          ${createField('Tempat', document.getElementById('ip1-tempat').value)}
-          ${createField('Objektif/Deskripsi Program', document.getElementById('ip1-objektif').value)}
-          ${createField('Impak Program', document.getElementById('ip1-impak').value)}
-          ${createField('Tetamu Kehormat', vipGuests)}
-          ${createField('Bilangan Tetamu Yang Hadir', document.getElementById('ip1-bil-tetamu').value)}
-          ${createField('Pihak Media Yang Hadir', document.getElementById('ip1-pihak-media').value)}
+          <p><strong>Tempat:</strong> ${document.getElementById('ip1-tempat').value || 'N/A'}</p>
+          <p><strong>Objektif/Deskripsi:</strong> ${document.getElementById('ip1-objektif').value || 'N/A'}</p>
+          <p><strong>Impak Program:</strong> ${document.getElementById('ip1-impak').value || 'N/A'}</p>
+          <p><strong>Tetamu Kehormat:</strong> ${vipGuestText}</p>
+          <p><strong>Bilangan Tetamu:</strong> ${document.getElementById('ip1-bil-tetamu').value || '0'}</p>
+          <p><strong>Pihak Media:</strong> ${document.getElementById('ip1-pihak-media').value || 'Tiada'}</p>
         </div>
       `;
     } 
@@ -1162,14 +1162,14 @@ function exportAsPDF() {
       pdfContent.innerHTML += `
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP2M1 - Community Engagement Index</h2>
-          ${createField('Channel Coverage', document.getElementById('media-coverage').textContent)}
-          ${createField('Total Respondent', document.getElementById('ip2-total-respondent').value)}
-          ${createField('Positive Respondent', document.getElementById('ip2-positive-respondent').value)}
-          ${createField('Satisfaction %', document.getElementById('ip2-satisfaction-percent').textContent)}
-          ${createField('Crowd Size', document.getElementById('crowd-size').value)}
-          ${createField('Target Group', document.getElementById('target-group').value)}
-          ${createField('Participant Mark', document.getElementById('participant-percent').textContent)}
-          ${createField('Total Score', document.getElementById('total-ip2m1-2').textContent + '%')}
+          <p><strong>Channel Coverage:</strong> ${document.getElementById('media-coverage').textContent || '0%'}</p>
+          <p><strong>Total Respondent:</strong> ${document.getElementById('ip2-total-respondent').value || '0'}</p>
+          <p><strong>Positive Respondent:</strong> ${document.getElementById('ip2-positive-respondent').value || '0'}</p>
+          <p><strong>Satisfaction %:</strong> ${document.getElementById('ip2-satisfaction-percent').textContent || '0%'}</p>
+          <p><strong>Crowd Size:</strong> ${document.getElementById('crowd-size').value || '0'}</p>
+          <p><strong>Target Group:</strong> ${document.getElementById('target-group').value || '0'}</p>
+          <p><strong>Participant Mark:</strong> ${document.getElementById('participant-percent').textContent || '0%'}</p>
+          <p><strong>Total Score:</strong> <span style="font-size:24px;color:#1e40af;font-weight:bold">${document.getElementById('total-ip2m1-2').textContent || '0'}%</span></p>
         </div>
       `;
     } 
@@ -1177,16 +1177,16 @@ function exportAsPDF() {
       pdfContent.innerHTML += `
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP3M2 - Event Management Effectiveness Index</h2>
-          ${createField('Media Coverage %', document.getElementById('ip3-media-percent').textContent)}
-          ${createField('Actual Attendance', document.getElementById('ip3-actual-attendance').value)}
-          ${createField('Target Attendance', document.getElementById('ip3-target-attendance').value)}
-          ${createField('Participation Mark', document.getElementById('ip3-participation-percent').textContent)}
-          ${createField('Total Respondent', document.getElementById('ip3-total-respondent').value)}
-          ${createField('Positive Respondent', document.getElementById('ip3-positive-respondent').value)}
-          ${createField('Satisfaction %', document.getElementById('ip3-satisfaction-percent').textContent)}
-          ${createField('Targeted Entrepreneur', document.getElementById('ip3-targeted-enterpreneur-involvement').value)}
-          ${createField('Actual Entrepreneur', document.getElementById('ip3-actual-enterprenuer-involvement').value)}
-          ${createField('ROI', document.getElementById('ip3-roi-percent').textContent)}
+          <p><strong>Media Coverage %:</strong> ${document.getElementById('ip3-media-percent').textContent || '0%'}</p>
+          <p><strong>Actual Attendance:</strong> ${document.getElementById('ip3-actual-attendance').value || '0'}</p>
+          <p><strong>Target Attendance:</strong> ${document.getElementById('ip3-target-attendance').value || '0'}</p>
+          <p><strong>Participation Mark:</strong> ${document.getElementById('ip3-participation-percent').textContent || '0%'}</p>
+          <p><strong>Total Respondent:</strong> ${document.getElementById('ip3-total-respondent').value || '0'}</p>
+          <p><strong>Positive Respondent:</strong> ${document.getElementById('ip3-positive-respondent').value || '0'}</p>
+          <p><strong>Satisfaction %:</strong> ${document.getElementById('ip3-satisfaction-percent').textContent || '0%'}</p>
+          <p><strong>Targeted Entrepreneur:</strong> ${document.getElementById('ip3-targeted-enterpreneur-involvement').value || '0'}</p>
+          <p><strong>Actual Entrepreneur:</strong> ${document.getElementById('ip3-actual-enterprenuer-involvement').value || '0'}</p>
+          <p><strong>ROI:</strong> ${document.getElementById('ip3-roi-percent').textContent || '0%'}</p>
         </div>
       `;
     }
@@ -1196,7 +1196,13 @@ function exportAsPDF() {
       <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:13px">
         <p style="font-weight:600;color:#1e40af">SocialSync Programme Management System</p>
         <p>Dokumen Rasmi Kerajaan • Sulit</p>
-        <p style="margin-top:8px;font-size:12px;color:#64748b">Dijana pada: ${new Date().toLocaleDateString('ms-MY', {dateStyle:'full',timeStyle:'short'})}</p>
+        <p style="margin-top:8px;font-size:12px;color:#64748b">Dijana pada: ${new Date().toLocaleDateString('ms-MY', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}</p>
       </div>
     `;
 
@@ -1210,7 +1216,8 @@ function exportAsPDF() {
       logging: false
     }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
       const imgWidth = 210;
       const pageHeight = 297;
       const imgHeight = canvas.height * imgWidth / canvas.width;
@@ -1220,7 +1227,7 @@ function exportAsPDF() {
       
       alert('✅ Laporan PDF telah dijana dan dimuat turun!');
     }).catch(err => {
-      console.error('PDF error:', err);
+      console.error('PDF generation error:', err);
       alert('⚠️ Gagal menjana PDF. Cuba semula atau guna fungsi Cetak.');
     }).finally(() => {
       document.body.removeChild(pdfContent);
@@ -1229,7 +1236,7 @@ function exportAsPDF() {
     });
   } catch (error) {
     console.error('Export error:', error);
-    alert('⚠️ Exporting PDF may have failed. Check browser console');
+    alert('⚠️ Ralat semasa menjana PDF. Sila semak konsol pelayar.');
     btn.disabled = false;
     btn.innerHTML = originalText;
   }
@@ -1271,6 +1278,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('main-form').addEventListener('submit', submitForm);
   document.getElementById('view-records-btn').addEventListener('click', () => {
     window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
+  // Add PDF export event listener (INSIDE DOMContentLoaded)
+  document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
   });
   setupPrint();
   updateIP2M1_2();
