@@ -1230,7 +1230,7 @@ function exportAsPDF() {
     });
   } catch (error) {
     console.error('Export error:', error);
-    alert('⚠️ Ralat semasa menjana PDF. Sila semak konsol pelayar.');
+    alert('⚠️ Exporting PDF may have failed. Check browser console.');
     btn.disabled = false;
     btn.innerHTML = originalText;
   }
