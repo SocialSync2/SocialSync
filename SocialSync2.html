@@ -1087,187 +1087,234 @@ function setupPrint() {
   });
 }
 
-function setupPrint() {
-  const printBtn = document.getElementById('print-btn');
-  const printModal = document.getElementById('print-modal');
-  const printCancel = document.getElementById('print-cancel');
-  const printConfirm = document.getElementById('print-confirm');
-  
-  printBtn.addEventListener('click', () => {
-    printModal.classList.remove('hidden');
-  });
-  
-  printCancel.addEventListener('click', () => {
-    printModal.classList.add('hidden');
-  });
-  
-  printConfirm.addEventListener('click', () => {
-    const ip2m1_1 = document.getElementById('print-ip2m1-1').checked;
-    const ip2m1_2 = document.getElementById('printm1-2').checked;
-    const ip3m2 = document.getElementById('print-ip3m2').checked;
-    
-    if (!ip2m1_1 && !ip2m1_2 && !ip3m2) {
-      alert('Please select at least one section to print.');
-      return;
-    }
-    
-    const printContent = document.createElement('div');
-    printContent.id = 'print-content';
-    
-    // Create the header
+// PDF Export Functionality (WORKING VERSION)
+function exportAsPDF() {
+  const activeSectionBtn = document.querySelector('.section-btn.active');
+  if (!activeSectionBtn) {
+    alert('❌ Please select a report type first.');
+    return;
+  }
+
+  const btn = document.getElementById('export-pdf-btn');
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span>Generating PDF...</span>';
+
+  try {
+    const sectionId = activeSectionBtn.dataset.section;
+    const pdfContent = document.createElement('div');
+    pdfContent.id = 'pdf-export-content';
+    pdfContent.style.width = '800px';
+    pdfContent.style.padding = '40px';
+    pdfContent.style.fontFamily = '"DM Sans", sans-serif';
+    pdfContent.style.color = '#1e293b';
+    pdfContent.style.backgroundColor = 'white';
+    pdfContent.style.lineHeight = '1.6';
+    pdfContent.style.margin = '0 auto';
+    pdfContent.style.boxSizing = 'border-box';
+
+    // === GET ACTUAL FORM DATA ===
     const programmeName = document.getElementById('programme').value || 'Programme';
     const programmeDate = document.getElementById('date').value || 'Date';
-    const organizer = document.getElementById('organizer').value || 'Organizer';
     
-    printContent.innerHTML = `
-      <div class="print-header">
-        <h1 class="print-title">SocialSync Official Report</h1>
-        <p class="print-subtitle">${programmeName} • ${programmeDate} • ${organizer}</p>
+    // Get ALL organizer values dynamically
+    const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
+    const organizerValues = Array.from(organizerInputs)
+      .map(input => input.value.trim())
+      .filter(value => value !== '');
+    const organizerText = organizerValues.join(', ') || 'Organizer';
+    
+    const daerah = document.getElementById('daerah-dropdown').options[document.getElementById('daerah-dropdown').selectedIndex]?.text || 'Daerah';
+
+    // Header
+    pdfContent.innerHTML = `
+      <div style="text-align:center;margin-bottom:30px;border-bottom:3px solid #3b82f6;padding-bottom:20px">
+        <div style="background:linear-gradient(135deg,#3b82f6 0%,#2563eb 100%);width:80px;height:80px;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:36px">SS</div>
+        <h1 style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:#1e40af;margin:10px 0 5px">LAPORAN PROGRAM SELERAS PROGRAM</h1>
+        <p style="color:#64748b;font-size:16px;margin:5px 0">SocialSync Programme Management System</p>
+        <div style="margin-top:15px;padding:12px;background:#bfdbfe;border-radius:8px;display:inline-block;min-width:300px">
+          <p style="font-weight:700;color:#1e40af;margin:4px 0;font-size:15px">${programmeName}</p>
+          <p style="font-weight:600;color:#1e40af;margin:4px 0;font-size:14px">${programmeDate} • ${daerah}</p>
+          <p style="font-weight:600;color:#1e40af;margin:4px 0;font-size:14px">${organizerText}</p>
+        </div>
       </div>
     `;
-    
-    // to create Q&A field
-    function createQAField(question, answer) {
-      if (!answer) return '';
-      return `
-        <div class="print-field">
-          <div class="print-label">${question}</div>
-          <div class="print-value">${answer}</div>
-        </div>
-      `;
-    }
-    
-    // Function to create checklist
-    function createChecklist(items) {
-      if (!items || items.length === 0) return '';
-      let html = '<div class="print-checklist">';
-      items.forEach(item => {
-        html += `<div class="print-checklist-item"><div class="print-checkbox checked"></div><div class="print-value">${item}</div></div>`;
-      });
-      html += '</div>';
-      return html;
-    }
-    
-    // Add BULETIN DAERAH section
-    if (ip2m1_1) {
-      const section1 = document.createElement('div');
-      section1.className = 'print-section';
-      
-      // Collect VIP guests
+
+    // === BULETIN DAERAH SECTION ===
+    if (sectionId === 'ip2m1-1') {
+      // Get ALL VIP guests dynamically
       const vipGuestInputs = document.querySelectorAll('input[name="vip_guest[]"]');
       const vipGuestValues = Array.from(vipGuestInputs)
         .map(input => input.value.trim())
         .filter(value => value !== '');
-      const vipGuestText = vipGuestValues.join(', ');
+      const vipGuestText = vipGuestValues.join(', ') || 'Tiada tetamu kehormat';
       
-      section1.innerHTML = `
-        <div class="print-section-header">
-          <h2 class="print-section-title">BULETIN DAERAH</h2>
-          <div class="print-section-subtitle">Community Engagement Report</div>
+      pdfContent.innerHTML += `
+        <div style="margin-bottom:25px">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">BULETIN DAERAH - Programme Details</h2>
+          <table style="width:100%;border-collapse:collapse;margin-top:15px">
+            <tr>
+              <td style="padding:8px 0;width:30%;font-weight:bold;color:#4b5563">Tempat & Kapasiti</td>
+              <td style="padding:8px 0;color:#1e293b">${document.getElementById('ip1-tempat').value || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;font-weight:bold;color:#4b5563">Objektif/Deskripsi Program</td>
+              <td style="padding:8px 0;color:#1e293b">${document.getElementById('ip1-objektif').value || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;font-weight:bold;color:#4b5563">Impak Program</td>
+              <td style="padding:8px 0;color:#1e293b">${document.getElementById('ip1-impak').value || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;font-weight:bold;color:#4b5563">Tetamu Kehormat</td>
+              <td style="padding:8px 0;color:#1e293b">${vipGuestText}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;font-weight:bold;color:#4b5563">Bilangan Tetamu Yang Hadir</td>
+              <td style="padding:8px 0;color:#1e293b">${document.getElementById('ip1-bil-tetamu').value || '0'}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;font-weight:bold;color:#4b5563">Pihak Media Yang Hadir</td>
+              <td style="padding:8px 0;color:#1e293b">${document.getElementById('ip1-pihak-media').value || 'Tiada'}</td>
+            </tr>
+          </table>
         </div>
-        ${createQAField('Daerah', document.getElementById('daerah-dropdown').options[document.getElementById('daerah-dropdown').selectedIndex]?.text || '')}
-        ${createQAField('Tempat dan Kapasiti', document.getElementById('ip1-tempat').value)}
-        ${createQAField('Deskripsi/Tujuan Program', document.getElementById('ip1-deskripsi').value)}
-        ${createQAField('Objektif', document.getElementById('ip1-objektif').value)}
-        ${createQAField('Impak Program', document.getElementById('ip1-impak').value)}
-        ${createQAField('Tetamu Kehormat', vipGuestText)}
-        ${createQAField('Bilangan Tetamu Yang Hadir', document.getElementById('ip1-bil-tetamu').value)}
-        ${createQAField('Pihak Media Yang Hadir', document.getElementById('ip1-pihak-media').value)}
       `;
-      printContent.appendChild(section1);
-    }
-    
-    // Add IP2M1:2 section
-    if (ip2m1_2) {
-      const section2 = document.createElement('div');
-      section2.className = 'print-section';
-      
+    } 
+    // === IP2M1:2 SECTION ===
+    else if (sectionId === 'ip2m1-2') {
       // Media channels
       let mediaItems = [];
       if (document.getElementById('media-cetak-checkbox').checked) {
-        mediaItems.push(document.getElementById('media-cetak-example').value || 'Media Cetak (Print Media)');
+        mediaItems.push(`Media Cetak: ${document.getElementById('media-cetak-example').value || 'N/A'}`);
       }
       if (document.getElementById('media-elektronik-checkbox').checked) {
-        mediaItems.push(document.getElementById('media-elektronik-example').value || 'Media Elektronik (Electronic Media)');
+        mediaItems.push(`Media Elektronik: ${document.getElementById('media-elektronik-example').value || 'N/A'}`);
       }
       if (document.getElementById('media-digital-checkbox').checked) {
-        mediaItems.push(document.getElementById('media-digital-example').value || 'Media Digital (Digital Media)');
+        mediaItems.push(`Media Digital: ${document.getElementById('media-digital-example').value || 'N/A'}`);
       }
-      
-      // Supporting documents
-      let docItems = [];
-      if (document.getElementById('doc-kertas-kerja').checked) docItems.push('Kertas kerja program / slide pembentangan');
-      if (document.getElementById('doc-surat-mesyuarat').checked) docItems.push('Surat mesyuarat penyelarasan / jemputan program');
-      if (document.getElementById('doc-laporan-kpi').checked) docItems.push('Laporan selepas program - borang KPI IP2M1-1');
-      if (document.getElementById('doc-gambar').checked) docItems.push('Gambar program / tangkap layar media');
-      if (document.getElementById('doc-laporan-sms').checked) docItems.push('Laporan Maklum Balas dari Survey Management System (SMS)');
-      
-      section2.innerHTML = `
-        <div class="print-section-header">
-          <h2 class="print-section-title">IP2M1:2 - Performance Metrics</h2>
-          <div class="print-section-subtitle">Performance & Feedback Analysis</div>
+      const mediaText = mediaItems.length > 0 ? mediaItems.join('<br>') : 'Tiada saluran media';
+
+      pdfContent.innerHTML += `
+        <div style="margin-bottom:25px">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP2M1 - Community Engagement Index</h2>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">A. Information Sharing & Publication (100%)</h3>
+            <p><strong>Saluran:</strong><br>${mediaText}</p>
+            <p><strong>Peratus Liputan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('media-coverage').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">B. Participant Satisfaction Level</h3>
+            <p><strong>Jumlah Responden:</strong> ${document.getElementById('ip2-total-respondent').value || '0'}</p>
+            <p><strong>Responden Positif:</strong> ${document.getElementById('ip2-positive-respondent').value || '0'}</p>
+            <p><strong>Peratus Kepuasan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip2-satisfaction-percent').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">C. Participant Involvement (100%)</h3>
+            <p><strong>Saiz Kehadiran:</strong> ${document.getElementById('crowd-size').value || '0'}</p>
+            <p><strong>Kumpulan Sasaran:</strong> ${document.getElementById('target-group').value || '0'}</p>
+            <p><strong>Markah:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('participant-percent').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:linear-gradient(135deg,#0ea5e9 0%,#0284c7 100%);color:white;padding:25px;border-radius:12px;text-align:center;margin:25px 0">
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:26px;margin:0 0 12px;letter-spacing:-0.5px">JUMLAH SKOR</h3>
+            <p style="font-size:42px;font-weight:800;margin:0;letter-spacing:-1px">${document.getElementById('total-ip2m1-2').textContent || '0'}%</p>
+            <p style="opacity:0.95;margin:12px 0 0;font-size:15px">Purata: Liputan Media + Kepuasan + Penyertaan</p>
+          </div>
         </div>
-        ${createQAField('Information Sharing Channels', mediaItems.join(', '))}
-        ${createQAField('Channel Coverage Percentage', document.getElementById('media-coverage').textContent)}
-        ${createQAField('Survey Satisfaction', document.getElementById('survey-percent-display').textContent)}
-        ${createQAField('Crowd Size (Actual Attendance)', document.getElementById('crowd-size').value)}
-        ${createQAField('Target Group (Capacity)', document.getElementById('target-group').value)}
-        ${createQAField('Participant Involvement Mark', document.getElementById('participant-percent').textContent)}
-        ${createQAField('Total Score', document.getElementById('total-ip2m1-2').textContent + '%')}
-        ${createQAField('Supporting Documents', docItems.join(', '))}
       `;
-      printContent.appendChild(section2);
-    }
-    
-    // Add IP3M2 section
-    if (ip3m2) {
-      const section3 = document.createElement('div');
-      section3.className = 'print-section';
-      section3.innerHTML = `
-        <div class="print-section-header">
-          <h2 class="print-section-title">IP3M2 - Economic & Media Analysis</h2>
+    } 
+    // === IP3M2 SECTION ===
+    else if (sectionId === 'ip3m2') {
+      pdfContent.innerHTML += `
+        <div style="margin-bottom:25px">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP3M2 - Event Management Effectiveness Index</h2>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">Promotion & Outreach (Media Coverage)</h3>
+            <p><strong>Senarai Media:</strong><br>${document.getElementById('ip3-media-list').value.replace(/\n/g, '<br>') || 'Tiada media'}</p>
+            <p><strong>Peratus Liputan Media:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip3-media-percent').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">Penyertaan</h3>
+            <p><strong>Kehadiran Sebenar:</strong> ${document.getElementById('ip3-actual-attendance').value || '0'}</p>
+            <p><strong>Sasaran Kehadiran:</strong> ${document.getElementById('ip3-target-attendance').value || '0'}</p>
+            <p><strong>Markah Penyertaan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip3-participation-percent').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">Tahap Kepuasan Peserta</h3>
+            <p><strong>Jumlah Responden:</strong> ${document.getElementById('ip3-total-respondent').value || '0'}</p>
+            <p><strong>Responden Positif:</strong> ${document.getElementById('ip3-positive-respondent').value || '0'}</p>
+            <p><strong>Peratus Kepuasan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip3-satisfaction-percent').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">Penjanaan Ekonomi</h3>
+            <p><strong>Bilangan Sasaran Penyertaan Usahawan:</strong> ${document.getElementById('ip3-targeted-enterpreneur-involvement').value || '0'}</p>
+            <p><strong>Bilangan Sebenar Penyertaan Usahawan:</strong> ${document.getElementById('ip3-actual-enterprenuer-involvement').value || '0'}</p>
+            <p><strong>ROI:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip3-roi-percent').textContent || '0%'}</span></p>
+          </div>
         </div>
-        ${createQAField('List of Media', document.getElementById('ip3-media-list').value.replace(/\n/g, ', '))}
-        ${createQAField('Media Coverage Percentage', document.getElementById('ip3-media-percent').textContent)}
-        ${createQAField('Actual Attendance', document.getElementById('ip3-actual-attendance').value)}
-        ${createQAField('Target Attendance', document.getElementById('ip3-target-attendance').value)}
-        ${createQAField('Participation Mark', document.getElementById('ip3-participation-percent').textContent)}
-        ${createQAField('Total Respondent', document.getElementById('ip3-total-respondent').value)}
-        ${createQAField('Positive Respondent', document.getElementById('ip3-positive-respondent').value)}
-        ${createQAField('Satisfaction Percentage', document.getElementById('ip3-satisfaction-percent').textContent)}
-        ${createQAField('Revenue (RM)', document.getElementById('ip3-revenue').value)}
-        ${createQAField('Modal (RM)', document.getElementById('ip3-modal').value)}
-        ${createQAField('ROI', document.getElementById('ip3-roi-percent').textContent)}
       `;
-      printContent.appendChild(section3);
     }
-    
-    // Add footer
-    printContent.innerHTML += `
-      <div class="print-footer">
-        SocialSync Programme Management System • Official Government Document • Confidential
+
+    // Footer
+    pdfContent.innerHTML += `
+      <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:13px">
+        <p style="font-weight:600;color:#1e40af">SocialSync Programme Management System</p>
+        <p>Dokumen Rasmi Kerajaan • Sulit</p>
+        <p style="margin-top:8px;font-size:12px;color:#64748b">
+          Dijana pada: ${new Date().toLocaleDateString('ms-MY', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
+        </p>
       </div>
     `;
-    
-    // Temporarily add to body
-    document.body.appendChild(printContent);
-    
-    // Trigger print
-    window.print();
-    
-    // Remove after print
-    setTimeout(() => {
-      document.body.removeChild(printContent);
-      printModal.classList.add('hidden');
-    }, 100);
-  });
-  
-  // Close modal when clicking outside
-  printModal.addEventListener('click', (e) => {
-    if (e.target === printModal) {
-      printModal.classList.add('hidden');
-    }
-  });
+
+    document.body.appendChild(pdfContent);
+
+    // Generate PDF
+    html2canvas(pdfContent, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false
+    }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 210;
+      const pageHeight = 297;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save(`${programmeName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
+      
+      alert('✅ Laporan PDF telah dijana dan dimuat turun!');
+    }).catch(err => {
+      console.error('PDF generation error:', err);
+      alert('⚠️ Gagal menjana PDF. Cuba semula atau guna fungsi Cetak.');
+    }).finally(() => {
+      document.body.removeChild(pdfContent);
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    });
+  } catch (error) {
+    console.error('Export error:', error);
+    alert('⚠️ Ralat semasa menjana PDF. Sila semak konsol pelayar.');
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
 }
 
 // Add event listener (place this INSIDE your DOMContentLoaded setup)
