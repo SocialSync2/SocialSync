@@ -1207,7 +1207,7 @@ function exportAsPDF() {
 
       pdfContent.innerHTML += `
         <div style="margin-bottom:25px">
-          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP2M1 - INDEKS PENYERTAAN KOMUNITI</h2>
+          <h2 style="font-family:'Space Grotesk',font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP2M1 - INDEKS PENYERTAAN KOMUNITI</h2>
           
           <div style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">A. Perkongsian Maklumat & Penyiaran (100%)</h3>
@@ -1244,27 +1244,27 @@ function exportAsPDF() {
           <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP3M2 - INDEKS KECEKAPAN PENGURUSAN ACARA</h2>
           
           <div style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">Promosi & Jangkauan (Liputan Media)</h3>
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">A. Promosi & Jangkauan (Liputan Media)</h3>
             <p style="margin:8px 0"><strong>Senarai Media:</strong><br>${document.getElementById('ip3-media-list').value.replace(/\n/g, '<br>') || 'Tiada media'}</p>
             <p style="margin:10px 0 6px;font-weight:600"><strong>Peratus Liputan Media:</strong> <span style="color:#0ea5e9;font-size:19px">${document.getElementById('ip3-media-percent').textContent || '0%'}</span></p>
           </div>
           
           <div style="background:#f0f9ff;border-left:4px solid #0ea5e9;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">Penyertaan</h3>
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">B. Penyertaan</h3>
             <p style="margin:8px 0"><strong>Kehadiran Sebenar:</strong> ${document.getElementById('ip3-actual-attendance').value || '0'}</p>
             <p style="margin:8px 0"><strong>Sasaran Kehadiran:</strong> ${document.getElementById('ip3-target-attendance').value || '0'}</p>
             <p style="margin:8px 0"><strong>Markah Penyertaan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip3-participation-percent').textContent || '0%'}</span></p>
           </div>
           
           <div style="background:#f0f9ff;border-left:4px solid #06b6d4;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">Tahap Kepuasan Peserta</h3>
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">C. Tahap Kepuasan Peserta</h3>
             <p style="margin:8px 0"><strong>Jumlah Responden:</strong> ${document.getElementById('ip3-total-respondent').value || '0'}</p>
             <p style="margin:8px 0"><strong>Responden Positif:</strong> ${document.getElementById('ip3-positive-respondent').value || '0'}</p>
             <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#06b6d4;font-weight:bold;font-size:18px">${document.getElementById('ip3-satisfaction-percent').textContent || '0%'}</span></p>
           </div>
           
           <div style="background:#f0f9ff;border-left:4px solid #8b5cf6;padding:16px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">Penjanaan Ekonomi</h3>
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">D. Penjanaan Ekonomi</h3>
             <p style="margin:8px 0"><strong>Bilangan Sasaran Penyertaan Usahawan:</strong> ${document.getElementById('ip3-targeted-enterpreneur-involvement').value || '0'}</p>
             <p style="margin:8px 0"><strong>Bilangan Sebenar Penyertaan Usahawan:</strong> ${document.getElementById('ip3-actual-enterprenuer-involvement').value || '0'}</p>
             <p style="margin:8px 0"><strong>ROI:</strong> <span style="color:#8b5cf6;font-weight:bold;font-size:18px">${document.getElementById('ip3-roi-percent').textContent || '0%'}</span></p>
