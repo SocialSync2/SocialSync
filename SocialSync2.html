@@ -220,9 +220,8 @@ body {
           </svg>
           View Records
         </button>
-      </div>
-      <div class="flex items-center gap-3">
-        <button id="export-pdf-btn" class="px-4 py-2 bg-red-100 hover:bg-red-200 border border-red-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-red-700 no-print">
+
+        <button id="export-pdf-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
@@ -284,7 +283,7 @@ body {
               </div>
               <div>
                 <label for="programme" class="block text-sm font-medium text-slate-700 mb-1">Nama Program</label>
-                <input type="text" id="programme" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Enter programme name">
+                <input type="text" id="programme" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Nama Program">
               </div>
               <div>
                 <label for="date" class="block text-sm font-medium text-slate-700 mb-1">Tarikh Pelaksanaan</label>
@@ -324,15 +323,15 @@ body {
             <div class="p-5 space-y-4">
               <div>
                 <label for="ip1-tempat" class="block text-sm text-slate-700 mb-1">Tempat</label>
-                <input type="text" id="ip1-tempat" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Venue and capacity">
+                <input type="text" id="ip1-tempat" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Tempat dan Kapasiti">
               </div>
               <div>
                 <label for="ip1-objektif" class="block text-sm text-slate-700 mb-1">Objektif/Deskripsi Program</label>
-                <textarea id="ip1-objektif" name="ip1-objektif" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Programme objectives"></textarea>
+                <textarea id="ip1-objektif" name="ip1-objektif" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Objektif Program"></textarea>
               </div>
               <div>
                 <label for="ip1-impak" class="block text-sm text-slate-700 mb-1">Impak Program/PCDS2030 & SDG2030</label>
-                <textarea id="ip1-impak" name="ip1-impak" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Programme impact"></textarea>
+                <textarea id="ip1-impak" name="ip1-impak" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Impak Program"></textarea>
               </div>
               
               <!-- Attendance Info -->
@@ -352,11 +351,11 @@ body {
                 </div>
                 <div>
                   <label for="ip1-bil-tetamu" class="block text-sm text-slate-700 mb-1">Bilangan Tetamu Yang Hadir</label>
-                  <input type="number" id="ip1-bil-tetamu" min="0" class="w-full px-4 py-3 rounded-lg input-style text-slate-800" placeholder="Number of attendees">
+                  <input type="number" id="ip1-bil-tetamu" min="0" class="w-full px-4 py-3 rounded-lg input-style text-slate-800" placeholder="Bilangan Tetamu">
                 </div>
                 <div class="md:col-span-2">
                   <label for="ip1-pihak-media" class="block text-sm text-slate-700 mb-1">Pihak Media Yang Hadir</label>
-                  <textarea id="ip1-pihak-media" name="ip1-pihak-media" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Media present at the event"></textarea>
+                  <textarea id="ip1-pihak-media" name="ip1-pihak-media" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Pihak Media yang hadir"></textarea>
                 </div>
               </div>
 
@@ -802,7 +801,7 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzipmucPWTEHWNIeOF-PE542af2qxBdm9-uXafh6jx4JZqht55MqowJBLIx4Qtug28W1g/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwPm20SWFoA-QGPJPFYKSxM4JbujU8Vw40Myl-O_GQqgSvYyFL1f5pfy1Om0KryNwCC/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -1088,7 +1087,7 @@ function setupPrint() {
   });
 }
 
-// PDF Export Functionality
+// PDF Export Functionality (FIXED - Captures actual form data)
 function exportAsPDF() {
   const activeSectionBtn = document.querySelector('.section-btn.active');
   if (!activeSectionBtn) {
@@ -1113,81 +1112,133 @@ function exportAsPDF() {
     pdfContent.style.lineHeight = '1.6';
     pdfContent.style.margin = '0 auto';
 
-    // Header
+    // === GET ACTUAL FORM DATA ===
     const programmeName = document.getElementById('programme').value || 'Programme';
     const programmeDate = document.getElementById('date').value || 'Date';
-    const organizer = document.querySelector('input[name="organizer[]"]')?.value || 'Organizer';
+    
+    // Get ALL organizer values dynamically
+    const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
+    const organizerValues = Array.from(organizerInputs)
+      .map(input => input.value.trim())
+      .filter(value => value !== '');
+    const organizerText = organizerValues.join(', ') || 'Organizer';
+    
     const daerah = document.getElementById('daerah-dropdown').options[document.getElementById('daerah-dropdown').selectedIndex]?.text || 'Daerah';
 
+    // Header
     pdfContent.innerHTML = `
       <div style="text-align:center;margin-bottom:30px;border-bottom:3px solid #3b82f6;padding-bottom:20px">
-        <div style="background:linear-gradient(135deg,#3b82f6 0%,#2563eb 100%);width:80px;height:80px;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:white">
-            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h1 style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;background:linear-gradient(to right,#3b82f6,#2563eb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:10px 0 5px">SocialSync Official Report</h1>
+        <div style="background:linear-gradient(135deg,#3b82f6 0%,#2563eb 100%);width:80px;height:80px;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:36px">SS</div>
+        <h1 style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:#1e40af;margin:10px 0 5px">SocialSync Official Report</h1>
         <p style="color:#64748b;font-size:16px;margin:5px 0">Event & Programme Management System</p>
         <div style="margin-top:15px;padding:12px;background:#bfdbfe;border-radius:8px;display:inline-block;min-width:300px">
           <p style="font-weight:700;color:#1e40af;margin:4px 0;font-size:15px">${programmeName}</p>
           <p style="font-weight:600;color:#1e40af;margin:4px 0;font-size:14px">${programmeDate} • ${daerah}</p>
-          <p style="font-weight:600;color:#1e40af;margin:4px 0;font-size:14px">${organizer}</p>
+          <p style="font-weight:600;color:#1e40af;margin:4px 0;font-size:14px">${organizerText}</p>
         </div>
       </div>
     `;
 
-    // Helper
-    const createField = (label, value) => 
-      value ? `<div style="margin:8px 0"><strong>${label}:</strong> ${value}</div>` : '';
-
-    // Section Content
+    // === BULETIN DAERAH SECTION ===
     if (sectionId === 'ip2m1-1') {
-      const vipGuests = Array.from(document.querySelectorAll('input[name="vip_guest[]"]'))
-        .map(el => el.value.trim())
-        .filter(v => v)
-        .join(', ') || 'Tiada tetamu kehormat';
+      // Get ALL VIP guests dynamically
+      const vipGuestInputs = document.querySelectorAll('input[name="vip_guest[]"]');
+      const vipGuestValues = Array.from(vipGuestInputs)
+        .map(input => input.value.trim())
+        .filter(value => value !== '');
+      const vipGuestText = vipGuestValues.join(', ') || 'Tiada tetamu kehormat';
       
       pdfContent.innerHTML += `
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">BULETIN DAERAH - Programme Details</h2>
-          ${createField('Tempat', document.getElementById('ip1-tempat').value)}
-          ${createField('Objektif/Deskripsi Program', document.getElementById('ip1-objektif').value)}
-          ${createField('Impak Program', document.getElementById('ip1-impak').value)}
-          ${createField('Tetamu Kehormat', vipGuests)}
-          ${createField('Bilangan Tetamu Yang Hadir', document.getElementById('ip1-bil-tetamu').value)}
-          ${createField('Pihak Media Yang Hadir', document.getElementById('ip1-pihak-media').value)}
+          <p><strong>Tempat:</strong> ${document.getElementById('ip1-tempat').value || 'N/A'}</p>
+          <p><strong>Objektif/Deskripsi:</strong> ${document.getElementById('ip1-objektif').value || 'N/A'}</p>
+          <p><strong>Impak Program:</strong> ${document.getElementById('ip1-impak').value || 'N/A'}</p>
+          <p><strong>Tetamu Kehormat:</strong> ${vipGuestText}</p>
+          <p><strong>Bilangan Tetamu:</strong> ${document.getElementById('ip1-bil-tetamu').value || '0'}</p>
+          <p><strong>Pihak Media:</strong> ${document.getElementById('ip1-pihak-media').value || 'Tiada'}</p>
         </div>
       `;
     } 
+    // === IP2M1:2 SECTION ===
     else if (sectionId === 'ip2m1-2') {
+      // Media channels
+      let mediaItems = [];
+      if (document.getElementById('media-cetak-checkbox').checked) {
+        mediaItems.push(`Media Cetak: ${document.getElementById('media-cetak-example').value || 'N/A'}`);
+      }
+      if (document.getElementById('media-elektronik-checkbox').checked) {
+        mediaItems.push(`Media Elektronik: ${document.getElementById('media-elektronik-example').value || 'N/A'}`);
+      }
+      if (document.getElementById('media-digital-checkbox').checked) {
+        mediaItems.push(`Media Digital: ${document.getElementById('media-digital-example').value || 'N/A'}`);
+      }
+      const mediaText = mediaItems.length > 0 ? mediaItems.join('<br>') : 'Tiada saluran media';
+
       pdfContent.innerHTML += `
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP2M1 - Community Engagement Index</h2>
-          ${createField('Channel Coverage', document.getElementById('media-coverage').textContent)}
-          ${createField('Total Respondent', document.getElementById('ip2-total-respondent').value)}
-          ${createField('Positive Respondent', document.getElementById('ip2-positive-respondent').value)}
-          ${createField('Satisfaction %', document.getElementById('ip2-satisfaction-percent').textContent)}
-          ${createField('Crowd Size', document.getElementById('crowd-size').value)}
-          ${createField('Target Group', document.getElementById('target-group').value)}
-          ${createField('Participant Mark', document.getElementById('participant-percent').textContent)}
-          ${createField('Total Score', document.getElementById('total-ip2m1-2').textContent + '%')}
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">A. Information Sharing & Publication (100%)</h3>
+            <p><strong>Saluran:</strong><br>${mediaText}</p>
+            <p><strong>Peratus Liputan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('media-coverage').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">B. Participant Satisfaction Level</h3>
+            <p><strong>Jumlah Responden:</strong> ${document.getElementById('ip2-total-respondent').value || '0'}</p>
+            <p><strong>Responden Positif:</strong> ${document.getElementById('ip2-positive-respondent').value || '0'}</p>
+            <p><strong>Peratus Kepuasan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip2-satisfaction-percent').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">C. Participant Involvement (100%)</h3>
+            <p><strong>Saiz Kehadiran:</strong> ${document.getElementById('crowd-size').value || '0'}</p>
+            <p><strong>Kumpulan Sasaran:</strong> ${document.getElementById('target-group').value || '0'}</p>
+            <p><strong>Markah:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('participant-percent').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:linear-gradient(135deg,#0ea5e9 0%,#0284c7 100%);color:white;padding:25px;border-radius:12px;text-align:center;margin:25px 0">
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:26px;margin:0 0 12px;letter-spacing:-0.5px">JUMLAH SKOR</h3>
+            <p style="font-size:42px;font-weight:800;margin:0;letter-spacing:-1px">${document.getElementById('total-ip2m1-2').textContent || '0'}%</p>
+            <p style="opacity:0.95;margin:12px 0 0;font-size:15px">Purata: Liputan Media + Kepuasan + Penyertaan</p>
+          </div>
         </div>
       `;
     } 
+    // === IP3M2 SECTION ===
     else if (sectionId === 'ip3m2') {
       pdfContent.innerHTML += `
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP3M2 - Event Management Effectiveness Index</h2>
-          ${createField('Media Coverage %', document.getElementById('ip3-media-percent').textContent)}
-          ${createField('Actual Attendance', document.getElementById('ip3-actual-attendance').value)}
-          ${createField('Target Attendance', document.getElementById('ip3-target-attendance').value)}
-          ${createField('Participation Mark', document.getElementById('ip3-participation-percent').textContent)}
-          ${createField('Total Respondent', document.getElementById('ip3-total-respondent').value)}
-          ${createField('Positive Respondent', document.getElementById('ip3-positive-respondent').value)}
-          ${createField('Satisfaction %', document.getElementById('ip3-satisfaction-percent').textContent)}
-          ${createField('Targeted Entrepreneur', document.getElementById('ip3-targeted-enterpreneur-involvement').value)}
-          ${createField('Actual Entrepreneur', document.getElementById('ip3-actual-enterprenuer-involvement').value)}
-          ${createField('ROI', document.getElementById('ip3-roi-percent').textContent)}
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">Promotion & Outreach (Media Coverage)</h3>
+            <p><strong>Senarai Media:</strong><br>${document.getElementById('ip3-media-list').value.replace(/\n/g, '<br>') || 'Tiada media'}</p>
+            <p><strong>Peratus Liputan Media:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip3-media-percent').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">Penyertaan</h3>
+            <p><strong>Kehadiran Sebenar:</strong> ${document.getElementById('ip3-actual-attendance').value || '0'}</p>
+            <p><strong>Sasaran Kehadiran:</strong> ${document.getElementById('ip3-target-attendance').value || '0'}</p>
+            <p><strong>Markah Penyertaan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip3-participation-percent').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px;margin-bottom:20px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">Tahap Kepuasan Peserta</h3>
+            <p><strong>Jumlah Responden:</strong> ${document.getElementById('ip3-total-respondent').value || '0'}</p>
+            <p><strong>Responden Positif:</strong> ${document.getElementById('ip3-positive-respondent').value || '0'}</p>
+            <p><strong>Peratus Kepuasan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip3-satisfaction-percent').textContent || '0%'}</span></p>
+          </div>
+          
+          <div style="background:#dbeafe;padding:15px;border-radius:10px">
+            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px">Penjanaan Ekonomi</h3>
+            <p><strong>Bilangan Sasaran Penyertaan Usahawan:</strong> ${document.getElementById('ip3-targeted-enterpreneur-involvement').value || '0'}</p>
+            <p><strong>Bilangan Sebenar Penyertaan Usahawan:</strong> ${document.getElementById('ip3-actual-enterprenuer-involvement').value || '0'}</p>
+            <p><strong>ROI:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip3-roi-percent').textContent || '0%'}</span></p>
+          </div>
         </div>
       `;
     }
@@ -1197,7 +1248,15 @@ function exportAsPDF() {
       <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:13px">
         <p style="font-weight:600;color:#1e40af">SocialSync Programme Management System</p>
         <p>Dokumen Rasmi Kerajaan • Sulit</p>
-        <p style="margin-top:8px;font-size:12px;color:#64748b">Dijana pada: ${new Date().toLocaleDateString('ms-MY', {dateStyle:'full',timeStyle:'short'})}</p>
+        <p style="margin-top:8px;font-size:12px;color:#64748b">
+          Dijana pada: ${new Date().toLocaleDateString('ms-MY', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
+        </p>
       </div>
     `;
 
@@ -1211,7 +1270,8 @@ function exportAsPDF() {
       logging: false
     }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
       const imgWidth = 210;
       const pageHeight = 297;
       const imgHeight = canvas.height * imgWidth / canvas.width;
@@ -1221,7 +1281,7 @@ function exportAsPDF() {
       
       alert('✅ Laporan PDF telah dijana dan dimuat turun!');
     }).catch(err => {
-      console.error('PDF error:', err);
+      console.error('PDF generation error:', err);
       alert('⚠️ Gagal menjana PDF. Cuba semula atau guna fungsi Cetak.');
     }).finally(() => {
       document.body.removeChild(pdfContent);
@@ -1230,7 +1290,7 @@ function exportAsPDF() {
     });
   } catch (error) {
     console.error('Export error:', error);
-    alert('⚠️ Exporting PDF may have failed. Check browser console.');
+    alert('⚠️ Ralat semasa menjana PDF. Sila semak konsol pelayar.');
     btn.disabled = false;
     btn.innerHTML = originalText;
   }
@@ -1272,6 +1332,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('main-form').addEventListener('submit', submitForm);
   document.getElementById('view-records-btn').addEventListener('click', () => {
     window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
+  // Add PDF export event listener (INSIDE DOMContentLoaded)
+  document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
   });
   setupPrint();
   updateIP2M1_2();
