@@ -1210,20 +1210,20 @@ function exportAsPDF() {
           <h2 style="font-family:'Space Grotesk',font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP2M1 - INDEKS PENYERTAAN KOMUNITI</h2>
           
           <div style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">A. Perkongsian Maklumat & Penyiaran (100%)</h3>
+            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">A. Perkongsian Maklumat & Penyiaran (100%)</h3>
             <p style="margin:8px 0"><strong>Saluran:</strong><br>${mediaText}</p>
             <p style="margin:10px 0 6px;font-weight:600"><strong>Peratus Liputan Saluran:</strong> <span style="color:#0ea5e9;font-size:19px">${document.getElementById('media-coverage').textContent || '0%'}</span></p>
           </div>
           
           <div style="background:#f0f9ff;border-left:4px solid #0ea5e9;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">B. Tahap Kepuasan Peserta</h3>
+            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">B. Tahap Kepuasan Peserta</h3>
             <p style="margin:8px 0"><strong>Jumlah Responden:</strong> ${document.getElementById('ip2-total-respondent').value || '0'}</p>
             <p style="margin:8px 0"><strong>Responden Positif:</strong> ${document.getElementById('ip2-positive-respondent').value || '0'}</p>
             <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip2-satisfaction-percent').textContent || '0%'}</span></p>
           </div>
           
           <div style="background:#f0f9ff;border-left:4px solid #06b6d4;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">C. Penyertaan Peserta (100%)</h3>
+            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">C. Penyertaan Peserta (100%)</h3>
             <p style="margin:8px 0"><strong>Saiz Kehadiran:</strong> ${document.getElementById('crowd-size').value || '0'}</p>
             <p style="margin:8px 0"><strong>Kumpulan Sasaran:</strong> ${document.getElementById('target-group').value || '0'}</p>
             <p style="margin:8px 0"><strong>Markah:</strong> <span style="color:#06b6d4;font-weight:bold;font-size:18px">${document.getElementById('participant-percent').textContent || '0%'}</span></p>
