@@ -1097,7 +1097,7 @@ function exportAsPDF() {
   const btn = document.getElementById('export-pdf-btn');
   const originalText = btn.innerHTML;
   btn.disabled = true;
-  btn '<span>Generating PDF...</span>';
+  btn.innerHTML = '<span>Generating PDF...</span>';
 
   try {
     const sectionId = activeSectionBtn.dataset.section;
