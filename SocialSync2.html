@@ -838,12 +838,13 @@ async function submitForm(e) {
     };
     
     // ... rest of submission code remains the same ...
+// This part is already working correctly
     const imageFiles = {
       'ip2m1-1': document.getElementById('ip2m1-1-images')?.files || [],
       'ip2m1-2': document.getElementById('ip2m1-2-images')?.files || [],
       'ip3m2': document.getElementById('ip3m2-images')?.files || []
     };
-    const images = [];
+    const images [];
     const selectedImages = imageFiles[selectedSection] || [];
     for (let i = 0; i < selectedImages.length; i++) {
       images.push(await fileToBase64(selectedImages[i]));
@@ -857,7 +858,7 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzipmucPWTEHWNIeOF-PE542af2qxBdm9-uXafh6jx4JZqht55MqowJBLIx4Qtug28W1g/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvEA_VE7QNQddIv9nHFd4ED9g0dXNVa4LZQgVPw_SVcrsLCe2sNQtbrN1LRmI4Hv8ulg/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
