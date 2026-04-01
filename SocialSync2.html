@@ -857,7 +857,7 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxwZ3hltiwjD5aubM3OZl39EuyK5r38pG1WTGKIBh5uTRq0YgiIN_PL9fJWXoobt-GZBw/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzipmucPWTEHWNIeOF-PE542af2qxBdm9-uXafh6jx4JZqht55MqowJBLIx4Qtug28W1g/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -1142,10 +1142,7 @@ function setupPrint() {
   });
 }
 
-// Global variable to store last submitted data (for post-submission PDF export)
-let lastSubmittedData = null;
-
-// PDF Export Functionality - WITH IMAGES & GOVERNMENT HEADER
+// PDF Export Functionality (FIXED FOR POST-SUBMISSION DATA)
 function exportAsPDF() {
   const activeSectionBtn = document.querySelector('.section-btn.active');
   if (!activeSectionBtn) {
@@ -1163,16 +1160,16 @@ function exportAsPDF() {
     const pdfContent = document.createElement('div');
     pdfContent.id = 'pdf-export-content';
     pdfContent.style.width = '800px';
-    pdfContent.style.padding = '40px';
+    pdfContent.style.padding = '30px 40px';
     pdfContent.style.fontFamily = '"DM Sans", sans-serif';
     pdfContent.style.color = '#1e293b';
     pdfContent.style.backgroundColor = 'white';
-    pdfContent.style.lineHeight = '1.6';
+    pdfContent.style.lineHeight = '1.5';
     pdfContent.style.margin = '0 auto';
     pdfContent.style.boxSizing = 'border-box';
     pdfContent.style.position = 'relative';
 
-    // === GET FORM DATA (USE STORED DATA IF FORM IS EMPTY AFTER SUBMISSION) ===
+    // === GET FORM DATA (USE STORED DATA IF FORM IS EMPTY) ===
     let programmeName = document.getElementById('programme').value || 'Programme';
     let programmeDate = document.getElementById('date').value || 'Date';
     let organizerText = 'Organizer';
@@ -1182,10 +1179,10 @@ function exportAsPDF() {
     const isFormEmpty = !document.getElementById('programme').value.trim();
     if (lastSubmittedData && isFormEmpty) {
       // Use stored submitted data
-      programmeName = lastSubmittedData.programme_name || programmeName;
-      programmeDate = lastSubmittedData.programme_date || programmeDate;
-      organizerText = lastSubmittedData.organizer || organizerText;
-      daerah = lastSubmittedData.daerah || daerah;
+      programmeName = lastSubmittedData.programme_name;
+      programmeDate = lastSubmittedData.programme_date;
+      organizerText = lastSubmittedData.organizer;
+      daerah = lastSubmittedData.daerah;
     } else {
       // Get current form data
       const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
@@ -1200,7 +1197,7 @@ function exportAsPDF() {
       }
     }
 
-    // === EXACT HEADER DESIGN FROM REFERENCE IMAGE (GOVERNMENT STYLE) ===
+    // === EXACT HEADER DESIGN FROM REFERENCE IMAGE ===
     pdfContent.innerHTML = `
       <div style="position:relative;height:100px;margin-bottom:25px;border-bottom:2px solid #1e40af">
         <!-- Left side: Borang KPI -->
@@ -1211,21 +1208,13 @@ function exportAsPDF() {
         <!-- Center: Main title and subtitle -->
         <div style="text-align:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
           <div style="font-size:24px;font-weight:bold;color:#000;margin-bottom:5px">PEJABAT DAERAH MUKAH</div>
-          <div style="font-size:18px;color:#000">SUKU PERTAMA (APRIL - JUN) 2025</div>
         </div>
-        
-        <!-- Right side: Vertical text with blue stripe -->
-        <div style="position:absolute;right:0;top:0;height:100%;width:35px;background-color:#1e40af;display:flex;align-items:center;justify-content:center">
-          <div style="writing-mode:vertical-rl;text-orientation:mixed;font-size:16px;font-weight:bold;color:white;padding:5px 0;text-align:center;line-height:1.3">
-            LAPORAN PROGRAM SELARAS PROGRAM
-          </div>
-        </div>
+
       </div>
     `;
 
     // === BULETIN DAERAH SECTION ===
     if (sectionId === 'ip2m1-1') {
-      // Get VIP guests
       let vipGuestText = 'Tiada tetamu kehormat';
       if (lastSubmittedData && isFormEmpty) {
         vipGuestText = lastSubmittedData.vip_guest || vipGuestText;
@@ -1237,28 +1226,12 @@ function exportAsPDF() {
         vipGuestText = vipGuestValues.join(', ') || vipGuestText;
       }
       
-      // Get field values with fallback to stored data
-      const tempat = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.venue_capacity || 'N/A') : 
-        (document.getElementById('ip1-tempat')?.value || 'N/A');
+      const tempat = isFormEmpty && lastSubmittedData ? lastSubmittedData.venue_capacity : document.getElementById('ip1-tempat').value || 'N/A';
+      const objektif = isFormEmpty && lastSubmittedData ? lastSubmittedData.objective : document.getElementById('ip1-objektif').value || 'N/A';
+      const impak = isFormEmpty && lastSubmittedData ? lastSubmittedData.impact : document.getElementById('ip1-impak').value || 'N/A';
+      const tetamuHadir = isFormEmpty && lastSubmittedData ? lastSubmittedData.total_attendance : document.getElementById('ip1-bil-tetamu').value || '0';
+      const mediaHadir = isFormEmpty && lastSubmittedData ? lastSubmittedData.media_present : document.getElementById('ip1-pihak-media').value || 'Tiada';
       
-      const objektif = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.objective || 'N/A') : 
-        (document.getElementById('ip1-objektif')?.value || 'N/A');
-      
-      const impak = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.impact || 'N/A') : 
-        (document.getElementById('ip1-impak')?.value || 'N/A');
-      
-      const tetamuHadir = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.total_attendance || '0') : 
-        (document.getElementById('ip1-bil-tetamu')?.value || '0');
-      
-      const mediaHadir = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.media_present || 'Tiada') : 
-        (document.getElementById('ip1-pihak-media')?.value || 'Tiada');
-      
-      // Add program info list ABOVE the table
       pdfContent.innerHTML += `
         <div style="margin-bottom:15px">
           <div style="margin-bottom:8px"><strong>Pejabat:</strong> ${daerah}</div>
@@ -1268,7 +1241,7 @@ function exportAsPDF() {
         </div>
         
         <div style="margin-bottom:25px">
-          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">BULETIN DAERAH</h2>
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">BULETIN DAERAH</h2>
           
           <table style="width:100%;border-collapse:collapse;margin-top:15px;font-size:14px">
             <tr>
@@ -1296,62 +1269,8 @@ function exportAsPDF() {
               <td style="padding:10px 0;color:#1e293b">${mediaHadir}</td>
             </tr>
           </table>
-          
-          <!-- IMAGES SECTION -->
-          <div style="margin-top:25px">
-            <h3 style="font-weight:700;color:#000;margin-bottom:15px;font-size:18px">Gambar Program</h3>
-            <div id="pdf-image-container" style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:10px"></div>
-          </div>
         </div>
       `;
-      
-      // Add images to PDF content
-      const imageFiles = isFormEmpty && lastSubmittedData?.images ? 
-        lastSubmittedData.images : 
-        Array.from(document.getElementById('ip2m1-1-images')?.files || []);
-      
-      const imageContainer = pdfContent.querySelector('#pdf-image-container');
-      
-      if (imageFiles.length > 0) {
-        // Limit to 4 images for PDF
-        const imagesToProcess = imageFiles.slice(0, 4);
-        const imagePromises = [];
-        
-        imagesToProcess.forEach((file, index) => {
-          if (file.type.match('image.*')) {
-            const reader = new FileReader();
-            const promise = new Promise((resolve) => {
-              reader.onload = (e) => {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.width = '100%';
-                img.style.height = '150px';
-                img.style.objectFit = 'cover';
-                img.style.borderRadius = '8px';
-                img.style.border = '1px solid #e2e8f0';
-                img.onload = () => resolve(img);
-                img.onerror = () => resolve(null);
-              };
-              reader.readAsDataURL(file);
-            });
-            imagePromises.push(promise);
-          }
-        });
-        
-        // Wait for all images to load before generating PDF
-        Promise.all(imagePromises).then((imgs) => {
-          imgs.filter(img => img !== null).forEach(img => {
-            imageContainer.appendChild(img);
-          });
-          generatePDF(pdfContent, programmeName, btn, originalText);
-        }).catch(err => {
-          console.error('Error loading images:', err);
-          generatePDF(pdfContent, programmeName, btn, originalText);
-        });
-      } else {
-        imageContainer.innerHTML = '<div style="grid-column:span 2;color:#64748b;text-align:center;padding:20px;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik</div>';
-        generatePDF(pdfContent, programmeName, btn, originalText);
-      }
     } 
     // === IP2M1:2 SECTION ===
     else if (sectionId === 'ip2m1-2') {
@@ -1417,7 +1336,7 @@ function exportAsPDF() {
         </div>
         
         <div style="margin-bottom:25px">
-          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">IP2M1 - INDEKS PENYERTAAN KOMUNITI</h2>
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">IP2M1 - INDEKS PENYERTAAN KOMUNITI</h2>
           
           <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">A. Perkongsian Maklumat & Penyiaran (100%)</h3>
@@ -1444,68 +1363,14 @@ function exportAsPDF() {
             <p style="font-size:48px;font-weight:800;margin:0;letter-spacing:-1.5px;text-shadow:0 4px 6px rgba(0,0,0,0.2)">${totalScore}%</p>
             <p style="opacity:0.95;margin:12px 0 0;font-size:15px">(Purata: Liputan Media + Kepuasan + Penyertaan)</p>
           </div>
-          
-          <!-- IMAGES SECTION -->
-          <div style="margin-top:25px">
-            <h3 style="font-weight:700;color:#000;margin-bottom:15px;font-size:18px">Gambar Program</h3>
-            <div id="pdf-image-container" style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:10px"></div>
-          </div>
         </div>
       `;
-      
-      // Add images to PDF content
-      const imageFiles = isFormEmpty && lastSubmittedData?.images ? 
-        lastSubmittedData.images : 
-        Array.from(document.getElementById('ip2m1-2-images')?.files || []);
-      
-      const imageContainer = pdfContent.querySelector('#pdf-image-container');
-      
-      if (imageFiles.length > 0) {
-        // Limit to 4 images for PDF
-        const imagesToProcess = imageFiles.slice(0, 4);
-        const imagePromises = [];
-        
-        imagesToProcess.forEach((file, index) => {
-          if (file.type.match('image.*')) {
-            const reader = new FileReader();
-            const promise = new Promise((resolve) => {
-              reader.onload = (e) => {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.width = '100%';
-                img.style.height = '150px';
-                img.style.objectFit = 'cover';
-                img.style.borderRadius = '8px';
-                img.style.border = '1px solid #e2e8f0';
-                img.onload = () => resolve(img);
-                img.onerror = () => resolve(null);
-              };
-              reader.readAsDataURL(file);
-            });
-            imagePromises.push(promise);
-          }
-        });
-        
-        // Wait for all images to load before generating PDF
-        Promise.all(imagePromises).then((imgs) => {
-          imgs.filter(img => img !== null).forEach(img => {
-            imageContainer.appendChild(img);
-          });
-          generatePDF(pdfContent, programmeName, btn, originalText);
-        }).catch(err => {
-          console.error('Error loading images:', err);
-          generatePDF(pdfContent, programmeName, btn, originalText);
-        });
-      } else {
-        imageContainer.innerHTML = '<div style="grid-column:span 2;color:#64748b;text-align:center;padding:20px;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik</div>';
-        generatePDF(pdfContent, programmeName, btn, originalText);
-      }
     } 
     // === IP3M2 SECTION ===
     else if (sectionId === 'ip3m2') {
       // Get values with fallback to stored data
       const mediaList = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip3_media_list || 'Tiada media').replace(/\n/g, '<br>') : 
+        lastSubmittedData.ip3_media_list.replace(/\n/g, '<br>') : 
         (document.getElementById('ip3-media-list')?.value.replace(/\n/g, '<br>') || 'Tiada media');
       
       const mediaPercent = isFormEmpty && lastSubmittedData ? 
@@ -1557,7 +1422,7 @@ function exportAsPDF() {
         </div>
         
         <div style="margin-bottom:25px">
-          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">IP3M2 - INDEKS KECEKAPAN PENGURUSAN ACARA</h2>
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">IP3M2 - INDEKS KECEKAPAN PENGURUSAN ACARA</h2>
           
           <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">A. Promosi & Jangkauan (Liputan Media)</h3>
@@ -1585,79 +1450,30 @@ function exportAsPDF() {
             <p style="margin:8px 0"><strong>Bilangan Sebenar Penyertaan Usahawan:</strong> ${actualEntrepreneur}</p>
             <p style="margin:8px 0"><strong>ROI:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${roiPercent}</span></p>
           </div>
-          
-          <!-- IMAGES SECTION -->
-          <div style="margin-top:25px">
-            <h3 style="font-weight:700;color:#000;margin-bottom:15px;font-size:18px">Gambar Program</h3>
-            <div id="pdf-image-container" style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:10px"></div>
-          </div>
         </div>
       `;
-      
-      // Add images to PDF content
-      const imageFiles = isFormEmpty && lastSubmittedData?.images ? 
-        lastSubmittedData.images : 
-        Array.from(document.getElementById('ip3m2-images')?.files || []);
-      
-      const imageContainer = pdfContent.querySelector('#pdf-image-container');
-      
-      if (imageFiles.length > 0) {
-        // Limit to 4 images for PDF
-        const imagesToProcess = imageFiles.slice(0, 4);
-        const imagePromises = [];
-        
-        imagesToProcess.forEach((file, index) => {
-          if (file.type.match('image.*')) {
-            const reader = new FileReader();
-            const promise = new Promise((resolve) => {
-              reader.onload = (e) => {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.width = '100%';
-                img.style.height = '150px';
-                img.style.objectFit = 'cover';
-                img.style.borderRadius = '8px';
-                img.style.border = '1px solid #e2e8f0';
-                img.onload = () => resolve(img);
-                img.onerror = () => resolve(null);
-              };
-              reader.readAsDataURL(file);
-            });
-            imagePromises.push(promise);
-          }
-        });
-        
-        // Wait for all images to load before generating PDF
-        Promise.all(imagePromises).then((imgs) => {
-          imgs.filter(img => img !== null).forEach(img => {
-            imageContainer.appendChild(img);
-          });
-          generatePDF(pdfContent, programmeName, btn, originalText);
-        }).catch(err => {
-          console.error('Error loading images:', err);
-          generatePDF(pdfContent, programmeName, btn, originalText);
-        });
-      } else {
-        imageContainer.innerHTML = '<div style="grid-column:span 2;color:#64748b;text-align:center;padding:20px;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik</div>';
-        generatePDF(pdfContent, programmeName, btn, originalText);
-      }
     }
-  } catch (error) {
-    console.error('Export error:', error);
-    alert('⚠️ Ralat semasa menjana PDF. Sila semak konsol pelayar.');
-    if (document.getElementById('export-pdf-btn')) {
-      document.getElementById('export-pdf-btn').disabled = false;
-      document.getElementById('export-pdf-btn').innerHTML = originalText;
-    }
-  }
-}
 
-// Helper function to generate PDF after images are loaded
-function generatePDF(pdfContent, programmeName, btn, originalText) {
-  document.body.appendChild(pdfContent);
-  
-  // Small delay to ensure images are fully rendered
-  setTimeout(() => {
+    // Footer with government styling
+    pdfContent.innerHTML += `
+      <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:12px">
+        <p style="font-weight:600;color:#1e40af;margin-bottom:6px">SocialSync Programme Management System</p>
+        <p style="font-weight:500;margin-bottom:4px">Dokumen Rasmi Kerajaan • Sulit</p>
+        <p style="margin-top:8px;font-size:11px;color:#64748b">
+          Dijana pada: ${new Date().toLocaleDateString('ms-MY', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
+        </p>
+      </div>
+    `;
+
+    document.body.appendChild(pdfContent);
+
+    // Generate PDF with proper A4 sizing
     html2canvas(pdfContent, {
       scale: 2,
       useCORS: true,
@@ -1702,7 +1518,12 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       btn.disabled = false;
       btn.innerHTML = originalText;
     });
-  }, 300);
+  } catch (error) {
+    console.error('Export error:', error);
+    alert('⚠️ Ralat semasa menjana PDF. Sila semak konsol pelayar.');
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
 }
 // Add event listener (place this INSIDE your DOMContentLoaded setup)
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
