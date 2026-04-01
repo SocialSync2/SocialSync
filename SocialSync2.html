@@ -838,7 +838,6 @@ async function submitForm(e) {
     };
     
     // ... rest of submission code remains the same ...
-// This part is already working correctly
     const imageFiles = {
       'ip2m1-1': document.getElementById('ip2m1-1-images')?.files || [],
       'ip2m1-2': document.getElementById('ip2m1-2-images')?.files || [],
@@ -858,7 +857,7 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvEA_VE7QNQddIv9nHFd4ED9g0dXNVa4LZQgVPw_SVcrsLCe2sNQtbrN1LRmI4Hv8ulg/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzviJe6XQ6bPNKUS90_GoC5_L8FmTSA8dx3UTInh9SbARv_3HgUhrL1Gs8O8DvAfxllXQ/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
