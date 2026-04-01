@@ -1087,7 +1087,6 @@ function setupPrint() {
   });
 }
 
-// PDF Export Functionality (EXACT GOVERNMENT HEADER DESIGN)
 function exportAsPDF() {
   const activeSectionBtn = document.querySelector('.section-btn.active');
   if (!activeSectionBtn) {
@@ -1098,7 +1097,7 @@ function exportAsPDF() {
   const btn = document.getElementById('export-pdf-btn');
   const originalText = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = '<span>Generating PDF...</span>';
+  btn '<span>Generating PDF...</span>';
 
   try {
     const sectionId = activeSectionBtn.dataset.section;
@@ -1137,7 +1136,7 @@ function exportAsPDF() {
         
         <!-- Center: Main title and subtitle -->
         <div style="text-align:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
-          <div style="font-size:24px;font-weight:bold;color:#000;margin-bottom:5px">PEJABAT DAERAH MUKAH</div>
+          <divfont-size:24px;font-weight:bold;color:#000;margin-bottom:5px">PEJABAT DAERAH MUKAH</div>
         </div>
         
         <!-- Right side: Vertical text with blue stripe -->
@@ -1158,6 +1157,13 @@ function exportAsPDF() {
       const vipGuestText = vipGuestValues.join(', ') || 'Tiada tetamu kehormat';
       
       pdfContent.innerHTML += `
+        <div style="margin-bottom:15px">
+          <div style="margin-bottom:8px"><strong>Pejabat:</strong> ${daerah}</div>
+          <div style="margin-bottom:8px"><strong>Nama Program:</strong> ${programmeName}</div>
+          <div style="margin-bottom:8px"><strong>Tarikh Pelaksanaan:</strong> ${programmeDate}</div>
+          <div style="margin-bottom:8px"><strong>Pengelola:</strong> ${organizerText}</div>
+        </div>
+        
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">BULETIN DAERAH - Programme Details</h2>
           
@@ -1209,27 +1215,27 @@ function exportAsPDF() {
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP2M1 - INDEKS PENYERTAAN KOMUNITI</h2>
           
-          <div style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
+          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">A. Perkongsian Maklumat & Penyiaran (100%)</h3>
             <p style="margin:8px 0"><strong>Saluran:</strong><br>${mediaText}</p>
-            <p style="margin:10px 0 6px;font-weight:600"><strong>Peratus Liputan Saluran:</strong> <span style="color:#0ea5e9;font-size:19px">${document.getElementById('media-coverage').textContent || '0%'}</span></p>
+            <p style="margin:10px 0 6px;font-weight:600"><strong>Peratus Liputan Saluran:</strong> <span style="color:#000;font-size:19px">${document.getElementById('media-coverage').textContent || '0%'}</span></p>
           </div>
           
-          <div style="background:#f0f9ff;border-left:4px solid #0ea5e9;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
+          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:00">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">B. Tahap Kepuasan Peserta</h3>
             <p style="margin:8px 0"><strong>Jumlah Responden:</strong> ${document.getElementById('ip2-total-respondent').value || '0'}</p>
             <p style="margin:8px 0"><strong>Responden Positif:</strong> ${document.getElementById('ip2-positive-respondent').value || '0'}</p>
-            <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip2-satisfaction-percent').textContent || '0%'}</span></p>
+            <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${document.getElementById('ip2-satisfaction-percent').textContent || '0%'}</span></p>
           </div>
           
-          <div style="background:#f0f9ff;border-left:4px solid #06b6d4;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
+          <div style="background:#f3;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">C. Penyertaan Peserta (100%)</h3>
             <p style="margin:8px 0"><strong>Saiz Kehadiran:</strong> ${document.getElementById('crowd-size').value || '0'}</p>
             <p style="margin:8px 0"><strong>Kumpulan Sasaran:</strong> ${document.getElementById('target-group').value || '0'}</p>
-            <p style="margin:8px 0"><strong>Markah:</strong> <span style="color:#06b6d4;font-weight:bold;font-size:18px">${document.getElementById('participant-percent').textContent || '0%'}</span></p>
+            <p style="margin:8px 0"><strong>Markah:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${document.getElementById('participant-percent').textContent || '0%'}</span></p>
           </div>
           
-          <div style="background:linear-gradient(135deg,#0ea5e9 0%,#0284c7 100%);color:white;padding:25px;border-radius:14px;text-align:center;margin:25px 0;box-shadow:0 8px 20px rgba(6, 182, 212, 0.25)">
+          <div style="background:#f3f4f6;color:#000;padding:25px;border-radius:14px;text-align:center;margin:25px 0;box-shadow:0 8px 20px rgba(6, 182, 212, 0.25)">
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:26px;margin:0 0 12px;letter-spacing:-0.5px">JUMLAH SKOR</h3>
             <p style="font-size:48px;font-weight:800;margin:0;letter-spacing:-1px">${document.getElementById('total-ip2m1-2').textContent || '0'}%</p>
             <p style="opacity:0.95;margin:12px 0 0;font-size:15px">(Purata: Liputan Media + Kepuasan + Penyertaan)</p>
@@ -1243,31 +1249,31 @@ function exportAsPDF() {
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP3M2 - INDEKS KECEKAPAN PENGURUSAN ACARA</h2>
           
-          <div style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">A. Promosi & Jangkauan (Liputan Media)</h3>
+          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
+            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">A. Promosi & Jangkauan (Liputan Media)</h3>
             <p style="margin:8px 0"><strong>Senarai Media:</strong><br>${document.getElementById('ip3-media-list').value.replace(/\n/g, '<br>') || 'Tiada media'}</p>
-            <p style="margin:10px 0 6px;font-weight:600"><strong>Peratus Liputan Media:</strong> <span style="color:#0ea5e9;font-size:19px">${document.getElementById('ip3-media-percent').textContent || '0%'}</span></p>
+            <p style="margin:10px 0 6px;font-weight:600"><strong>Peratus Liputan Media:</strong> <span style="color:#000;font-size:19px">${document.getElementById('ip3-media-percent').textContent || '0%'}</span></p>
           </div>
           
-          <div style="background:#f0f9ff;border-left:4px solid #0ea5e9;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">B. Penyertaan</h3>
+          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
+            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">B. Penyertaan</h3>
             <p style="margin:8px 0"><strong>Kehadiran Sebenar:</strong> ${document.getElementById('ip3-actual-attendance').value || '0'}</p>
             <p style="margin:8px 0"><strong>Sasaran Kehadiran:</strong> ${document.getElementById('ip3-target-attendance').value || '0'}</p>
-            <p style="margin:8px 0"><strong>Markah Penyertaan:</strong> <span style="color:#0ea5e9;font-weight:bold;font-size:18px">${document.getElementById('ip3-participation-percent').textContent || '0%'}</span></p>
+            <p style="margin:8px 0"><strong>Markah Penyertaan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${document.getElementById('ip3-participation-percent').textContent || '0%'}</span></p>
           </div>
           
-          <div style="background:#f0f9ff;border-left:4px solid #06b6d4;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">C. Tahap Kepuasan Peserta</h3>
+          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
+            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">C. Tahap Kepuasan Peserta</h3>
             <p style="margin:8px 0"><strong>Jumlah Responden:</strong> ${document.getElementById('ip3-total-respondent').value || '0'}</p>
-            <p style="margin:8px 0"><strong>Responden Positif:</strong> ${document.getElementById('ip3-positive-respondent').value || '0'}</p>
-            <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#06b6d4;font-weight:bold;font-size:18px">${document.getElementById('ip3-satisfaction-percent').textContent || '0%'}</span></p>
+            <p style="margin:8px 0Responden Positif:</strong> ${document.getElementById('ip3-positive-respondent').value || '0'}</p>
+            <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${document.getElementById('ip3-satisfaction-percent').textContent || '0%'}</span></p>
           </div>
           
-          <div style="background:#f0f9ff;border-left:4px solid #8b5cf6;padding:16px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#1e40af;margin-bottom:10px;font-size:17px">D. Penjanaan Ekonomi</h3>
+          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;border-radius:0 6px 6px 0">
+            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">D. Penjanaan Ekonomi</h3>
             <p style="margin:8px 0"><strong>Bilangan Sasaran Penyertaan Usahawan:</strong> ${document.getElementById('ip3-targeted-enterpreneur-involvement').value || '0'}</p>
             <p style="margin:8px 0"><strong>Bilangan Sebenar Penyertaan Usahawan:</strong> ${document.getElementById('ip3-actual-enterprenuer-involvement').value || '0'}</p>
-            <p style="margin:8px 0"><strong>ROI:</strong> <span style="color:#8b5cf6;font-weight:bold;font-size:18px">${document.getElementById('ip3-roi-percent').textContent || '0%'}</span></p>
+            <p style="8px 0"><strong>ROI:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${document.getElementById('ip3-roi-percent').textContent || '0%'}</span></p>
           </div>
         </div>
       `;
@@ -1287,7 +1293,7 @@ function exportAsPDF() {
             minute: '2-digit'
           })}
         </p>
-      </div>
+div>
     `;
 
     document.body.appendChild(pdfContent);
