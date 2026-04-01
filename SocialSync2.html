@@ -1206,6 +1206,13 @@ function exportAsPDF() {
       const mediaText = mediaItems.length > 0 ? mediaItems.join('<br>') : 'Tiada saluran media';
 
       pdfContent.innerHTML += `
+        <div style="margin-bottom:15px">
+          <div style="margin-bottom:8px"><strong>Pejabat:</strong> ${daerah}</div>
+          <div style="margin-bottom:8px"><strong>Nama Program:</strong> ${programmeName}</div>
+          <div style="margin-bottom:8px"><strong>Tarikh Pelaksanaan:</strong> ${programmeDate}</div>
+          <div style="margin-bottom:8px"><strong>Pengelola:</strong> ${organizerText}</div>
+        </div>
+
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP2M1 - INDEKS PENYERTAAN KOMUNITI</h2>
           
@@ -1275,6 +1282,13 @@ function exportAsPDF() {
 
     // Footer with government styling
     pdfContent.innerHTML += `
+        <div style="margin-bottom:15px">
+          <div style="margin-bottom:8px"><strong>Pejabat:</strong> ${daerah}</div>
+          <div style="margin-bottom:8px"><strong>Nama Program:</strong> ${programmeName}</div>
+          <div style="margin-bottom:8px"><strong>Tarikh Pelaksanaan:</strong> ${programmeDate}</div>
+          <div style="margin-bottom:8px"><strong>Pengelola:</strong> ${organizerText}</div>
+        </div>
+        
       <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:12px">
         <p style="font-weight:600;color:#1e40af;margin-bottom:6px">SocialSync Programme Management System</p>
         <p style="font-weight:500;margin-bottom:4px">Dokumen Rasmi Kerajaan • Sulit</p>
