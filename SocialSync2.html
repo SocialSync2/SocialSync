@@ -1247,6 +1247,13 @@ function exportAsPDF() {
     // === IP3M2 SECTION ===
     else if (sectionId === 'ip3m2') {
       pdfContent.innerHTML += `
+          <div style="margin-bottom:15px">
+            <div style="margin-bottom:8px"><strong>Pejabat:</strong> ${daerah}</div>
+            <div style="margin-bottom:8px"><strong>Nama Program:</strong> ${programmeName}</div>
+            <div style="margin-bottom:8px"><strong>Tarikh Pelaksanaan:</strong> ${programmeDate}</div>
+            <div style="margin-bottom:8px"><strong>Pengelola:</strong> ${organizerText}</div>
+          </div>
+          
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">IP3M2 - INDEKS KECEKAPAN PENGURUSAN ACARA</h2>
           
