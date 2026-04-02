@@ -752,40 +752,42 @@ async function submitForm(e) {
     ].filter(Boolean).join(', ');
     
     // === STORE DATA BEFORE RESET ===
-    lastSubmittedData = {
-      programme_name: document.getElementById('programme').value || 'Programme',
-      programme_date: document.getElementById('date').value || 'Date',
-      organizer: organizerText,
-      daerah: document.getElementById('daerah-dropdown').options[document.getElementById('daerah-dropdown').selectedIndex]?.text || 'Daerah',
-      venue_capacity: document.getElementById('ip1-tempat')?.value || 'N/A',
-      objective: document.getElementById('ip1-objektif')?.value || 'N/A',
-      impact: document.getElementById('ip1-impak')?.value || 'N/A',
-      vip_guest: vipGuestText,
-      total_attendance: document.getElementById('ip1-bil-tetamu')?.value || '0',
-      media_present: document.getElementById('ip1-pihak-media')?.value || 'Tiada',
-      selected_media_channels: mediaText,
-      media_coverage_percent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,
-      ip2_total_respondent: document.getElementById('ip2-total-respondent')?.value || '0',
-      ip2_positive_respondent: document.getElementById('ip2-positive-respondent')?.value || '0',
-      ip2_satisfaction_percent: parseFloat(document.getElementById('ip2-satisfaction-percent')?.textContent) || 0,
-      crowd_size: document.getElementById('crowd-size')?.value || '0',
-      target_group: document.getElementById('target-group')?.value || '0',
-      survey_participation_percent: parseFloat(document.getElementById('participant-percent')?.textContent) || 0,
-      total_ip2m1_score: parseFloat(document.getElementById('total-ip2m1-2')?.textContent) || 0,
-      selected_supporting_docs: selectedDocs,
-      ip3_media_list: document.getElementById('ip3-media-list')?.value || 'Tiada media',
-      ip3_media_percent: parseFloat(document.getElementById('ip3-media-percent')?.textContent) || 0,
-      ip3_actual_attendance: document.getElementById('ip3-actual-attendance')?.value || '0',
-      ip3_target_attendance: document.getElementById('ip3-target-attendance')?.value || '0',
-      ip3_participation_percent: parseFloat(document.getElementById('ip3-participation-percent')?.textContent) || 0,
-      ip3_total_respondent: document.getElementById('ip3-total-respondent')?.value || '0',
-      ip3_positive_respondent: document.getElementById('ip3-positive-respondent')?.value || '0',
-      ip3_satisfaction_percent: parseFloat(document.getElementById('ip3-satisfaction-percent')?.textContent) || 0,
-      targeted_enterpreneur_involvement: document.getElementById('ip3-targeted-enterpreneur-involvement')?.value || '0',
-      actual_enterpreneur_involvement: document.getElementById('ip3-actual-enterprenuer-involvement')?.value || '0',
-      roi_percent: parseFloat(document.getElementById('ip3-roi-percent')?.textContent) || 0,
-      section: selectedSection
-    };
+// Store submitted data for PDF export after form reset
+  lastSubmittedData = {
+    programme_name: document.getElementById('programme')?.value || '',
+    programme_date: document.getElementById('date')?.value || '',
+    organizer: organizerText,
+    daerah: document.getElementById('daerah-dropdown')?.value || '',
+    venue_capacity: document.getElementById('ip1-tempat')?.value || '',
+    objective: document.getElementById('ip1-objektif')?.value || '',
+    impact: document.getElementById('ip1-impak')?.value || '',
+    vip_guest: vipGuestText,
+    total_attendance: document.getElementById('ip1-bil-tetamu')?.value || '',
+    media_present: document.getElementById('ip1-pihak-media')?.value || '',
+    selected_media_channels: selectedMediaText,
+    media_coverage_percent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,
+    ip2_total_respondent: document.getElementById('ip2-total-respondent')?.value || 0,
+    ip2_positive_respondent: document.getElementById('ip2-positive-respondent')?.value || 0,
+    ip2_satisfaction_percent: parseFloat(document.getElementById('ip2-satisfaction-percent')?.textContent) || 0,
+    crowd_size: document.getElementById('crowd-size')?.value || 0,
+    target_group: document.getElementById('target-group')?.value || 0,
+    survey_participation_percent: parseFloat(document.getElementById('participant-percent')?.textContent) || 0,
+    total_ip2m1_score: parseFloat(document.getElementById('total-ip2m1-2')?.textContent) || 0,
+    selected_supporting_docs: selectedDocs,
+    ip3_media_list: document.getElementById('ip3-media-list')?.value || '',
+    ip3_media_percent: parseFloat(document.getElementById('ip3-media-percent')?.textContent) || 0,
+    ip3_actual_attendance: document.getElementById('ip3-actual-attendance')?.value || 0,
+    ip3_target_attendance: document.getElementById('ip3-target-attendance')?.value || 0,
+    ip3_participation_percent: parseFloat(document.getElementById('ip3-participation-percent')?.textContent) || 0,
+    ip3_total_respondent: document.getElementById('ip3-total-respondent')?.value || 0,
+    ip3_positive_respondent: document.getElementById('ip3-positive-respondent')?.value || 0,
+    ip3_satisfaction_percent: parseFloat(document.getElementById('ip3-satisfaction-percent')?.textContent) || 0,
+    targeted_enterpreneur_involvement: document.getElementById('ip3-targeted-enterpreneur-involvement')?.value || 0,
+    actual_enterpreneur_involvement: document.getElementById('ip3-actual-enterprenuer-involvement')?.value || 0,
+    roi_percent: parseFloat(document.getElementById('ip3-roi-percent')?.textContent) || 0,
+    images: images, // Store Base64 images for PDF export after submission
+    section: selectedSection
+  };
     
     // === PROCEED WITH SUBMISSION ===
     const selectedMedia = [];
