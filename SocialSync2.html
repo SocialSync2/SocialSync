@@ -1195,21 +1195,16 @@ function exportAsPDF() {
       }
     }
 
-    // === GOVERNMENT HEADER (FIXED WITH VERTICAL TEXT) ===
+    // === GOVERNMENT HEADER ===
     pdfContent.innerHTML = `
       <div style="position:relative;height:100px;margin-bottom:25px;border-bottom:2px solid #1e40af">
-        <!-- Left side: Borang KPI -->
         <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:14px;font-weight:bold;color:#000;width:180px">
           Borang KPI IP2M1:1
         </div>
-        
-        <!-- Center: Main title and subtitle -->
         <div style="text-align:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
           <div style="font-size:24px;font-weight:bold;color:#000;margin-bottom:5px">PEJABAT DAERAH MUKAH</div>
           <div style="font-size:18px;color:#000">SUKU PERTAMA (APRIL - JUN) 2025</div>
         </div>
-        
-        <!-- Right side: Vertical text with blue stripe (FIXED) -->
         <div style="position:absolute;right:0;top:0;height:100%;width:35px;background-color:#1e40af;display:flex;align-items:center;justify-content:center">
           <div style="writing-mode:vertical-rl;text-orientation:mixed;font-size:14px;font-weight:bold;color:white;padding:5px 0;text-align:center;line-height:1.3">
             LAPORAN PROGRAM SELARAS PROGRAM
@@ -1230,7 +1225,7 @@ function exportAsPDF() {
     let imageInputId = '';
     
     if (sectionId === 'ip2m1-1') {
-      // BULETIN DAERAH content (with fallback to stored data)
+      // BULETIN DAERAH content
       let vipGuestText = 'Tiada tetamu kehormat';
       if (isFormEmpty && lastSubmittedData) {
         vipGuestText = lastSubmittedData.vip_guest || vipGuestText;
@@ -1283,7 +1278,7 @@ function exportAsPDF() {
       imageInputId = 'ip2m1-1-images';
       
     } else if (sectionId === 'ip2m1-2') {
-      // IP2M1 content (with fallback to stored data)
+      // IP2M1 content
       let mediaItems = [];
       if (isFormEmpty && lastSubmittedData) {
         mediaItems = lastSubmittedData.selected_media_channels ? 
@@ -1368,7 +1363,7 @@ function exportAsPDF() {
       imageInputId = 'ip2m1-2-images';
       
     } else if (sectionId === 'ip3m2') {
-      // IP3M2 content (with fallback to stored data)
+      // IP3M2 content
       const mediaList = isFormEmpty && lastSubmittedData ? 
         lastSubmittedData.ip3_media_list.replace(/\n/g, '<br>') : 
         (document.getElementById('ip3-media-list')?.value.replace(/\n/g, '<br>') || 'Tiada media');
@@ -1472,16 +1467,14 @@ function exportAsPDF() {
       </div>
     `;
 
-    // === LOAD IMAGES PROPERLY (CRITICAL FIX) ===
+    // === LOAD IMAGES PROPERLY ===
     const imageInput = document.getElementById(imageInputId);
     const pdfImageContainer = pdfContent.querySelector('#pdf-image-container');
     
-    // Check if there are images to load
     if (imageInput && imageInput.files && imageInput.files.length > 0) {
-      const imageFiles = Array.from(imageInput.files).slice(0, 4); // Max 4 images
+      const imageFiles = Array.from(imageInput.files).slice(0, 4);
       const imagePromises = [];
       
-      // Create image elements and load them properly with onload handlers
       imageFiles.forEach(file => {
         if (!file.type.match('image.*')) return;
         
@@ -1496,76 +1489,40 @@ function exportAsPDF() {
             img.style.borderRadius = '8px';
             img.style.border = '1px solid #e2e8f0';
             
-            // CRITICAL: Wait for image to fully render before resolving
-            img.onload = () => {
-              console.log('✅ Image loaded successfully');
-              resolve(img);
-            };
-            img.onerror = (err) => {
-              console.error('❌ Image load error:', err);
-              resolve(null);
-            };
+            // CRITICAL: Wait for image to fully render
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
           };
           reader.readAsDataURL(file);
         });
         imagePromises.push(promise);
       });
       
-      // Wait for ALL images to load completely before generating PDF
+      // Wait for ALL images to load before generating PDF
       Promise.all(imagePromises).then((imgs) => {
-        console.log(`✅ ${imgs.filter(img => img !== null).length} images loaded successfully`);
-        
-        // Append successfully loaded images to container
         imgs.filter(img => img !== null).forEach(img => {
           pdfImageContainer.appendChild(img);
         });
         
-        // If no images loaded successfully, show placeholder
         if (imgs.filter(img => img !== null).length === 0) {
-          pdfImageContainer.innerHTML = `
-            <div style="grid-column:span 2;background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:24px;text-align:center;color:#64748b;font-size:14px">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px;color:#94a3b8">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="2 2"/>
-                <circle cx="12" cy="12" r="3" stroke-dasharray="2 2"/>
-              </svg>
-              <div>Tiada gambar dimuat naik untuk laporan ini</div>
-            </div>
-          `;
+          pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b">Tiada gambar dimuat naik</div>`;
         }
         
-        // Generate PDF AFTER images are fully loaded and rendered
         generatePDF(pdfContent, programmeName, btn, originalText);
       }).catch(err => {
-        console.error('❌ Image loading error:', err);
-        // Still generate PDF with placeholder if images fail
-        pdfImageContainer.innerHTML = `
-          <div style="grid-column:span 2;background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:24px;text-align:center;color:#64748b;font-size:14px">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px;color:#94a3b8">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="2 2"/>
-              <circle cx="12" cy="12" r="3" stroke-dasharray="2 2"/>
-            </svg>
-            <div>Ralat memuatkan gambar. PDF dijana tanpa gambar.</div>
-          </div>
-        `;
+        console.error('Image loading error:', err);
+        pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b">Ralat memuatkan gambar</div>`;
         generatePDF(pdfContent, programmeName, btn, originalText);
       });
       
     } else {
-      // No images uploaded - show nice placeholder
-      pdfImageContainer.innerHTML = `
-        <div style="grid-column:span 2;background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:24px;text-align:center;color:#64748b;font-size:14px">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px;color:#94a3b8">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="2 2"/>
-            <circle cx="12" cy="12" r="3" stroke-dasharray="2 2"/>
-          </svg>
-          <div>Tiada gambar dimuat naik untuk laporan ini</div>
-        </div>
-      `;
+      // No images uploaded
+      pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>`;
       generatePDF(pdfContent, programmeName, btn, originalText);
     }
     
   } catch (error) {
-    console.error('❌ Export error:', error);
+    console.error('Export error:', error);
     alert('⚠️ Ralat semasa menjana PDF: ' + error.message);
     if (btn) {
       btn.disabled = false;
@@ -1574,11 +1531,11 @@ function exportAsPDF() {
   }
 }
 
-// Helper function to generate PDF after images are loaded
+// Helper function to generate PDF after images load
 function generatePDF(pdfContent, programmeName, btn, originalText) {
   document.body.appendChild(pdfContent);
   
-  // CRITICAL: 500ms delay to ensure browser fully renders images before capture
+  // CRITICAL 500ms delay for image rendering
   setTimeout(() => {
     html2canvas(pdfContent, {
       scale: 2,
@@ -1595,14 +1552,11 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       const pageHeight = 297;
       const imgHeight = canvas.height * imgWidth / canvas.width;
       
-      // Handle multi-page PDF if content is too long
       if (imgHeight > pageHeight) {
         let heightLeft = imgHeight;
         let position = 0;
-        
         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
-        
         while (heightLeft >= 0) {
           position = heightLeft - imgHeight;
           pdf.addPage();
@@ -1617,14 +1571,14 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       alert('✅ Laporan PDF telah dijana dan dimuat turun!');
       
     }).catch(err => {
-      console.error('❌ PDF generation error:', err);
-      alert('⚠️ Gagal menjana PDF. Cuba semula atau guna fungsi Cetak sebagai alternatif.');
+      console.error('PDF generation error:', err);
+      alert('⚠️ Gagal menjana PDF. Cuba semula.');
     }).finally(() => {
       document.body.removeChild(pdfContent);
       btn.disabled = false;
       btn.innerHTML = originalText;
     });
-  }, 500); // Critical 500ms delay for image rendering
+  }, 500);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1642,35 +1596,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Add IP2M1 listeners
-  ['ip2-total-respondent', 'ip2-positive-respondent', 'media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox', 'crowd-size', 'target-group']
+  // Setup calculation listeners
+  ['ip2-total-respondent', 'ip2-positive-respondent', 'media-cetak-checkbox', 
+   'media-elektronik-checkbox', 'media-digital-checkbox', 'crowd-size', 'target-group']
   .forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('input', updateIP2M1_2);
   });
 
-  // Add IP3M2 listeners
-  ['ip3-media-list', 'ip3-actual-attendance', 'ip3-target-attendance', 'ip3-total-respondent', 'ip3-positive-respondent', 'ip3-targeted-enterpreneur-involvement', 'ip3-actual-enterprenuer-involvement']
+  ['ip3-media-list', 'ip3-actual-attendance', 'ip3-target-attendance', 
+   'ip3-total-respondent', 'ip3-positive-respondent', 
+   'ip3-targeted-enterpreneur-involvement', 'ip3-actual-enterprenuer-involvement']
   .forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('input', updateIP3M2);
   });
 
+  // Setup UI components
   setupSectionSelection();
   setupImagePreview();
-  document.getElementById('main-form').addEventListener('submit', submitForm);
-  document.getElementById('view-records-btn').addEventListener('click', () => {
-    window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
-  });
   
-  // ✅ CRITICAL: Add PDF export listener HERE (inside DOMContentLoaded)
-  const exportBtn = document.getElementById('export-pdf-btn');
-  if (exportBtn) {
-    exportBtn.addEventListener('click', exportAsPDF);
-    exportBtn.classList.add('cursor-pointer', 'hover:bg-blue-50', 'hover:text-blue-700');
+  // Setup form submission
+  const form = document.getElementById('main-form');
+  if (form) {
+    form.addEventListener('submit', submitForm);
   }
   
-  setupPrint();
+  // Setup View Records button
+  const viewRecordsBtn = document.getElementById('view-records-btn');
+  if (viewRecordsBtn) {
+    viewRecordsBtn.addEventListener('click', () => {
+      window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
+    });
+  }
+  
+  // ✅ CRITICAL: Setup PDF export button HERE (inside DOMContentLoaded)
+  const exportPdfBtn = document.getElementById('export-pdf-btn');
+  if (exportPdfBtn) {
+    exportPdfBtn.addEventListener('click', exportAsPDF);
+  }
+  
+  // Initialize calculations
   updateIP2M1_2();
   updateIP3M2();
+  
+  console.log('✅ SocialSync initialized successfully');
 });
