@@ -1710,6 +1710,7 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Setup media checkboxes
   ['media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
@@ -1723,32 +1724,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-// Add IP2M1 satisfaction listeners
-['ip2-total-respondent', 'ip2-positive-respondent', 'media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox', 'crowd-size', 'target-group']
-.forEach(id => {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener('input', updateIP2M1_2);
-});
+  // IP2M1 listeners
+  ['ip2-total-respondent', 'ip2-positive-respondent', 'media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox', 'crowd-size', 'target-group']
+  .forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateIP2M1_2);
+  });
 
-// FIX: Add ALL IP3M2 fields including ROI entrepreneur fields (with exact typos from your HTML)
-['ip3-media-list', 'ip3-actual-attendance', 'ip3-target-attendance', 'ip3-total-respondent', 'ip3-positive-respondent', 'ip3-targeted-enterpreneur-involvement', 'ip3-actual-enterprenuer-involvement']
-.forEach(id => {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener('input', updateIP3M2);
-});
+  // IP3M2 listeners
+  ['ip3-media-list', 'ip3-actual-attendance', 'ip3-target-attendance', 'ip3-total-respondent', 'ip3-positive-respondent', 'ip3-targeted-enterpreneur-involvement', 'ip3-actual-enterprenuer-involvement']
+  .forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateIP3M2);
+  });
 
+  // Core setup
   setupSectionSelection();
   setupImagePreview();
+  
+  // Form submission
   document.getElementById('main-form').addEventListener('submit', submitForm);
+  
+  // View Records button
   document.getElementById('view-records-btn').addEventListener('click', () => {
     window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
-  // Add PDF export event listener (INSIDE DOMContentLoaded)
-  document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
   });
-  setupPrint();
+  
+  // ✅ CRITICAL FIX: PDF Export button (MUST be OUTSIDE the previous callback)
+  document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
+  
+  // Print functionality (optional - remove if you don't have a print button)
+  // setupPrint(); 
+  
+  // Initial calculations
   updateIP2M1_2();
   updateIP3M2();
 });
-</script>
-</body>
-</html>
