@@ -699,6 +699,8 @@ function fileToBase64(file) {
 }
 
 // Global variable to store last submitted data
+let lastSubmittedData = null;
+
 // Submit handler (FIXED TO STORE DATA BEFORE RESET)
 async function submitForm(e) {
   e.preventDefault();
@@ -1141,9 +1143,6 @@ function setupPrint() {
     }
   });
 }
-
-// Global variable to store last submitted data (for post-submission PDF export)
-let lastSubmittedData = null;
 
 // PDF Export Functionality - WITH IMAGES & GOVERNMENT HEADER
 function exportAsPDF() {
