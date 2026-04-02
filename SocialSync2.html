@@ -730,66 +730,6 @@ async function submitForm(e) {
     const vipGuestText = vipGuestValues.join(', ');
     
     // Media channels
-    let mediaItems = [];
-    if (document.getElementById('media-cetak-checkbox')?.checked) {
-      mediaItems.push(`Media Cetak: ${document.getElementById('media-cetak-example')?.value || 'N/A'}`);
-    }
-    if (document.getElementById('media-elektronik-checkbox')?.checked) {
-      mediaItems.push(`Media Elektronik: ${document.getElementById('media-elektronik-example')?.value || 'N/A'}`);
-    }
-    if (document.getElementById('media-digital-checkbox')?.checked) {
-      mediaItems.push(`Media Digital: ${document.getElementById('media-digital-example')?.value || 'N/A'}`);
-    }
-    const mediaText = mediaItems.join(', ');
-    
-    // Supporting docs
-    const selectedDocs = [
-      document.getElementById('doc-kertas-kerja')?.checked ? 'Kertas kerja program / slide pembentangan' : '',
-      document.getElementById('doc-surat-mesyuarat')?.checked ? 'Surat mesyuarat penyelarasan / jemputan program' : '',
-      document.getElementById('doc-laporan-kpi')?.checked ? 'Laporan selepas program - borang KPI IP2M1-1' : '',
-      document.getElementById('doc-gambar')?.checked ? 'Gambar program / tangkap layar media' : '',
-      document.getElementById('doc-laporan-sms')?.checked ? 'Laporan Maklum Balas dari Survey Management System (SMS)' : ''
-    ].filter(Boolean).join(', ');
-    
-    // === STORE DATA BEFORE RESET ===
-// Store submitted data for PDF export after form reset
-  lastSubmittedData = {
-    programme_name: document.getElementById('programme')?.value || '',
-    programme_date: document.getElementById('date')?.value || '',
-    organizer: organizerText,
-    daerah: document.getElementById('daerah-dropdown')?.value || '',
-    venue_capacity: document.getElementById('ip1-tempat')?.value || '',
-    objective: document.getElementById('ip1-objektif')?.value || '',
-    impact: document.getElementById('ip1-impak')?.value || '',
-    vip_guest: vipGuestText,
-    total_attendance: document.getElementById('ip1-bil-tetamu')?.value || '',
-    media_present: document.getElementById('ip1-pihak-media')?.value || '',
-    selected_media_channels: selectedMediaText,
-    media_coverage_percent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,
-    ip2_total_respondent: document.getElementById('ip2-total-respondent')?.value || 0,
-    ip2_positive_respondent: document.getElementById('ip2-positive-respondent')?.value || 0,
-    ip2_satisfaction_percent: parseFloat(document.getElementById('ip2-satisfaction-percent')?.textContent) || 0,
-    crowd_size: document.getElementById('crowd-size')?.value || 0,
-    target_group: document.getElementById('target-group')?.value || 0,
-    survey_participation_percent: parseFloat(document.getElementById('participant-percent')?.textContent) || 0,
-    total_ip2m1_score: parseFloat(document.getElementById('total-ip2m1-2')?.textContent) || 0,
-    selected_supporting_docs: selectedDocs,
-    ip3_media_list: document.getElementById('ip3-media-list')?.value || '',
-    ip3_media_percent: parseFloat(document.getElementById('ip3-media-percent')?.textContent) || 0,
-    ip3_actual_attendance: document.getElementById('ip3-actual-attendance')?.value || 0,
-    ip3_target_attendance: document.getElementById('ip3-target-attendance')?.value || 0,
-    ip3_participation_percent: parseFloat(document.getElementById('ip3-participation-percent')?.textContent) || 0,
-    ip3_total_respondent: document.getElementById('ip3-total-respondent')?.value || 0,
-    ip3_positive_respondent: document.getElementById('ip3-positive-respondent')?.value || 0,
-    ip3_satisfaction_percent: parseFloat(document.getElementById('ip3-satisfaction-percent')?.textContent) || 0,
-    targeted_enterpreneur_involvement: document.getElementById('ip3-targeted-enterpreneur-involvement')?.value || 0,
-    actual_enterpreneur_involvement: document.getElementById('ip3-actual-enterprenuer-involvement')?.value || 0,
-    roi_percent: parseFloat(document.getElementById('ip3-roi-percent')?.textContent) || 0,
-    images: images, // Store Base64 images for PDF export after submission
-    section: selectedSection
-  };
-    
-    // === PROCEED WITH SUBMISSION ===
     const selectedMedia = [];
     if (document.getElementById('media-cetak-checkbox')?.checked) {
       const example = document.getElementById('media-cetak-example')?.value.trim();
@@ -805,6 +745,65 @@ async function submitForm(e) {
     }
     const selectedMediaText = selectedMedia.join(', ');
     
+    // Supporting docs
+    const selectedDocs = [
+      document.getElementById('doc-kertas-kerja')?.checked ? 'Kertas kerja program / slide pembentangan' : '',
+      document.getElementById('doc-surat-mesyuarat')?.checked ? 'Surat mesyuarat penyelarasan / jemputan program' : '',
+      document.getElementById('doc-laporan-kpi')?.checked ? 'Laporan selepas program - borang KPI IP2M1-1' : '',
+      document.getElementById('doc-gambar')?.checked ? 'Gambar program / tangkap layar media' : '',
+      document.getElementById('doc-laporan-sms')?.checked ? 'Laporan Maklum Balas dari Survey Management System (SMS)' : ''
+    ].filter(Boolean).join(', ');
+    
+    // === COLLECT IMAGES FIRST (MUST happen BEFORE storing in lastSubmittedData) ===
+    const imageFiles = {
+      'ip2m1-1': document.getElementById('ip2m1-1-images')?.files || [],
+      'ip2m1-2': document.getElementById('ip2m1-2-images')?.files || [],
+      'ip3m2': document.getElementById('ip3m2-images')?.files || []
+    };
+    const images = [];
+    const selectedImages = imageFiles[selectedSection] || [];
+    for (let i = 0; i < selectedImages.length; i++) {
+      images.push(await fileToBase64(selectedImages[i]));
+    }
+    
+    // === STORE DATA BEFORE RESET (NOW images variable exists) ===
+    lastSubmittedData = {
+      programme_name: document.getElementById('programme')?.value || '',
+      programme_date: document.getElementById('date')?.value || '',
+      organizer: organizerText,
+      daerah: document.getElementById('daerah-dropdown')?.value || '',
+      venue_capacity: document.getElementById('ip1-tempat')?.value || '',
+      objective: document.getElementById('ip1-objektif')?.value || '',
+      impact: document.getElementById('ip1-impak')?.value || '',
+      vip_guest: vipGuestText,
+      total_attendance: document.getElementById('ip1-bil-tetamu')?.value || '',
+      media_present: document.getElementById('ip1-pihak-media')?.value || '',
+      selected_media_channels: selectedMediaText,
+      media_coverage_percent: parseFloat(document.getElementById('media-coverage')?.textContent) || 0,
+      ip2_total_respondent: document.getElementById('ip2-total-respondent')?.value || 0,
+      ip2_positive_respondent: document.getElementById('ip2-positive-respondent')?.value || 0,
+      ip2_satisfaction_percent: parseFloat(document.getElementById('ip2-satisfaction-percent')?.textContent) || 0,
+      crowd_size: document.getElementById('crowd-size')?.value || 0,
+      target_group: document.getElementById('target-group')?.value || 0,
+      survey_participation_percent: parseFloat(document.getElementById('participant-percent')?.textContent) || 0,
+      total_ip2m1_score: parseFloat(document.getElementById('total-ip2m1-2')?.textContent) || 0,
+      selected_supporting_docs: selectedDocs,
+      ip3_media_list: document.getElementById('ip3-media-list')?.value || '',
+      ip3_media_percent: parseFloat(document.getElementById('ip3-media-percent')?.textContent) || 0,
+      ip3_actual_attendance: document.getElementById('ip3-actual-attendance')?.value || 0,
+      ip3_target_attendance: document.getElementById('ip3-target-attendance')?.value || 0,
+      ip3_participation_percent: parseFloat(document.getElementById('ip3-participation-percent')?.textContent) || 0,
+      ip3_total_respondent: document.getElementById('ip3-total-respondent')?.value || 0,
+      ip3_positive_respondent: document.getElementById('ip3-positive-respondent')?.value || 0,
+      ip3_satisfaction_percent: parseFloat(document.getElementById('ip3-satisfaction-percent')?.textContent) || 0,
+      targeted_enterpreneur_involvement: document.getElementById('ip3-targeted-enterpreneur-involvement')?.value || 0,
+      actual_enterpreneur_involvement: document.getElementById('ip3-actual-enterprenuer-involvement')?.value || 0,
+      roi_percent: parseFloat(document.getElementById('ip3-roi-percent')?.textContent) || 0,
+      images: images, // ✅ NOW images exists!
+      section: selectedSection
+    };
+    
+    // === PROCEED WITH SUBMISSION ===
     const formData = {
       programme_name: document.getElementById('programme').value,
       programme_date: document.getElementById('date').value,
@@ -839,18 +838,6 @@ async function submitForm(e) {
       roi_percent: parseFloat(document.getElementById('ip3-roi-percent')?.textContent) || 0
     };
     
-    // ... rest of submission code remains the same ...
-    const imageFiles = {
-      'ip2m1-1': document.getElementById('ip2m1-1-images')?.files || [],
-      'ip2m1-2': document.getElementById('ip2m1-2-images')?.files || [],
-      'ip3m2': document.getElementById('ip3m2-images')?.files || []
-    };
-    const images = [];
-    const selectedImages = imageFiles[selectedSection] || [];
-    for (let i = 0; i < selectedImages.length; i++) {
-      images.push(await fileToBase64(selectedImages[i]));
-    }
-    
     const pdfs = [];
     if (selectedSection === 'ip2m1-2') {
       const pdfFiles = document.getElementById('supporting-docs-pdf')?.files || [];
@@ -859,7 +846,9 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx2pB5K7bgukq3SVT9W5pYsY2GtXfMN6yRF1QSkvOkUpzcnDBv5D-V6BDhlCaCnE3Odvw/exec';
+    // ✅ REPLACE WITH YOUR DEPLOYED APPS SCRIPT URL
+    const WEB_APP_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYED_WEB_APP_URL/exec';
+    
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -885,6 +874,7 @@ async function submitForm(e) {
     btn.innerHTML = originalHTML;
   }
 }
+
 function addVipGuest() {
   const container = document.getElementById('vip-guests-container');
   const newField = document.createElement('div');
@@ -1747,11 +1737,13 @@ document.addEventListener('DOMContentLoaded', () => {
     window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
   });
   
-  // ✅ CRITICAL FIX: PDF Export button (MUST be OUTSIDE the previous callback)
-  document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
-  
-  // Print functionality (optional - remove if you don't have a print button)
-  // setupPrint(); 
+  // ✅ CRITICAL: PDF Export button MUST be here (after all other setup)
+  const exportBtn = document.getElementById('export-pdf-btn');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', exportAsPDF);
+    // Add visual feedback for clickable state
+    exportBtn.classList.add('cursor-pointer', 'hover:bg-blue-500', 'hover:text-white');
+  }
   
   // Initial calculations
   updateIP2M1_2();
