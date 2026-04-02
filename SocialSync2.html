@@ -1271,6 +1271,8 @@ function exportAsPDF() {
           </table>
         </div>
       `;
+      imageContainerId = 'ip2m1-1-images';
+
     } 
     // === IP2M1:2 SECTION ===
     else if (sectionId === 'ip2m1-2') {
@@ -1365,6 +1367,8 @@ function exportAsPDF() {
           </div>
         </div>
       `;
+      imageContainerId = 'ip2m1-2-images';
+
     } 
     // === IP3M2 SECTION ===
     else if (sectionId === 'ip3m2') {
@@ -1452,6 +1456,8 @@ function exportAsPDF() {
           </div>
         </div>
       `;
+      imageContainerId = 'ip3m2-images';
+
     }
 
     // Footer with government styling
@@ -1470,7 +1476,67 @@ function exportAsPDF() {
         </p>
       </div>
     `;
+    // === LOAD IMAGES INTO PDF CONTENT ===
+    const imageContainer = document.getElementById(imageContainerId);
+    const pdfImageContainer = pdfContent.querySelector('#pdf-image-container');
+    
+    if (imageContainer && imageContainer.files && imageContainer.files.length > 0) {
+      const imageFiles = Array.from(imageContainer.files).slice(0, 4); // Max 4 images
+      const imagePromises = [];
+      
+      // Create image elements and load them
+      imageFiles.forEach(file => {
+        if (!file.type.match('image.*')) return;
+        
+        const reader = new FileReader();
+        const promise = new Promise((resolve) => {
+          reader.onload = (e) => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.width = '100%';
+            img.style.height = '150px';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '8px';
+            img.style.border = '1px solid #e2e8f0';
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+          };
+          reader.readAsDataURL(file);
+        });
+        imagePromises.push(promise);
+      });
+      
+      // Wait for all images to load, then generate PDF
+      Promise.all(imagePromises).then((imgs) => {
+        imgs.filter(img => img !== null).forEach(img => {
+          pdfImageContainer.appendChild(img);
+        });
+        
+        // Generate PDF after images are loaded
+        generatePDF(pdfContent, programmeName, btn, originalText);
+      }).catch(err => {
+        console.error('Image loading error:', err);
+        generatePDF(pdfContent, programmeName, btn, originalText);
+      });
+      
+    } else {
+      // No images - add placeholder
+      pdfImageContainer.innerHTML = '<div style="grid-column:span 2;color:#64748b;text-align:center;padding:20px;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik</div>';
+      generatePDF(pdfContent, programmeName, btn, originalText);
+    }
+    
+  } catch (error) {
+    console.error('Export error:', error);
+    alert('⚠️ Ralat semasa menjana PDF: ' + error.message);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  }
+}
 
+// Helper function to generate PDF after images are loaded
+function generatePDF(pdfContent, programmeName, btn, originalText) {
     document.body.appendChild(pdfContent);
 
     // Generate PDF with proper A4 sizing
