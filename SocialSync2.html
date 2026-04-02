@@ -1574,8 +1574,8 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       }
       
       pdf.save(`${programmeName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
-      
       alert('✅ Laporan PDF telah dijana dan dimuat turun!');
+      
     }).catch(err => {
       console.error('PDF generation error:', err);
       alert('⚠️ Gagal menjana PDF. Cuba semula atau guna fungsi Cetak sebagai alternatif.');
@@ -1584,13 +1584,7 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       btn.disabled = false;
       btn.innerHTML = originalText;
     });
-  } catch (error) {
-    console.error('Export error:', error);
-    alert('⚠️ Ralat semasa menjana PDF. Sila semak konsol pelayar.');
-    btn.disabled = false;
-    btn.innerHTML = originalText;
-  }
-}
+
 // Add event listener (place this INSIDE your DOMContentLoaded setup)
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
