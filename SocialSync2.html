@@ -1142,7 +1142,6 @@ function setupPrint() {
   });
 }
 
-// PDF Export Functionality (FIXED FOR POST-SUBMISSION DATA)
 // PDF Export Functionality - WORKING WITH IMAGES
 function exportAsPDF() {
   const activeSectionBtn = document.querySelector('.section-btn.active');
@@ -1473,7 +1472,6 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
     });
   }, 300);
 }
-
 // Add event listener (place this INSIDE your DOMContentLoaded setup)
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
