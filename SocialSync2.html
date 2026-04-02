@@ -1142,6 +1142,7 @@ function setupPrint() {
   });
 }
 
+// PDF Export Functionality - WORKING WITH IMAGES
 function exportAsPDF() {
   const activeSectionBtn = document.querySelector('.section-btn.active');
   if (!activeSectionBtn) {
@@ -1167,31 +1168,23 @@ function exportAsPDF() {
     pdfContent.style.margin = '0 auto';
     pdfContent.style.boxSizing = 'border-box';
 
-    // === GET FORM DATA (USE STORED DATA IF FORM IS EMPTY) ===
+    // === GET FORM DATA ===
     let programmeName = document.getElementById('programme')?.value?.trim() || 'Programme';
     let programmeDate = document.getElementById('date')?.value || 'Date';
     let organizerText = 'Organizer';
     let daerah = 'Daerah';
     
-    // Check if form is empty (after submission)
-    const isFormEmpty = !document.getElementById('programme')?.value?.trim();
-    if (lastSubmittedData && isFormEmpty) {
-      programmeName = lastSubmittedData.programme_name || 'Programme';
-      programmeDate = lastSubmittedData.programme_date || 'Date';
-      organizerText = lastSubmittedData.organizer || 'Organizer';
-      daerah = lastSubmittedData.daerah || 'Daerah';
-    } else {
-      // Get current form data
-      const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
-      const organizerValues = Array.from(organizerInputs)
-        .map(input => input.value.trim())
-        .filter(value => value !== '');
-      organizerText = organizerValues.join(', ') || organizerText;
-      
-      const daerahEl = document.getElementById('daerah-dropdown');
-      if (daerahEl && daerahEl.selectedIndex >= 0) {
-        daerah = daerahEl.options[daerahEl.selectedIndex]?.text || daerah;
-      }
+    // Get organizer values
+    const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
+    const organizerValues = Array.from(organizerInputs)
+      .map(input => input.value.trim())
+      .filter(value => value !== '');
+    organizerText = organizerValues.join(', ') || organizerText;
+    
+    // Get daerah value
+    const daerahEl = document.getElementById('daerah-dropdown');
+    if (daerahEl && daerahEl.selectedIndex >= 0) {
+      daerah = daerahEl.options[daerahEl.selectedIndex]?.text || daerah;
     }
 
     // === GOVERNMENT HEADER ===
@@ -1226,21 +1219,17 @@ function exportAsPDF() {
     if (sectionId === 'ip2m1-1') {
       // BULETIN DAERAH content
       let vipGuestText = 'Tiada tetamu kehormat';
-      if (lastSubmittedData && isFormEmpty) {
-        vipGuestText = lastSubmittedData.vip_guest || vipGuestText;
-      } else {
-        const vipGuestInputs = document.querySelectorAll('input[name="vip_guest[]"]');
-        const vipGuestValues = Array.from(vipGuestInputs)
-          .map(input => input.value.trim())
-          .filter(value => value !== '');
-        vipGuestText = vipGuestValues.join(', ') || vipGuestText;
-      }
+      const vipGuestInputs = document.querySelectorAll('input[name="vip_guest[]"]');
+      const vipGuestValues = Array.from(vipGuestInputs)
+        .map(input => input.value.trim())
+        .filter(value => value !== '');
+      vipGuestText = vipGuestValues.join(', ') || vipGuestText;
       
-      const tempat = isFormEmpty && lastSubmittedData ? lastSubmittedData.venue_capacity : document.getElementById('ip1-tempat')?.value || 'N/A';
-      const objektif = isFormEmpty && lastSubmittedData ? lastSubmittedData.objective : document.getElementById('ip1-objektif')?.value || 'N/A';
-      const impak = isFormEmpty && lastSubmittedData ? lastSubmittedData.impact : document.getElementById('ip1-impak')?.value || 'N/A';
-      const tetamuHadir = isFormEmpty && lastSubmittedData ? lastSubmittedData.total_attendance : document.getElementById('ip1-bil-tetamu')?.value || '0';
-      const mediaHadir = isFormEmpty && lastSubmittedData ? lastSubmittedData.media_present : document.getElementById('ip1-pihak-media')?.value || 'Tiada';
+      const tempat = document.getElementById('ip1-tempat')?.value || 'N/A';
+      const objektif = document.getElementById('ip1-objektif')?.value || 'N/A';
+      const impak = document.getElementById('ip1-impak')?.value || 'N/A';
+      const tetamuHadir = document.getElementById('ip1-bil-tetamu')?.value || '0';
+      const mediaHadir = document.getElementById('ip1-pihak-media')?.value || 'Tiada';
       
       sectionContent = `
         <div style="margin-bottom:25px">
@@ -1289,46 +1278,16 @@ function exportAsPDF() {
         mediaItems.push(`Media Digital: ${document.getElementById('media-digital-example')?.value || 'N/A'}`);
       }
       
-      // Use stored data if form is empty
-      if (isFormEmpty && lastSubmittedData) {
-        mediaItems = lastSubmittedData.selected_media_channels ? 
-          lastSubmittedData.selected_media_channels.split(', ') : [];
-      }
-      
       const mediaText = mediaItems.length > 0 ? mediaItems.join('<br>') : 'Tiada saluran media';
       
-      // Get values with fallback to stored data
-      const mediaCoverage = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.media_coverage_percent + '%') : 
-        (document.getElementById('media-coverage')?.textContent || '0%');
-      
-      const totalRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip2_total_respondent : 
-        (document.getElementById('ip2-total-respondent')?.value || '0');
-      
-      const positiveRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip2_positive_respondent : 
-        (document.getElementById('ip2-positive-respondent')?.value || '0');
-      
-      const satisfactionPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip2_satisfaction_percent + '%') : 
-        (document.getElementById('ip2-satisfaction-percent')?.textContent || '0%');
-      
-      const crowdSize = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.crowd_size : 
-        (document.getElementById('crowd-size')?.value || '0');
-      
-      const targetGroup = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.target_group : 
-        (document.getElementById('target-group')?.value || '0');
-      
-      const participantPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.survey_participation_percent + '%') : 
-        (document.getElementById('participant-percent')?.textContent || '0%');
-      
-      const totalScore = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.total_ip2m1_score : 
-        (document.getElementById('total-ip2m1-2')?.textContent || '0');
+      const mediaCoverage = document.getElementById('media-coverage')?.textContent || '0%';
+      const totalRespondent = document.getElementById('ip2-total-respondent')?.value || '0';
+      const positiveRespondent = document.getElementById('ip2-positive-respondent')?.value || '0';
+      const satisfactionPercent = document.getElementById('ip2-satisfaction-percent')?.textContent || '0%';
+      const crowdSize = document.getElementById('crowd-size')?.value || '0';
+      const targetGroup = document.getElementById('target-group')?.value || '0';
+      const participantPercent = document.getElementById('participant-percent')?.textContent || '0%';
+      const totalScore = document.getElementById('total-ip2m1-2')?.textContent || '0';
       
       sectionContent = `
         <div style="margin-bottom:25px">
@@ -1365,49 +1324,17 @@ function exportAsPDF() {
       
     } else if (sectionId === 'ip3m2') {
       // IP3M2 content
-      const mediaList = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_media_list.replace(/\n/g, '<br>') : 
-        (document.getElementById('ip3-media-list')?.value.replace(/\n/g, '<br>') || 'Tiada media');
-      
-      const mediaPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip3_media_percent + '%') : 
-        (document.getElementById('ip3-media-percent')?.textContent || '0%');
-      
-      const actualAttendance = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_actual_attendance : 
-        (document.getElementById('ip3-actual-attendance')?.value || '0');
-      
-      const targetAttendance = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_target_attendance : 
-        (document.getElementById('ip3-target-attendance')?.value || '0');
-      
-      const participationPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip3_participation_percent + '%') : 
-        (document.getElementById('ip3-participation-percent')?.textContent || '0%');
-      
-      const totalRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_total_respondent : 
-        (document.getElementById('ip3-total-respondent')?.value || '0');
-      
-      const positiveRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_positive_respondent : 
-        (document.getElementById('ip3-positive-respondent')?.value || '0');
-      
-      const satisfactionPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip3_satisfaction_percent + '%') : 
-        (document.getElementById('ip3-satisfaction-percent')?.textContent || '0%');
-      
-      const targetedEntrepreneur = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.targeted_enterpreneur_involvement : 
-        (document.getElementById('ip3-targeted-enterpreneur-involvement')?.value || '0');
-      
-      const actualEntrepreneur = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.actual_enterpreneur_involvement : 
-        (document.getElementById('ip3-actual-enterprenuer-involvement')?.value || '0');
-      
-      const roiPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.roi_percent + '%') : 
-        (document.getElementById('ip3-roi-percent')?.textContent || '0%');
+      const mediaList = document.getElementById('ip3-media-list')?.value.replace(/\n/g, '<br>') || 'Tiada media';
+      const mediaPercent = document.getElementById('ip3-media-percent')?.textContent || '0%';
+      const actualAttendance = document.getElementById('ip3-actual-attendance')?.value || '0';
+      const targetAttendance = document.getElementById('ip3-target-attendance')?.value || '0';
+      const participationPercent = document.getElementById('ip3-participation-percent')?.textContent || '0%';
+      const totalRespondent = document.getElementById('ip3-total-respondent')?.value || '0';
+      const positiveRespondent = document.getElementById('ip3-positive-respondent')?.value || '0';
+      const satisfactionPercent = document.getElementById('ip3-satisfaction-percent')?.textContent || '0%';
+      const targetedEntrepreneur = document.getElementById('ip3-targeted-enterpreneur-involvement')?.value || '0';
+      const actualEntrepreneur = document.getElementById('ip3-actual-enterprenuer-involvement')?.value || '0';
+      const roiPercent = document.getElementById('ip3-roi-percent')?.textContent || '0%';
       
       sectionContent = `
         <div style="margin-bottom:25px">
@@ -1508,12 +1435,21 @@ function exportAsPDF() {
         generatePDF(pdfContent, programmeName, btn, originalText);
       }).catch(err => {
         console.error('Image loading error:', err);
+        // Still generate PDF even if images fail to load
         generatePDF(pdfContent, programmeName, btn, originalText);
       });
       
     } else {
-      // No images - add placeholder
-      pdfImageContainer.innerHTML = '<div style="grid-column:span 2;color:#64748b;text-align:center;padding:20px;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik</div>';
+      // No images - show nicer placeholder
+      pdfImageContainer.innerHTML = `
+        <div style="grid-column:span 2;background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:24px;text-align:center;color:#64748b;font-size:14px">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px;color:#94a3b8">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="2 2"/>
+            <circle cx="12" cy="12" r="3" stroke-dasharray="2 2"/>
+          </svg>
+          <div>Tiada gambar dimuat naik untuk laporan ini</div>
+        </div>
+      `;
       generatePDF(pdfContent, programmeName, btn, originalText);
     }
     
