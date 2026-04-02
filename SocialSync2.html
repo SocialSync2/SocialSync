@@ -626,6 +626,9 @@ body {
 
 <!-- Live Logic -->
 <script>
+
+let lastSubmittedData = null;
+
 function num(val) {
   const n = parseFloat(val);
   return isNaN(n) ? 0 : n;
@@ -698,8 +701,6 @@ function fileToBase64(file) {
   });
 }
 
-// Global variable to store last submitted data
-let lastSubmittedData = null;
 
 // Submit handler (FIXED TO STORE DATA BEFORE RESET)
 async function submitForm(e) {
