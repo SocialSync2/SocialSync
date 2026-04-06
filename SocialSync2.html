@@ -1460,26 +1460,20 @@ function exportAsPDF() {
       `;
       imageInputId = 'ip2m1-2-images';
     }
-pdfContent.innerHTML += sectionContent;
-
-// ✅ CRITICAL FIX: ADD IMAGE CONTAINER HERE (MUST BE BEFORE FOOTER)
-pdfContent.innerHTML += `<div id="pdf-image-container" style="margin-top:20px;grid-template-columns:repeat(2,1fr);gap:15px;display:grid;"></div>`;
-
-// Footer with government styling
-pdfContent.innerHTML += `
+// Bina SEMUA kandungan PDF dalam SATU STRING sahaja
+let fullPdfHtml = pdfContent.innerHTML; // Header
+fullPdfHtml += sectionContent; // Kandungan section
+fullPdfHtml += `<div id="pdf-image-container" style="margin-top:20px;grid-template-columns:repeat(2,1fr);gap:15px;display:grid;"></div>`;
+fullPdfHtml += `
   <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:12px">
     <p style="font-weight:600;color:#1e40af;margin-bottom:6px">SocialSync Programme Management System</p>
     <p style="font-weight:500;margin-bottom:4px">Dokumen Rasmi Kerajaan • Sulit</p>
     <p style="margin-top:8px;font-size:11px;color:#64748b">
       Dijana pada: ${new Date().toLocaleDateString('ms-MY', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: '2-digit',
-        minute: '2-digit'
-      })}
-    </p>
+        year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
   </div>
 `;
+pdfContent.innerHTML = fullPdfHtml; // SET SEKALI SAHAJA!
 
     document.body.appendChild(pdfContent);
 
@@ -1551,8 +1545,12 @@ pdfContent.innerHTML += `
 // Helper function to generate PDF after images load
 // Helper function to generate PDF after images load
 function generatePDF(pdfContent, programmeName, btn, originalText) {
-  document.body.appendChild(pdfContent);
+  // ✅ HAPUS element lama untuk elak konflik
+  const existing = document.getElementById('pdf-export-content');
+  if (existing) existing.remove();
   
+  document.body.appendChild(pdfContent);
+}  
   // CRITICAL 500ms delay for image rendering
   setTimeout(() => {
     html2canvas(pdfContent, {
