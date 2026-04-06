@@ -1550,8 +1550,8 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
   if (existing) existing.remove();
   
   document.body.appendChild(pdfContent);
-}  
-  // CRITICAL 500ms delay for image rendering
+  
+  // CRITICAL 500ms delay for image rendering - NOW INSIDE THE FUNCTION
   setTimeout(() => {
     html2canvas(pdfContent, {
       scale: 2,
@@ -1594,23 +1594,21 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       btn.disabled = false;
       btn.innerHTML = originalText;
     });
-  }, 500); // ✅ CORRECT PLACEMENT OF DELAY PARAMETER
+  }, 500); // Delay is now properly inside the function
+}
+
 // Add event listener (place this INSIDE your DOMContentLoaded setup)
+// Remove this line
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
+// Keep only this one inside DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
-  ['media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('change', (e) => {
-        const exampleId = id.replace('-checkbox', '-example');
-        const exampleEl = document.getElementById(exampleId);
-        if (exampleEl) {
-          exampleEl.disabled = !e.target.checked;
-        }
-      });
-    }
-  });
+  // ...
+  const exportPdfBtn = document.getElementById('export-pdf-btn');
+  if (exportPdfBtn) {
+    exportPdfBtn.addEventListener('click', exportAsPDF);
+  }
+});
 
 // Add IP2M1 satisfaction listeners
 ['ip2-total-respondent', 'ip2-positive-respondent', 'media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox', 'crowd-size', 'target-group']
