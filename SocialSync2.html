@@ -626,9 +626,6 @@ body {
 
 <!-- Live Logic -->
 <script>
-
-let lastSubmittedData = null;
-
 function num(val) {
   const n = parseFloat(val);
   return isNaN(n) ? 0 : n;
@@ -701,6 +698,8 @@ function fileToBase64(file) {
   });
 }
 
+// Global variable to store last submitted data
+let lastSubmittedData = null;
 
 // Submit handler (FIXED TO STORE DATA BEFORE RESET)
 async function submitForm(e) {
@@ -858,7 +857,7 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwkOTXTF-GBout1zRB0eDQbzlY0LhZ2Q4B7ztn6U0kQ4JcPTDODN4OXnlYnQX1NdM_5iQ/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyaiRGaC4BqvNa3n3jjoHpUR-BBsE-7t0iwWn5jPcPUGHxZKyriapQJX_IV1PLkug5sDA/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -1143,7 +1142,8 @@ function setupPrint() {
   });
 }
 
-// PDF Export Functionality - FIXED (Works with images + post-submission data)
+// PDF Export Functionality - WORKING WITH IMAGES
+// PDF Export Functionality - WORKING WITH IMAGES
 function exportAsPDF() {
   const activeSectionBtn = document.querySelector('.section-btn.active');
   if (!activeSectionBtn) {
@@ -1169,43 +1169,40 @@ function exportAsPDF() {
     pdfContent.style.margin = '0 auto';
     pdfContent.style.boxSizing = 'border-box';
 
-    // === GET FORM DATA (WITH FALLBACK TO lastSubmittedData AFTER SUBMISSION) ===
+    // === GET FORM DATA ===
     let programmeName = document.getElementById('programme')?.value?.trim() || 'Programme';
     let programmeDate = document.getElementById('date')?.value || 'Date';
     let organizerText = 'Organizer';
     let daerah = 'Daerah';
     
-    // Check if form is empty (after submission) - use stored data
-    const isFormEmpty = !document.getElementById('programme')?.value?.trim();
-    if (isFormEmpty && lastSubmittedData) {
-      programmeName = lastSubmittedData.programme_name || 'Programme';
-      programmeDate = lastSubmittedData.programme_date || 'Date';
-      organizerText = lastSubmittedData.organizer || 'Organizer';
-      daerah = lastSubmittedData.daerah || 'Daerah';
-    } else {
-      // Get current form data
-      const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
-      const organizerValues = Array.from(organizerInputs)
-        .map(input => input.value.trim())
-        .filter(value => value !== '');
-      organizerText = organizerValues.join(', ') || organizerText;
-      
-      const daerahEl = document.getElementById('daerah-dropdown');
-      if (daerahEl && daerahEl.selectedIndex >= 0) {
-        daerah = daerahEl.options[daerahEl.selectedIndex]?.text || daerah;
-      }
+    // Get organizer values
+    const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
+    const organizerValues = Array.from(organizerInputs)
+      .map(input => input.value.trim())
+      .filter(value => value !== '');
+    organizerText = organizerValues.join(', ') || organizerText;
+    
+    // Get daerah value
+    const daerahEl = document.getElementById('daerah-dropdown');
+    if (daerahEl && daerahEl.selectedIndex >= 0) {
+      daerah = daerahEl.options[daerahEl.selectedIndex]?.text || daerah;
     }
 
-    // === GOVERNMENT HEADER ===
+    // === GOVERNMENT HEADER (FIXED WITH VERTICAL TEXT) ===
     pdfContent.innerHTML = `
       <div style="position:relative;height:100px;margin-bottom:25px;border-bottom:2px solid #1e40af">
+        <!-- Left side: Borang KPI -->
         <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:14px;font-weight:bold;color:#000;width:180px">
           Borang KPI IP2M1:1
         </div>
+        
+        <!-- Center: Main title and subtitle -->
         <div style="text-align:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
           <div style="font-size:24px;font-weight:bold;color:#000;margin-bottom:5px">PEJABAT DAERAH MUKAH</div>
           <div style="font-size:18px;color:#000">SUKU PERTAMA (APRIL - JUN) 2025</div>
         </div>
+        
+        <!-- Right side: Vertical text with blue stripe (FIXED) -->
         <div style="position:absolute;right:0;top:0;height:100%;width:35px;background-color:#1e40af;display:flex;align-items:center;justify-content:center">
           <div style="writing-mode:vertical-rl;text-orientation:mixed;font-size:14px;font-weight:bold;color:white;padding:5px 0;text-align:center;line-height:1.3">
             LAPORAN PROGRAM SELARAS PROGRAM
@@ -1228,21 +1225,17 @@ function exportAsPDF() {
     if (sectionId === 'ip2m1-1') {
       // BULETIN DAERAH content
       let vipGuestText = 'Tiada tetamu kehormat';
-      if (isFormEmpty && lastSubmittedData) {
-        vipGuestText = lastSubmittedData.vip_guest || vipGuestText;
-      } else {
-        const vipGuestInputs = document.querySelectorAll('input[name="vip_guest[]"]');
-        const vipGuestValues = Array.from(vipGuestInputs)
-          .map(input => input.value.trim())
-          .filter(value => value !== '');
-        vipGuestText = vipGuestValues.join(', ') || vipGuestText;
-      }
+      const vipGuestInputs = document.querySelectorAll('input[name="vip_guest[]"]');
+      const vipGuestValues = Array.from(vipGuestInputs)
+        .map(input => input.value.trim())
+        .filter(value => value !== '');
+      vipGuestText = vipGuestValues.join(', ') || vipGuestText;
       
-      const tempat = isFormEmpty && lastSubmittedData ? lastSubmittedData.venue_capacity : document.getElementById('ip1-tempat')?.value || 'N/A';
-      const objektif = isFormEmpty && lastSubmittedData ? lastSubmittedData.objective : document.getElementById('ip1-objektif')?.value || 'N/A';
-      const impak = isFormEmpty && lastSubmittedData ? lastSubmittedData.impact : document.getElementById('ip1-impak')?.value || 'N/A';
-      const tetamuHadir = isFormEmpty && lastSubmittedData ? lastSubmittedData.total_attendance : document.getElementById('ip1-bil-tetamu')?.value || '0';
-      const mediaHadir = isFormEmpty && lastSubmittedData ? lastSubmittedData.media_present : document.getElementById('ip1-pihak-media')?.value || 'Tiada';
+      const tempat = document.getElementById('ip1-tempat')?.value || 'N/A';
+      const objektif = document.getElementById('ip1-objektif')?.value || 'N/A';
+      const impak = document.getElementById('ip1-impak')?.value || 'N/A';
+      const tetamuHadir = document.getElementById('ip1-bil-tetamu')?.value || '0';
+      const mediaHadir = document.getElementById('ip1-pihak-media')?.value || 'Tiada';
       
       sectionContent = `
         <div style="margin-bottom:25px">
@@ -1281,54 +1274,26 @@ function exportAsPDF() {
     } else if (sectionId === 'ip2m1-2') {
       // IP2M1 content
       let mediaItems = [];
-      if (isFormEmpty && lastSubmittedData) {
-        mediaItems = lastSubmittedData.selected_media_channels ? 
-          lastSubmittedData.selected_media_channels.split(', ') : [];
-      } else {
-        if (document.getElementById('media-cetak-checkbox')?.checked) {
-          mediaItems.push(`Media Cetak: ${document.getElementById('media-cetak-example')?.value || 'N/A'}`);
-        }
-        if (document.getElementById('media-elektronik-checkbox')?.checked) {
-          mediaItems.push(`Media Elektronik: ${document.getElementById('media-elektronik-example')?.value || 'N/A'}`);
-        }
-        if (document.getElementById('media-digital-checkbox')?.checked) {
-          mediaItems.push(`Media Digital: ${document.getElementById('media-digital-example')?.value || 'N/A'}`);
-        }
+      if (document.getElementById('media-cetak-checkbox')?.checked) {
+        mediaItems.push(`Media Cetak: ${document.getElementById('media-cetak-example')?.value || 'N/A'}`);
+      }
+      if (document.getElementById('media-elektronik-checkbox')?.checked) {
+        mediaItems.push(`Media Elektronik: ${document.getElementById('media-elektronik-example')?.value || 'N/A'}`);
+      }
+      if (document.getElementById('media-digital-checkbox')?.checked) {
+        mediaItems.push(`Media Digital: ${document.getElementById('media-digital-example')?.value || 'N/A'}`);
       }
       
       const mediaText = mediaItems.length > 0 ? mediaItems.join('<br>') : 'Tiada saluran media';
       
-      const mediaCoverage = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.media_coverage_percent + '%') : 
-        (document.getElementById('media-coverage')?.textContent || '0%');
-      
-      const totalRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip2_total_respondent : 
-        (document.getElementById('ip2-total-respondent')?.value || '0');
-      
-      const positiveRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip2_positive_respondent : 
-        (document.getElementById('ip2-positive-respondent')?.value || '0');
-      
-      const satisfactionPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip2_satisfaction_percent + '%') : 
-        (document.getElementById('ip2-satisfaction-percent')?.textContent || '0%');
-      
-      const crowdSize = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.crowd_size : 
-        (document.getElementById('crowd-size')?.value || '0');
-      
-      const targetGroup = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.target_group : 
-        (document.getElementById('target-group')?.value || '0');
-      
-      const participantPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.survey_participation_percent + '%') : 
-        (document.getElementById('participant-percent')?.textContent || '0%');
-      
-      const totalScore = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.total_ip2m1_score : 
-        (document.getElementById('total-ip2m1-2')?.textContent || '0');
+      const mediaCoverage = document.getElementById('media-coverage')?.textContent || '0%';
+      const totalRespondent = document.getElementById('ip2-total-respondent')?.value || '0';
+      const positiveRespondent = document.getElementById('ip2-positive-respondent')?.value || '0';
+      const satisfactionPercent = document.getElementById('ip2-satisfaction-percent')?.textContent || '0%';
+      const crowdSize = document.getElementById('crowd-size')?.value || '0';
+      const targetGroup = document.getElementById('target-group')?.value || '0';
+      const participantPercent = document.getElementById('participant-percent')?.textContent || '0%';
+      const totalScore = document.getElementById('total-ip2m1-2')?.textContent || '0';
       
       sectionContent = `
         <div style="margin-bottom:25px">
@@ -1365,49 +1330,17 @@ function exportAsPDF() {
       
     } else if (sectionId === 'ip3m2') {
       // IP3M2 content
-      const mediaList = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_media_list.replace(/\n/g, '<br>') : 
-        (document.getElementById('ip3-media-list')?.value.replace(/\n/g, '<br>') || 'Tiada media');
-      
-      const mediaPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip3_media_percent + '%') : 
-        (document.getElementById('ip3-media-percent')?.textContent || '0%');
-      
-      const actualAttendance = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_actual_attendance : 
-        (document.getElementById('ip3-actual-attendance')?.value || '0');
-      
-      const targetAttendance = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_target_attendance : 
-        (document.getElementById('ip3-target-attendance')?.value || '0');
-      
-      const participationPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip3_participation_percent + '%') : 
-        (document.getElementById('ip3-participation-percent')?.textContent || '0%');
-      
-      const totalRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_total_respondent : 
-        (document.getElementById('ip3-total-respondent')?.value || '0');
-      
-      const positiveRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_positive_respondent : 
-        (document.getElementById('ip3-positive-respondent')?.value || '0');
-      
-      const satisfactionPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip3_satisfaction_percent + '%') : 
-        (document.getElementById('ip3-satisfaction-percent')?.textContent || '0%');
-      
-      const targetedEntrepreneur = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.targeted_enterpreneur_involvement : 
-        (document.getElementById('ip3-targeted-enterpreneur-involvement')?.value || '0');
-      
-      const actualEntrepreneur = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.actual_enterpreneur_involvement : 
-        (document.getElementById('ip3-actual-enterprenuer-involvement')?.value || '0');
-      
-      const roiPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.roi_percent + '%') : 
-        (document.getElementById('ip3-roi-percent')?.textContent || '0%');
+      const mediaList = document.getElementById('ip3-media-list')?.value.replace(/\n/g, '<br>') || 'Tiada media';
+      const mediaPercent = document.getElementById('ip3-media-percent')?.textContent || '0%';
+      const actualAttendance = document.getElementById('ip3-actual-attendance')?.value || '0';
+      const targetAttendance = document.getElementById('ip3-target-attendance')?.value || '0';
+      const participationPercent = document.getElementById('ip3-participation-percent')?.textContent || '0%';
+      const totalRespondent = document.getElementById('ip3-total-respondent')?.value || '0';
+      const positiveRespondent = document.getElementById('ip3-positive-respondent')?.value || '0';
+      const satisfactionPercent = document.getElementById('ip3-satisfaction-percent')?.textContent || '0%';
+      const targetedEntrepreneur = document.getElementById('ip3-targeted-enterpreneur-involvement')?.value || '0';
+      const actualEntrepreneur = document.getElementById('ip3-actual-enterprenuer-involvement')?.value || '0';
+      const roiPercent = document.getElementById('ip3-roi-percent')?.textContent || '0%';
       
       sectionContent = `
         <div style="margin-bottom:25px">
@@ -1446,7 +1379,7 @@ function exportAsPDF() {
 
     pdfContent.innerHTML += sectionContent;
     
-    // === IMAGE GALLERY SECTION ===
+    // === IMAGE GALLERY SECTION (CRITICAL FIX) ===
     pdfContent.innerHTML += `
       <div style="margin-top:25px">
         <h3 style="font-weight:700;color:#000;margin-bottom:15px;font-size:18px">Gambar Program</h3>
@@ -1468,14 +1401,16 @@ function exportAsPDF() {
       </div>
     `;
 
-    // === LOAD IMAGES PROPERLY ===
+    // === LOAD IMAGES PROPERLY (FIXED) ===
     const imageInput = document.getElementById(imageInputId);
     const pdfImageContainer = pdfContent.querySelector('#pdf-image-container');
     
+    // Check if there are images to load
     if (imageInput && imageInput.files && imageInput.files.length > 0) {
-      const imageFiles = Array.from(imageInput.files).slice(0, 4);
+      const imageFiles = Array.from(imageInput.files).slice(0, 4); // Max 4 images
       const imagePromises = [];
       
+      // Create image elements and load them properly
       imageFiles.forEach(file => {
         if (!file.type.match('image.*')) return;
         
@@ -1490,7 +1425,7 @@ function exportAsPDF() {
             img.style.borderRadius = '8px';
             img.style.border = '1px solid #e2e8f0';
             
-            // CRITICAL: Wait for image to fully render
+            // Critical: Wait for image to fully load before resolving
             img.onload = () => resolve(img);
             img.onerror = () => resolve(null);
           };
@@ -1499,26 +1434,53 @@ function exportAsPDF() {
         imagePromises.push(promise);
       });
       
-      // Wait for ALL images to load before generating PDF
+      // Wait for ALL images to load completely before generating PDF
       Promise.all(imagePromises).then((imgs) => {
         imgs.filter(img => img !== null).forEach(img => {
           pdfImageContainer.appendChild(img);
         });
         
+        // If no images loaded successfully, show placeholder
         if (imgs.filter(img => img !== null).length === 0) {
-          pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b">Tiada gambar dimuat naik</div>`;
+          pdfImageContainer.innerHTML = `
+            <div style="grid-column:span 2;background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:24px;text-align:center;color:#64748b;font-size:14px">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px;color:#94a3b8">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="2 2"/>
+                <circle cx="12" cy="12" r="3" stroke-dasharray="2 2"/>
+              </svg>
+              <div>Tiada gambar dimuat naik untuk laporan ini</div>
+            </div>
+          `;
         }
         
+        // Generate PDF AFTER images are fully loaded
         generatePDF(pdfContent, programmeName, btn, originalText);
       }).catch(err => {
         console.error('Image loading error:', err);
-        pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b">Ralat memuatkan gambar</div>`;
+        // Still generate PDF with placeholder if images fail
+        pdfImageContainer.innerHTML = `
+          <div style="grid-column:span 2;background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:24px;text-align:center;color:#64748b;font-size:14px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px;color:#94a3b8">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="2 2"/>
+              <circle cx="12" cy="12" r="3" stroke-dasharray="2 2"/>
+            </svg>
+            <div>Ralat memuatkan gambar. PDF dijana tanpa gambar.</div>
+          </div>
+        `;
         generatePDF(pdfContent, programmeName, btn, originalText);
       });
       
     } else {
-      // No images uploaded
-      pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>`;
+      // No images uploaded - show nice placeholder
+      pdfImageContainer.innerHTML = `
+        <div style="grid-column:span 2;background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:24px;text-align:center;color:#64748b;font-size:14px">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px;color:#94a3b8">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="2 2"/>
+            <circle cx="12" cy="12" r="3" stroke-dasharray="2 2"/>
+          </svg>
+          <div>Tiada gambar dimuat naik untuk laporan ini</div>
+        </div>
+      `;
       generatePDF(pdfContent, programmeName, btn, originalText);
     }
     
@@ -1532,11 +1494,11 @@ function exportAsPDF() {
   }
 }
 
-// Helper function to generate PDF after images load
+// Helper function to generate PDF after images are loaded
 function generatePDF(pdfContent, programmeName, btn, originalText) {
   document.body.appendChild(pdfContent);
   
-  // CRITICAL 500ms delay for image rendering
+  // Critical: Small delay to ensure images render properly before capture
   setTimeout(() => {
     html2canvas(pdfContent, {
       scale: 2,
@@ -1553,11 +1515,14 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       const pageHeight = 297;
       const imgHeight = canvas.height * imgWidth / canvas.width;
       
+      // Handle multi-page PDF if content is too long
       if (imgHeight > pageHeight) {
         let heightLeft = imgHeight;
         let position = 0;
+        
         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
+        
         while (heightLeft >= 0) {
           position = heightLeft - imgHeight;
           pdf.addPage();
@@ -1573,17 +1538,18 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       
     }).catch(err => {
       console.error('PDF generation error:', err);
-      alert('⚠️ Gagal menjana PDF. Cuba semula.');
+      alert('⚠️ Gagal menjana PDF. Cuba semula atau guna fungsi Cetak sebagai alternatif.');
     }).finally(() => {
       document.body.removeChild(pdfContent);
       btn.disabled = false;
       btn.innerHTML = originalText;
     });
-  }, 500);
+  }, 500); // Increased delay to 500ms for reliable image rendering
 }
+// Add event listener (place this INSIDE your DOMContentLoaded setup)
+document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Setup media checkboxes
   ['media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
@@ -1597,49 +1563,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Setup calculation listeners
-  ['ip2-total-respondent', 'ip2-positive-respondent', 'media-cetak-checkbox', 
-   'media-elektronik-checkbox', 'media-digital-checkbox', 'crowd-size', 'target-group']
-  .forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('input', updateIP2M1_2);
-  });
+// Add IP2M1 satisfaction listeners
+['ip2-total-respondent', 'ip2-positive-respondent', 'media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox', 'crowd-size', 'target-group']
+.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', updateIP2M1_2);
+});
 
-  ['ip3-media-list', 'ip3-actual-attendance', 'ip3-target-attendance', 
-   'ip3-total-respondent', 'ip3-positive-respondent', 
-   'ip3-targeted-enterpreneur-involvement', 'ip3-actual-enterprenuer-involvement']
-  .forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('input', updateIP3M2);
-  });
+// FIX: Add ALL IP3M2 fields including ROI entrepreneur fields (with exact typos from your HTML)
+['ip3-media-list', 'ip3-actual-attendance', 'ip3-target-attendance', 'ip3-total-respondent', 'ip3-positive-respondent', 'ip3-targeted-enterpreneur-involvement', 'ip3-actual-enterprenuer-involvement']
+.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', updateIP3M2);
+});
 
-  // Setup UI components
   setupSectionSelection();
   setupImagePreview();
-  
-  // Setup form submission
-  const form = document.getElementById('main-form');
-  if (form) {
-    form.addEventListener('submit', submitForm);
-  }
-  
-  // Setup View Records button
-  const viewRecordsBtn = document.getElementById('view-records-btn');
-  if (viewRecordsBtn) {
-    viewRecordsBtn.addEventListener('click', () => {
-      window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
-    });
-  }
-  
-  // ✅ CRITICAL: Setup PDF export button HERE (inside DOMContentLoaded)
-  const exportPdfBtn = document.getElementById('export-pdf-btn');
-  if (exportPdfBtn) {
-    exportPdfBtn.addEventListener('click', exportAsPDF);
-  }
-  
-  // Initialize calculations
+  document.getElementById('main-form').addEventListener('submit', submitForm);
+  document.getElementById('view-records-btn').addEventListener('click', () => {
+    window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
+  // Add PDF export event listener (INSIDE DOMContentLoaded)
+  document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
+  });
+  setupPrint();
   updateIP2M1_2();
   updateIP3M2();
-  
-  console.log('✅ SocialSync initialized successfully');
 });
+</script>
+</body>
+</html>
