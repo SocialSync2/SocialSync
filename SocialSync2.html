@@ -857,7 +857,7 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzB9AtXFyj-0Yda1zW94vdIE6zBzQMi9qR_Dfd6eDYkRi6UyrlsYHB3ZTaLX7xbnXEWEA/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyaiRGaC4BqvNa3n3jjoHpUR-BBsE-7t0iwWn5jPcPUGHxZKyriapQJX_IV1PLkug5sDA/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -1142,7 +1142,7 @@ function setupPrint() {
   });
 }
 
-// PDF Export Functionality - WORKING WITH IMAGES
+// PDF Export Functionality (FIXED FOR POST-SUBMISSION DATA)
 // PDF Export Functionality - WORKING WITH IMAGES
 function exportAsPDF() {
   const activeSectionBtn = document.querySelector('.section-btn.active');
@@ -1188,23 +1188,18 @@ function exportAsPDF() {
       daerah = daerahEl.options[daerahEl.selectedIndex]?.text || daerah;
     }
 
-    // === GOVERNMENT HEADER (FIXED WITH VERTICAL TEXT) ===
+    // === GOVERNMENT HEADER ===
     pdfContent.innerHTML = `
       <div style="position:relative;height:100px;margin-bottom:25px;border-bottom:2px solid #1e40af">
-        <!-- Left side: Borang KPI -->
         <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:14px;font-weight:bold;color:#000;width:180px">
           Borang KPI IP2M1:1
         </div>
-        
-        <!-- Center: Main title and subtitle -->
         <div style="text-align:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
           <div style="font-size:24px;font-weight:bold;color:#000;margin-bottom:5px">PEJABAT DAERAH MUKAH</div>
           <div style="font-size:18px;color:#000">SUKU PERTAMA (APRIL - JUN) 2025</div>
         </div>
-        
-        <!-- Right side: Vertical text with blue stripe (FIXED) -->
         <div style="position:absolute;right:0;top:0;height:100%;width:35px;background-color:#1e40af;display:flex;align-items:center;justify-content:center">
-          <div style="writing-mode:vertical-rl;text-orientation:mixed;font-size:14px;font-weight:bold;color:white;padding:5px 0;text-align:center;line-height:1.3">
+          <div style="writing-mode:vertical-rl;text-orientation:mixed;font-size:16px;font-weight:bold;color:white;padding:5px 0;text-align:center;line-height:1.3">
             LAPORAN PROGRAM SELARAS PROGRAM
           </div>
         </div>
@@ -1220,20 +1215,22 @@ function exportAsPDF() {
 
     // === SECTION CONTENT ===
     let sectionContent = '';
-    let imageInputId = '';
+    let imageContainerId = '';
     
     if (sectionId === 'ip2m1-1') {
       // BULETIN DAERAH content
+      const tempat = document.getElementById('ip1-tempat')?.value || 'N/A';
+      const objektif = document.getElementById('ip1-objektif')?.value || 'N/A';
+      const impak = document.getElementById('ip1-impak')?.value || 'N/A';
+      
+      // Get VIP guests
       let vipGuestText = 'Tiada tetamu kehormat';
       const vipGuestInputs = document.querySelectorAll('input[name="vip_guest[]"]');
       const vipGuestValues = Array.from(vipGuestInputs)
         .map(input => input.value.trim())
         .filter(value => value !== '');
-      vipGuestText = vipGuestValues.join(', ') || vipGuestText;
+      if (vipGuestValues.length > 0) vipGuestText = vipGuestValues.join(', ');
       
-      const tempat = document.getElementById('ip1-tempat')?.value || 'N/A';
-      const objektif = document.getElementById('ip1-objektif')?.value || 'N/A';
-      const impak = document.getElementById('ip1-impak')?.value || 'N/A';
       const tetamuHadir = document.getElementById('ip1-bil-tetamu')?.value || '0';
       const mediaHadir = document.getElementById('ip1-pihak-media')?.value || 'Tiada';
       
@@ -1269,29 +1266,12 @@ function exportAsPDF() {
           </table>
         </div>
       `;
-      imageInputId = 'ip2m1-1-images';
+      imageContainerId = 'ip2m1-1-images';
       
     } else if (sectionId === 'ip2m1-2') {
       // IP2M1 content
-      let mediaItems = [];
-      if (document.getElementById('media-cetak-checkbox')?.checked) {
-        mediaItems.push(`Media Cetak: ${document.getElementById('media-cetak-example')?.value || 'N/A'}`);
-      }
-      if (document.getElementById('media-elektronik-checkbox')?.checked) {
-        mediaItems.push(`Media Elektronik: ${document.getElementById('media-elektronik-example')?.value || 'N/A'}`);
-      }
-      if (document.getElementById('media-digital-checkbox')?.checked) {
-        mediaItems.push(`Media Digital: ${document.getElementById('media-digital-example')?.value || 'N/A'}`);
-      }
-      
-      const mediaText = mediaItems.length > 0 ? mediaItems.join('<br>') : 'Tiada saluran media';
-      
       const mediaCoverage = document.getElementById('media-coverage')?.textContent || '0%';
-      const totalRespondent = document.getElementById('ip2-total-respondent')?.value || '0';
-      const positiveRespondent = document.getElementById('ip2-positive-respondent')?.value || '0';
-      const satisfactionPercent = document.getElementById('ip2-satisfaction-percent')?.textContent || '0%';
-      const crowdSize = document.getElementById('crowd-size')?.value || '0';
-      const targetGroup = document.getElementById('target-group')?.value || '0';
+      const satisfaction = document.getElementById('ip2-satisfaction-percent')?.textContent || '0%';
       const participantPercent = document.getElementById('participant-percent')?.textContent || '0%';
       const totalScore = document.getElementById('total-ip2m1-2')?.textContent || '0';
       
@@ -1301,21 +1281,16 @@ function exportAsPDF() {
           
           <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">A. Perkongsian Maklumat & Penyiaran (100%)</h3>
-            <p style="margin:8px 0"><strong>Saluran:</strong><br>${mediaText}</p>
-            <p style="margin:10px 0 6px;font-weight:600"><strong>Peratus Liputan Saluran:</strong> <span style="color:#000;font-size:19px">${mediaCoverage}</span></p>
+            <p style="margin:8px 0"><strong>Peratus Liputan Saluran:</strong> <span style="color:#000;font-size:19px">${mediaCoverage}</span></p>
           </div>
           
           <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">B. Tahap Kepuasan Peserta</h3>
-            <p style="margin:8px 0"><strong>Jumlah Responden:</strong> ${totalRespondent}</p>
-            <p style="margin:8px 0"><strong>Responden Positif:</strong> ${positiveRespondent}</p>
-            <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${satisfactionPercent}</span></p>
+            <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${satisfaction}</span></p>
           </div>
           
           <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">C. Penyertaan Peserta (100%)</h3>
-            <p style="margin:8px 0"><strong>Saiz Kehadiran:</strong> ${crowdSize}</p>
-            <p style="margin:8px 0"><strong>Kumpulan Sasaran:</strong> ${targetGroup}</p>
             <p style="margin:8px 0"><strong>Markah:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${participantPercent}</span></p>
           </div>
           
@@ -1326,21 +1301,14 @@ function exportAsPDF() {
           </div>
         </div>
       `;
-      imageInputId = 'ip2m1-2-images';
+      imageContainerId = 'ip2m1-2-images';
       
     } else if (sectionId === 'ip3m2') {
       // IP3M2 content
-      const mediaList = document.getElementById('ip3-media-list')?.value.replace(/\n/g, '<br>') || 'Tiada media';
       const mediaPercent = document.getElementById('ip3-media-percent')?.textContent || '0%';
-      const actualAttendance = document.getElementById('ip3-actual-attendance')?.value || '0';
-      const targetAttendance = document.getElementById('ip3-target-attendance')?.value || '0';
-      const participationPercent = document.getElementById('ip3-participation-percent')?.textContent || '0%';
-      const totalRespondent = document.getElementById('ip3-total-respondent')?.value || '0';
-      const positiveRespondent = document.getElementById('ip3-positive-respondent')?.value || '0';
-      const satisfactionPercent = document.getElementById('ip3-satisfaction-percent')?.textContent || '0%';
-      const targetedEntrepreneur = document.getElementById('ip3-targeted-enterpreneur-involvement')?.value || '0';
-      const actualEntrepreneur = document.getElementById('ip3-actual-enterprenuer-involvement')?.value || '0';
-      const roiPercent = document.getElementById('ip3-roi-percent')?.textContent || '0%';
+      const participation = document.getElementById('ip3-participation-percent')?.textContent || '0%';
+      const satisfaction = document.getElementById('ip3-satisfaction-percent')?.textContent || '0%';
+      const roi = document.getElementById('ip3-roi-percent')?.textContent || '0%';
       
       sectionContent = `
         <div style="margin-bottom:25px">
@@ -1348,38 +1316,31 @@ function exportAsPDF() {
           
           <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">A. Promosi & Jangkauan (Liputan Media)</h3>
-            <p style="margin:8px 0"><strong>Senarai Media:</strong><br>${mediaList}</p>
             <p style="margin:10px 0 6px;font-weight:600"><strong>Peratus Liputan Media:</strong> <span style="color:#000;font-size:19px">${mediaPercent}</span></p>
           </div>
           
           <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">B. Penyertaan</h3>
-            <p style="margin:8px 0"><strong>Kehadiran Sebenar:</strong> ${actualAttendance}</p>
-            <p style="margin:8px 0"><strong>Sasaran Kehadiran:</strong> ${targetAttendance}</p>
-            <p style="margin:8px 0"><strong>Markah Penyertaan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${participationPercent}</span></p>
+            <p style="margin:8px 0"><strong>Markah Penyertaan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${participation}</span></p>
           </div>
           
           <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">C. Tahap Kepuasan Peserta</h3>
-            <p style="margin:8px 0"><strong>Jumlah Responden:</strong> ${totalRespondent}</p>
-            <p style="margin:8px 0"><strong>Responden Positif:</strong> ${positiveRespondent}</p>
-            <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${satisfactionPercent}</span></p>
+            <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${satisfaction}</span></p>
           </div>
           
           <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">D. Penjanaan Ekonomi</h3>
-            <p style="margin:8px 0"><strong>Bilangan Sasaran Penyertaan Usahawan:</strong> ${targetedEntrepreneur}</p>
-            <p style="margin:8px 0"><strong>Bilangan Sebenar Penyertaan Usahawan:</strong> ${actualEntrepreneur}</p>
-            <p style="margin:8px 0"><strong>ROI:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${roiPercent}</span></p>
+            <p style="margin:8px 0"><strong>ROI:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${roi}</span></p>
           </div>
         </div>
       `;
-      imageInputId = 'ip3m2-images';
+      imageContainerId = 'ip3m2-images';
     }
 
     pdfContent.innerHTML += sectionContent;
     
-    // === IMAGE GALLERY SECTION (CRITICAL FIX) ===
+    // === IMAGE GALLERY ===
     pdfContent.innerHTML += `
       <div style="margin-top:25px">
         <h3 style="font-weight:700;color:#000;margin-bottom:15px;font-size:18px">Gambar Program</h3>
@@ -1401,16 +1362,15 @@ function exportAsPDF() {
       </div>
     `;
 
-    // === LOAD IMAGES PROPERLY (FIXED) ===
-    const imageInput = document.getElementById(imageInputId);
+    // === LOAD IMAGES INTO PDF CONTENT ===
+    const imageContainer = document.getElementById(imageContainerId);
     const pdfImageContainer = pdfContent.querySelector('#pdf-image-container');
     
-    // Check if there are images to load
-    if (imageInput && imageInput.files && imageInput.files.length > 0) {
-      const imageFiles = Array.from(imageInput.files).slice(0, 4); // Max 4 images
+    if (imageContainer && imageContainer.files && imageContainer.files.length > 0) {
+      const imageFiles = Array.from(imageContainer.files).slice(0, 4); // Max 4 images
       const imagePromises = [];
       
-      // Create image elements and load them properly
+      // Create image elements and load them
       imageFiles.forEach(file => {
         if (!file.type.match('image.*')) return;
         
@@ -1424,8 +1384,6 @@ function exportAsPDF() {
             img.style.objectFit = 'cover';
             img.style.borderRadius = '8px';
             img.style.border = '1px solid #e2e8f0';
-            
-            // Critical: Wait for image to fully load before resolving
             img.onload = () => resolve(img);
             img.onerror = () => resolve(null);
           };
@@ -1434,53 +1392,22 @@ function exportAsPDF() {
         imagePromises.push(promise);
       });
       
-      // Wait for ALL images to load completely before generating PDF
+      // Wait for all images to load, then generate PDF
       Promise.all(imagePromises).then((imgs) => {
         imgs.filter(img => img !== null).forEach(img => {
           pdfImageContainer.appendChild(img);
         });
         
-        // If no images loaded successfully, show placeholder
-        if (imgs.filter(img => img !== null).length === 0) {
-          pdfImageContainer.innerHTML = `
-            <div style="grid-column:span 2;background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:24px;text-align:center;color:#64748b;font-size:14px">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px;color:#94a3b8">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="2 2"/>
-                <circle cx="12" cy="12" r="3" stroke-dasharray="2 2"/>
-              </svg>
-              <div>Tiada gambar dimuat naik untuk laporan ini</div>
-            </div>
-          `;
-        }
-        
-        // Generate PDF AFTER images are fully loaded
+        // Generate PDF after images are loaded
         generatePDF(pdfContent, programmeName, btn, originalText);
       }).catch(err => {
         console.error('Image loading error:', err);
-        // Still generate PDF with placeholder if images fail
-        pdfImageContainer.innerHTML = `
-          <div style="grid-column:span 2;background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:24px;text-align:center;color:#64748b;font-size:14px">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px;color:#94a3b8">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="2 2"/>
-              <circle cx="12" cy="12" r="3" stroke-dasharray="2 2"/>
-            </svg>
-            <div>Ralat memuatkan gambar. PDF dijana tanpa gambar.</div>
-          </div>
-        `;
         generatePDF(pdfContent, programmeName, btn, originalText);
       });
       
     } else {
-      // No images uploaded - show nice placeholder
-      pdfImageContainer.innerHTML = `
-        <div style="grid-column:span 2;background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:24px;text-align:center;color:#64748b;font-size:14px">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 12px;color:#94a3b8">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="2 2"/>
-            <circle cx="12" cy="12" r="3" stroke-dasharray="2 2"/>
-          </svg>
-          <div>Tiada gambar dimuat naik untuk laporan ini</div>
-        </div>
-      `;
+      // No images - add placeholder
+      pdfImageContainer.innerHTML = '<div style="grid-column:span 2;color:#64748b;text-align:center;padding:20px;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik</div>';
       generatePDF(pdfContent, programmeName, btn, originalText);
     }
     
@@ -1498,7 +1425,7 @@ function exportAsPDF() {
 function generatePDF(pdfContent, programmeName, btn, originalText) {
   document.body.appendChild(pdfContent);
   
-  // Critical: Small delay to ensure images render properly before capture
+  // Small delay to ensure images render
   setTimeout(() => {
     html2canvas(pdfContent, {
       scale: 2,
@@ -1515,7 +1442,7 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       const pageHeight = 297;
       const imgHeight = canvas.height * imgWidth / canvas.width;
       
-      // Handle multi-page PDF if content is too long
+      // Handle multi-page content
       if (imgHeight > pageHeight) {
         let heightLeft = imgHeight;
         let position = 0;
@@ -1544,8 +1471,9 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       btn.disabled = false;
       btn.innerHTML = originalText;
     });
-  }, 500); // Increased delay to 500ms for reliable image rendering
+  }, 300);
 }
+
 // Add event listener (place this INSIDE your DOMContentLoaded setup)
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
