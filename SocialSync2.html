@@ -1595,7 +1595,6 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       btn.innerHTML = originalText;
     });
   }, 500); // ✅ CORRECT PLACEMENT OF DELAY PARAMETER
-}
 // Add event listener (place this INSIDE your DOMContentLoaded setup)
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
