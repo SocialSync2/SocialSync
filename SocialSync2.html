@@ -1370,7 +1370,7 @@ function exportAsPDF() {
           </div>
         </div>
       `;
-      imageInputId = 'ip3m2-images';  // ✅ CORRECT ID
+       imageInputId = 'ip2m1-2-images';
     } 
     // === IP3M2 SECTION ===
     else if (sectionId === 'ip3m2') {
@@ -1480,22 +1480,13 @@ pdfContent.innerHTML += `
     </p>
   </div>
 `;
-`;
 
     document.body.appendChild(pdfContent);
 
 
     // === LOAD IMAGES PROPERLY ===
     const imageInput = document.getElementById(imageInputId);
-    let pdfImageContainer = pdfContent.querySelector('#pdf-image-container');
-    if (!pdfImageContainer) {
-      // Safety fallback: create container if missing
-      pdfImageContainer = document.createElement('div');
-      pdfImageContainer.id = 'pdf-image-container';
-      pdfImageContainer.style.cssText = 'margin-top:20px;grid-template-columns:repeat(2,1fr);gap:15px;display:grid;';
-      pdfContent.appendChild(pdfImageContainer);
-      console.warn('PDF image container was missing - created fallback container');
-    }
+    const pdfImageContainer = pdfContent.querySelector('#pdf-image-container');
     
     if (imageInput && imageInput.files && imageInput.files.length > 0) {
       const imageFiles = Array.from(imageInput.files).slice(0, 4);
