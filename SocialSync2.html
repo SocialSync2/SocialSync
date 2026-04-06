@@ -1458,9 +1458,12 @@ function exportAsPDF() {
           </div>
         </div>
       `;
-      imageInputId = 'ip3m2-images';
+      imageInputId = 'ip2m1-2-images';
     }
     pdfContent.innerHTML += sectionContent;
+
+    // Add the image container to pdfContent
+    pdfContent.innerHTML += `<divpdf-image-container" style="margin-top:20px;grid-template-columns:repeat(2,1fr);gap:15px;display:grid;"></div>`;
 
     // Footer with government styling
     pdfContent.innerHTML += `
@@ -1600,7 +1603,6 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Setup media checkboxes
   ['media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
@@ -1614,15 +1616,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Setup IP2M1 calculation listeners
-  ['ip2-total-respondent', 'ip2-positive-respondent', 'media-cetak-checkbox', 
-   'media-elektronik-checkbox', 'media-digital-checkbox', 'crowd-size', 'target-group']
-  .forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('input', updateIP2M1_2);
-  });
+// Add IP2M1 satisfaction listeners
+['ip2-total-respondent', 'ip2-positive-respondent', 'media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox', 'crowd-size', 'target-group']
+.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', updateIP2M1_2);
+});
 
-  // Setup IP3M2 calculation listeners (FIXED TYPO)
+// FIX: Add ALL IP3M2 fields including ROI entrepreneur fields (with exact typos from your HTML)
   ['ip3-media-list', 'ip3-actual-attendance', 'ip3-target-attendance', 
    'ip3-total-respondent', 'ip3-positive-respondent', 
    'ip3-targeted-enterpreneur-involvement', 'ip3-actual-enterprenuer-involvement']
@@ -1631,16 +1632,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el) el.addEventListener('input', updateIP3M2);
   });
 
-  // Setup UI components
   setupSectionSelection();
   setupImagePreview();
-  
-  // Setup form submission
-  const form = document.getElementById('main-form');
-  if (form) {
-    form.addEventListener('submit', submitForm);
-  }
-  
+  document.getElementById('main-form').addEventListener('submit', submitForm);
+  document.getElementById('view-records-btn').addEventListener('click', () => {
+  // Add PDF export event listener (INSIDE DOMContentLoaded)
+  document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
+  });
+  setupPrint();
+
   // Setup View Records button
   const viewRecordsBtn = document.getElementById('view-records-btn');
   if (viewRecordsBtn) {
@@ -1654,10 +1654,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (exportPdfBtn) {
     exportPdfBtn.addEventListener('click', exportAsPDF);
   }
-  
-  // Initialize calculations
+
   updateIP2M1_2();
   updateIP3M2();
-  
-  console.log('✅ SocialSync initialized successfully');
 });
+</script>
+</body>
+</html>
