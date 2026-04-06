@@ -1460,27 +1460,27 @@ function exportAsPDF() {
       `;
       imageInputId = 'ip2m1-2-images';
     }
-    pdfContent.innerHTML += sectionContent;
+pdfContent.innerHTML += sectionContent;
 
-    // Add the image container to pdfContent
-    pdfContent.innerHTML += `<divpdf-image-container" style="margin-top:20px;grid-template-columns:repeat(2,1fr);gap:15px;display:grid;"></div>`;
+// ADD THE FIX HERE - insert this line
+pdfContent.innerHTML += `<div id="pdf-image-container" style="margin-top:20px;grid-template-columns:repeat(2,1fr);gap:15px;display:grid;"></div>`;
 
-    // Footer with government styling
-    pdfContent.innerHTML += `
-      <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:12px">
-        <p style="font-weight:600;color:#1e40af;margin-bottom:6px">SocialSync Programme Management System</p>
-        <p style="font-weight:500;margin-bottom:4px">Dokumen Rasmi Kerajaan • Sulit</p>
-        <p style="margin-top:8px;font-size:11px;color:#64748b">
-          Dijana pada: ${new Date().toLocaleDateString('ms-MY', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          })}
-        </p>
-      </div>
-    `;
+// Footer with government styling
+pdfContent.innerHTML += `
+  <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:12px">
+    <p style="font-weight:600;color:#1e40af;margin-bottom:6px">SocialSync Programme Management System</p>
+    <p style="font-weight:500;margin-bottom:4px">Dokumen Rasmi Kerajaan • Sulit</p>
+    <p style="margin-top:8px;font-size:11px;color:#64748b">
+      Dijana pada: ${new Date().toLocaleDateString('ms-MY', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })}
+    </p>
+  </div>
+`;
 
     document.body.appendChild(pdfContent);
 
