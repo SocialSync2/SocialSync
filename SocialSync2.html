@@ -1169,9 +1169,9 @@ function exportAsPDF() {
     pdfContent.style.boxSizing = 'border-box';
     pdfContent.style.position = 'relative';
 
-    // === GET FORM DATA (USE STORED DATA IF FORM IS EMPTY) ===
-    let programmeName = document.getElementById('programme').value || 'Programme';
-    let programmeDate = document.getElementById('date').value || 'Date';
+    // === GET FORM DATA (WITH FALLBACK TO lastSubmittedData AFTER SUBMISSION) ===
+    let programmeName = document.getElementById('programme')?.value?.trim() || 'Programme';
+    let programmeDate = document.getElementById('date')?.value || 'Date';
     let organizerText = 'Organizer';
     let daerah = 'Daerah';
     
@@ -1213,6 +1213,10 @@ function exportAsPDF() {
       </div>
     `;
 
+        // === SECTION CONTENT ===
+    let sectionContent = '';
+    let imageInputId = '';
+    
     // === BULETIN DAERAH SECTION ===
     if (sectionId === 'ip2m1-1') {
       let vipGuestText = 'Tiada tetamu kehormat';
@@ -1271,6 +1275,7 @@ function exportAsPDF() {
           </table>
         </div>
       `;
+      imageInputId = 'ip2m1-1-images';
     } 
     // === IP2M1:2 SECTION ===
     else if (sectionId === 'ip2m1-2') {
@@ -1365,6 +1370,7 @@ function exportAsPDF() {
           </div>
         </div>
       `;
+       imageInputId = 'ip2m1-2-images';
     } 
     // === IP3M2 SECTION ===
     else if (sectionId === 'ip3m2') {
@@ -1452,7 +1458,9 @@ function exportAsPDF() {
           </div>
         </div>
       `;
+      imageInputId = 'ip2m1-2-images';
     }
+    pdfContent.innerHTML += sectionContent;
 
     // Footer with government styling
     pdfContent.innerHTML += `
@@ -1473,7 +1481,78 @@ function exportAsPDF() {
 
     document.body.appendChild(pdfContent);
 
-    // Generate PDF with proper A4 sizing
+
+    // === LOAD IMAGES PROPERLY ===
+    const imageInput = document.getElementById(imageInputId);
+    const pdfImageContainer = pdfContent.querySelector('#pdf-image-container');
+    
+    if (imageInput && imageInput.files && imageInput.files.length > 0) {
+      const imageFiles = Array.from(imageInput.files).slice(0, 4);
+      const imagePromises = [];
+      
+      imageFiles.forEach(file => {
+        if (!file.type.match('image.*')) return;
+        
+        const reader = new FileReader();
+        const promise = new Promise((resolve) => {
+          reader.onload = (e) => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.width = '100%';
+            img.style.height = '150px';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '8px';
+            img.style.border = '1px solid #e2e8f0';
+            
+            // CRITICAL: Wait for image to fully render
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+          };
+          reader.readAsDataURL(file);
+        });
+        imagePromises.push(promise);
+      });
+      
+      // Wait for ALL images to load before generating PDF
+      Promise.all(imagePromises).then((imgs) => {
+        imgs.filter(img => img !== null).forEach(img => {
+          pdfImageContainer.appendChild(img);
+        });
+        
+        if (imgs.filter(img => img !== null).length === 0) {
+          pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b">Tiada gambar dimuat naik</div>`;
+        }
+        
+        generatePDF(pdfContent, programmeName, btn, originalText);
+      }).catch(err => {
+        console.error('Image loading error:', err);
+        pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b">Ralat memuatkan gambar</div>`;
+        generatePDF(pdfContent, programmeName, btn, originalText);
+      });
+      
+    } else {
+      // No images uploaded
+      pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>`;
+      generatePDF(pdfContent, programmeName, btn, originalText);
+    }
+    
+  } catch (error) {
+    console.error('Export error:', error);
+    alert('⚠️ Ralat semasa menjana PDF: ' + error.message);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  }
+}
+
+// Helper function to generate PDF after images load
+// Helper function to generate PDF after images load
+function generatePDF(pdfContent, programmeName, btn, originalText) {
+  document.body.appendChild(pdfContent);
+  
+  // CRITICAL 500ms delay for image rendering
+  setTimeout(() => {
     html2canvas(pdfContent, {
       scale: 2,
       useCORS: true,
@@ -1489,14 +1568,11 @@ function exportAsPDF() {
       const pageHeight = 297;
       const imgHeight = canvas.height * imgWidth / canvas.width;
       
-      // Handle multi-page PDF if content is too long
       if (imgHeight > pageHeight) {
         let heightLeft = imgHeight;
         let position = 0;
-        
         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
-        
         while (heightLeft >= 0) {
           position = heightLeft - imgHeight;
           pdf.addPage();
@@ -1508,22 +1584,17 @@ function exportAsPDF() {
       }
       
       pdf.save(`${programmeName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
-      
       alert('✅ Laporan PDF telah dijana dan dimuat turun!');
+      
     }).catch(err => {
       console.error('PDF generation error:', err);
-      alert('⚠️ Gagal menjana PDF. Cuba semula atau guna fungsi Cetak sebagai alternatif.');
+      alert('⚠️ Gagal menjana PDF. Cuba semula.');
     }).finally(() => {
       document.body.removeChild(pdfContent);
       btn.disabled = false;
       btn.innerHTML = originalText;
     });
-  } catch (error) {
-    console.error('Export error:', error);
-    alert('⚠️ Ralat semasa menjana PDF. Sila semak konsol pelayar.');
-    btn.disabled = false;
-    btn.innerHTML = originalText;
-  }
+  }, 500); // ✅ CORRECT PLACEMENT OF DELAY PARAMETER
 }
 // Add event listener (place this INSIDE your DOMContentLoaded setup)
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
@@ -1565,6 +1636,21 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
   });
   setupPrint();
+
+  // Setup View Records button
+  const viewRecordsBtn = document.getElementById('view-records-btn');
+  if (viewRecordsBtn) {
+    viewRecordsBtn.addEventListener('click', () => {
+      window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
+    });
+  }
+  
+  // ✅ CRITICAL: Setup PDF export button HERE (inside DOMContentLoaded)
+  const exportPdfBtn = document.getElementById('export-pdf-btn');
+  if (exportPdfBtn) {
+    exportPdfBtn.addEventListener('click', exportAsPDF);
+  }
+
   updateIP2M1_2();
   updateIP3M2();
 });
