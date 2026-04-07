@@ -221,6 +221,13 @@ body {
           View Records
         </button>
 
+        <button id="view-statistics-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          View Statistics
+        </button>
+
         <button id="export-pdf-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -698,10 +705,8 @@ function fileToBase64(file) {
   });
 }
 
-// Global variable to store last submitted data
 let lastSubmittedData = null;
 
-// Submit handler (FIXED TO STORE DATA BEFORE RESET)
 async function submitForm(e) {
   e.preventDefault();
   const btn = document.getElementById('submit-btn');
@@ -716,7 +721,6 @@ async function submitForm(e) {
       return;
     }
     
-    // === COLLECT FORM DATA ===
     const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
     const organizerValues = Array.from(organizerInputs)
       .map(input => input.value.trim())
@@ -751,7 +755,6 @@ async function submitForm(e) {
       document.getElementById('doc-laporan-sms')?.checked ? 'Laporan Maklum Balas dari Survey Management System (SMS)' : ''
     ].filter(Boolean).join(', ');
     
-    // === STORE DATA BEFORE RESET ===
     lastSubmittedData = {
       programme_name: document.getElementById('programme').value || 'Programme',
       programme_date: document.getElementById('date').value || 'Date',
@@ -787,7 +790,6 @@ async function submitForm(e) {
       section: selectedSection
     };
     
-    // === PROCEED WITH SUBMISSION ===
     const selectedMedia = [];
     if (document.getElementById('media-cetak-checkbox')?.checked) {
       const example = document.getElementById('media-cetak-example')?.value.trim();
@@ -837,7 +839,6 @@ async function submitForm(e) {
       roi_percent: parseFloat(document.getElementById('ip3-roi-percent')?.textContent) || 0
     };
     
-    // ... rest of submission code remains the same ...
     const imageFiles = {
       'ip2m1-1': document.getElementById('ip2m1-1-images')?.files || [],
       'ip2m1-2': document.getElementById('ip2m1-2-images')?.files || [],
@@ -1142,7 +1143,6 @@ function setupPrint() {
   });
 }
 
-// PDF Export Functionality (FIXED FOR POST-SUBMISSION DATA)
 function exportAsPDF() {
   const activeSectionBtn = document.querySelector('.section-btn.active');
   if (!activeSectionBtn) {
@@ -1542,8 +1542,6 @@ pdfContent.innerHTML = fullPdfHtml; // SET SEKALI SAHAJA!
   }
 }
 
-// Helper function to generate PDF after images load
-// Helper function to generate PDF after images load
 function generatePDF(pdfContent, programmeName, btn, originalText) {
   // ✅ HAPUS element lama untuk elak konflik
   const existing = document.getElementById('pdf-export-content');
@@ -1551,7 +1549,6 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
   
   document.body.appendChild(pdfContent);
   
-  // CRITICAL 500ms delay for image rendering - NOW INSIDE THE FUNCTION
   setTimeout(() => {
     html2canvas(pdfContent, {
       scale: 2,
@@ -1594,11 +1591,9 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       btn.disabled = false;
       btn.innerHTML = originalText;
     });
-  }, 500); // Delay is now properly inside the function
+  }, 500); 
 }
 
-// Add event listener (place this INSIDE your DOMContentLoaded setup)
-// Remove this line
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
 // Keep only this one inside DOMContentLoaded
@@ -1642,6 +1637,15 @@ document.addEventListener('DOMContentLoaded', () => {
       window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
     });
   }
+
+// Setup View Statistics button
+const viewStatisticsBtn = document.getElementById('view-statistics-btn');
+if (viewStatisticsBtn) {
+  viewStatisticsBtn.addEventListener('click', () => {
+    window.location.href = 'statistics.html';
+    
+  });
+}
   
   // ✅ CRITICAL: Setup PDF export button HERE (inside DOMContentLoaded)
   const exportPdfBtn = document.getElementById('export-pdf-btn');
