@@ -1638,14 +1638,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-// Setup View Statistics button
+  // ADD THIS INSIDE DOMContentLoaded
 const viewStatisticsBtn = document.getElementById('view-statistics-btn');
-if (viewStatisticsBtn) {
-  viewStatisticsBtn.addEventListener('click', () => {
-    window.location.href = 'statistics.html';
-    
-  });
+const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
+const dashboardView = document.querySelector('#dashboard-view'); // Wrap main content in <div id="dashboard-view">
+const statisticsView = document.getElementById('statistics-view');
+
+// Wrap your existing dashboard content in <div id="dashboard-view"> if not already done
+if (!dashboardView) {
+  const container = document.querySelector('.max-w-6xl.mx-auto');
+  const wrapper = document.createElement('div');
+  wrapper.id = 'dashboard-view';
+  container.parentNode.insertBefore(wrapper, container);
+  wrapper.appendChild(container);
 }
+
+// Setup navigation
+viewStatisticsBtn.addEventListener('click', () => {
+  document.getElementById('dashboard-view').classList.add('hidden');
+  statisticsView.classList.remove('hidden');
+  backToDashboardBtn.classList.remove('hidden');
+  viewStatisticsBtn.classList.add('hidden');
+});
+
+backToDashboardBtn.addEventListener('click', () => {
+  statisticsView.classList.add('hidden');
+  document.getElementById('dashboard-view').classList.remove('hidden');
+  backToDashboardBtn.classList.add('hidden');
+  viewStatisticsBtn.classList.remove('hidden');
+});
+
+// Make cells clickable
+document.querySelectorAll('.stat-cell').forEach(cell => {
+  cell.addEventListener('click', function() {
+    alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
+  });
+});
   
   // ✅ CRITICAL: Setup PDF export button HERE (inside DOMContentLoaded)
   const exportPdfBtn = document.getElementById('export-pdf-btn');
