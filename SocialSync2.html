@@ -234,12 +234,20 @@ body {
           </svg>
           Export as PDF
         </button>
+
+        <button id="back-to-dashboard-btn" class="hidden px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Dashboard
+        </button>
       </div>
     </div>
   </header>
 
   <!-- Main Content -->
   <main class="flex-1 overflow-auto scroll-container p-6">
+  + <div id="dashboard-view"></div>
     <div class="max-w-6xl mx-auto">
       <!-- Section Selection -->
       <div class="bg-white rounded-xl p-6 mb-6 border border-slate-200 shadow-sm">
@@ -627,8 +635,11 @@ body {
           </button>
         </div>
       </form>
-    </div>
+      </form>
+    </div> <!-- closes max-w-6xl mx-auto -->
+  + </div> <!-- closes dashboard-view -->
   </main>
+  
 </div>
 
 <!-- Live Logic -->
