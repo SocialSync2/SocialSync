@@ -1742,42 +1742,39 @@ document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF
 
 // Keep only this one inside DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
-  // Setup statistics navigation
-  const viewStatisticsBtn = document.getElementById('view-statistics-btn');
-  const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
-  const dashboardView = document.getElementById('dashboard-view');
-  const statisticsView = document.getElementById('statistics-view');
-
-  if (viewStatisticsBtn && backToDashboardBtn && dashboardView && statisticsView) {
-    viewStatisticsBtn.addEventListener('click', () => {
-      dashboardView.classList.add('hidden');
-      statisticsView.classList.remove('hidden');
-      backToDashboardBtn.classList.remove('hidden');
-      viewStatisticsBtn.classList.add('hidden');
-    });
-
-    backToDashboardBtn.addEventListener('click', () => {
-      statisticsView.classList.add('hidden');
-      dashboardView.classList.remove('hidden');
-      backToDashboardBtn.classList.add('hidden');
-      viewStatisticsBtn.classList.remove('hidden');
-    });
-
-    document.querySelectorAll('.stat-cell').forEach(cell => {
-      cell.addEventListener('click', function() {
-        alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
-      });
-      
-      cell.addEventListener('mouseenter', () => cell.classList.add('active'));
-      cell.addEventListener('mouseleave', () => cell.classList.remove('active'));
-    });
+  // ...
+  const exportPdfBtn = document.getElementById('export-pdf-btn');
+  if (exportPdfBtn) {
+    exportPdfBtn.addEventListener('click', exportAsPDF);
   }
+});
 
-  // Keep existing initialization
+// Add IP2M1 satisfaction listeners
+['ip2-total-respondent', 'ip2-positive-respondent', 'media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox', 'crowd-size', 'target-group']
+.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', updateIP2M1_2);
+});
+
+// FIX: Add ALL IP3M2 fields including ROI entrepreneur fields (with exact typos from your HTML)
+  ['ip3-media-list', 'ip3-actual-attendance', 'ip3-target-attendance', 
+   'ip3-total-respondent', 'ip3-positive-respondent', 
+   'ip3-targeted-enterpreneur-involvement', 'ip3-actual-enterprenuer-involvement']
+  .forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateIP3M2);
+  });
+
   setupSectionSelection();
   setupImagePreview();
   document.getElementById('main-form').addEventListener('submit', submitForm);
-  
+  document.getElementById('view-records-btn').addEventListener('click', () => {
+  // Add PDF export event listener (INSIDE DOMContentLoaded)
+  document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
+  });
+  setupPrint();
+
+  // Setup View Records button
   const viewRecordsBtn = document.getElementById('view-records-btn');
   if (viewRecordsBtn) {
     viewRecordsBtn.addEventListener('click', () => {
@@ -1785,6 +1782,62 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ADD THIS INSIDE DOMContentLoaded
+// Setup View Statistics button
+const viewStatisticsBtn = document.getElementById('view-statistics-btn');
+const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
+const dashboardView = document.getElementById('dashboard-view');
+const statisticsView = document.getElementById('statistics-view');
+
+// Setup navigation
+viewStatisticsBtn.addEventListener('click', () => {
+  dashboardView.classList.add('hidden');
+  statisticsView.classList.remove('hidden');
+  backToDashboardBtn.classList.remove('hidden');
+  viewStatisticsBtn.classList.add('hidden');
+});
+
+backToDashboardBtn.addEventListener('click', () => {
+  statisticsView.classList.add('hidden');
+  dashboardView.classList.remove('hidden');
+  backToDashboardBtn.classList.add('hidden');
+  viewStatisticsBtn.classList.remove('hidden');
+});
+
+// Make cells clickable
+document.querySelectorAll('.stat-cell').forEach(cell => {
+  cell.addEventListener('click', function() {
+    alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
+  });
+  
+  // Add hover effects
+  cell.addEventListener('mouseenter', () => cell.classList.add('active'));
+  cell.addEventListener('mouseleave', () => cell.classList.remove('active'));
+});
+
+// Setup navigation
+viewStatisticsBtn.addEventListener('click', () => {
+  document.getElementById('dashboard-view').classList.add('hidden');
+  statisticsView.classList.remove('hidden');
+  backToDashboardBtn.classList.remove('hidden');
+  viewStatisticsBtn.classList.add('hidden');
+});
+
+backToDashboardBtn.addEventListener('click', () => {
+  statisticsView.classList.add('hidden');
+  document.getElementById('dashboard-view').classList.remove('hidden');
+  backToDashboardBtn.classList.add('hidden');
+  viewStatisticsBtn.classList.remove('hidden');
+});
+
+// Make cells clickable
+document.querySelectorAll('.stat-cell').forEach(cell => {
+  cell.addEventListener('click', function() {
+    alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
+  });
+});
+  
+  // ✅ CRITICAL: Setup PDF export button HERE (inside DOMContentLoaded)
   const exportPdfBtn = document.getElementById('export-pdf-btn');
   if (exportPdfBtn) {
     exportPdfBtn.addEventListener('click', exportAsPDF);
@@ -1792,4 +1845,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateIP2M1_2();
   updateIP3M2();
-});
+</script>
+</body>
+</html>
