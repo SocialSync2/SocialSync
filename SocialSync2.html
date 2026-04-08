@@ -1782,9 +1782,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Keep existing initialization
   setupSectionSelection();
   setupImagePreview();
+  document.getElementById('report-type').value = this.getAttribute('data-section');
   document.getElementById('main-form')?.addEventListener('submit', submitForm);
   // Set the report type value based on the clicked button
-  document.getElementById('report-type').value = this.getAttribute('data-section');
   
   const viewRecordsBtn = document.getElementById('view-records-btn');
   if (viewRecordsBtn) {
