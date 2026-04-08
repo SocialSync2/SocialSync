@@ -292,9 +292,9 @@ body {
         </div>
       </div>
 
-      <input type="hidden" id="report-type" name="reportType" value="">
       <!-- Form Container -->
       <form id="main-form" class="card-gradient rounded-2xl border border-slate-200 shadow-xl hidden">
+        <input type="hidden" id="report-type" name="reportType" value="">
         <!-- Programme Info Section -->
         <div class="p-6 border-b border-slate-200 bg-white/50 rounded-t-2xl">
           <h2 class="title-font text-lg font-semibold text-cyan-600 mb-4 flex items-center gap-2">
@@ -1740,14 +1740,8 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
 }
 
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
-
-// Keep ALL existing helper functions here (num, updateIP2M1_2, updateIP3M2, fileToBase64, etc.)
-// ... [ALL YOUR EXISTING FUNCTIONS FROM num() TO generatePDF() STAY HERE] ...
-
-// ✅ CRITICAL FIX: Wrap ALL DOM initialization in DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
   // Setup statistics navigation
-  <button type="button" class="section-btn" data-section="ip2m1-1">BULETIN DAERAH</button>
   const viewStatisticsBtn = document.getElementById('view-statistics-btn');
   const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
   const dashboardView = document.getElementById('dashboard-view');
@@ -1779,13 +1773,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Keep existing initialization
-  setupSectionSelection();
-  setupImagePreview();
-  document.getElementById('report-type').value = this.getAttribute('data-section');
-  document.getElementById('main-form')?.addEventListener('submit', submitForm);
-  // Set the report type value based on the clicked button
+  // Setup section selection WITH report type tracking
+  const sectionBtns = document.querySelectorAll('.section-btn');
+  const form = document.getElementById('main-form');
+  const sections = {
+    'ip2m1-1': document.getElementById('section-ip2m1-1'),
+    'ip2m1-2': document.getElementById('section-ip2m1-2'),
+    'ip3m2': document.getElementById('section-ip3m2')
+  };
   
+  sectionBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // ✅ SET REPORT TYPE VALUE WHEN BUTTON CLICKED
+      document.getElementById('report-type').value = btn.dataset.section;
+      
+      sectionBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      form.classList.remove('hidden');
+      Object.values(sections).forEach(section => section.classList.add('hidden'));
+      const sectionId = btn.dataset.section;
+      if (sections[sectionId]) {
+        sections[sectionId].classList.remove('hidden');
+      }
+    });
+  });
+
+  // Setup image preview
+  const imageInputs = [
+    { input: 'ip2m1-1-images', preview: 'ip2m1-1-image-preview' },
+    { input: 'ip2m1-2-images', preview: 'ip2m1-2-image-preview' },
+    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
+  ];
+  
+  imageInputs.forEach(({ input, preview }) => {
+    const inputEl = document.getElementById(input);
+    if (inputEl) {
+      inputEl.addEventListener('change', (e) => {
+        const previewEl = document.getElementById(preview);
+        previewEl.innerHTML = '';
+        Array.from(e.target.files).forEach(file => {
+          if (!file.type.match('image.*')) return;
+          const reader = new FileReader();
+          reader.onload = ev => {
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
+            previewEl.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+    }
+  });
+
+  // Form submission
+  document.getElementById('main-form')?.addEventListener('submit', submitForm);
+  
+  // View Records button
   const viewRecordsBtn = document.getElementById('view-records-btn');
   if (viewRecordsBtn) {
     viewRecordsBtn.addEventListener('click', () => {
@@ -1793,11 +1837,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Export PDF button
   const exportPdfBtn = document.getElementById('export-pdf-btn');
   if (exportPdfBtn) {
     exportPdfBtn.addEventListener('click', exportAsPDF);
   }
 
+  // Initialize calculations
   updateIP2M1_2();
   updateIP3M2();
 });
