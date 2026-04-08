@@ -292,6 +292,7 @@ body {
         </div>
       </div>
 
+      <input type="hidden" id="report-type" name="reportType" value="">
       <!-- Form Container -->
       <form id="main-form" class="card-gradient rounded-2xl border border-slate-200 shadow-xl hidden">
         <!-- Programme Info Section -->
@@ -1746,6 +1747,7 @@ document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF
 // ✅ CRITICAL FIX: Wrap ALL DOM initialization in DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
   // Setup statistics navigation
+  <button type="button" class="section-btn" data-section="ip2m1-1">BULETIN DAERAH</button>
   const viewStatisticsBtn = document.getElementById('view-statistics-btn');
   const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
   const dashboardView = document.getElementById('dashboard-view');
@@ -1781,6 +1783,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupSectionSelection();
   setupImagePreview();
   document.getElementById('main-form')?.addEventListener('submit', submitForm);
+  // Set the report type value based on the clicked button
+  document.getElementById('report-type').value = this.getAttribute('data-section');
   
   const viewRecordsBtn = document.getElementById('view-records-btn');
   if (viewRecordsBtn) {
