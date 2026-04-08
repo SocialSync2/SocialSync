@@ -1741,6 +1741,7 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
 }
 
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
+
 document.addEventListener('DOMContentLoaded', () => {
   // Setup statistics navigation
   const viewStatisticsBtn = document.getElementById('view-statistics-btn');
@@ -1754,6 +1755,9 @@ document.addEventListener('DOMContentLoaded', () => {
       statisticsView.classList.remove('hidden');
       backToDashboardBtn.classList.remove('hidden');
       viewStatisticsBtn.classList.add('hidden');
+      
+      // ✅ FETCH REAL STATISTICS WHEN VIEWING
+      fetchStatistics();
     });
 
     backToDashboardBtn.addEventListener('click', () => {
@@ -1763,7 +1767,7 @@ document.addEventListener('DOMContentLoaded', () => {
       viewStatisticsBtn.classList.remove('hidden');
     });
 
-    // Make cells clickable
+    // Make cells clickable (for debugging)
     document.querySelectorAll('.stat-cell').forEach(cell => {
       cell.addEventListener('click', function() {
         alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
@@ -1772,6 +1776,108 @@ document.addEventListener('DOMContentLoaded', () => {
       cell.addEventListener('mouseenter', () => cell.classList.add('active'));
       cell.addEventListener('mouseleave', () => cell.classList.remove('active'));
     });
+  }
+
+  // ✅ NEW: Fetch and display real statistics
+  function fetchStatistics() {
+    // REPLACE WITH YOUR ACTUAL DEPLOYED WEB APP URL
+    const STATS_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_URL/exec';
+    
+    fetch(STATS_URL)
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          console.error('Stats error:', data.error);
+          return;
+        }
+        
+        // Map report types to display names
+        const reportMap = {
+          'ip2m1-1': 'BULETIN DAERAH',
+          'ip2m1-2': 'IP2M1',
+          'ip3m2': 'IP3M2'
+        };
+        
+        // Map district values to display names
+        const districtMap = {
+          'Pejabat Residen Bahagian Mukah': 'RESIDEN BAHAGIAN MUKAH',
+          'Pejabat Daerah Mukah': 'MUKAH',
+          'Pejabat Daerah Dalat': 'DALAT',
+          'Pejabat Daerah Matu': 'MATU',
+          'Pejabat Daerah Daro': 'DARO',
+          'Pejabat Daerah Tanjung Manis': 'TANJUNG MANIS',
+          'Pejabat Daerah Kecil Balingian': 'KECIL BALINGIAN',
+          'Pejabat Daerah Kecil Oya': 'KECIL OYA',
+          'Pejabat Daerah Kecil Igan': 'KECIL IGAN'
+        };
+        
+        // Update each cell with real count
+        document.querySelectorAll('.stat-cell').forEach(cell => {
+          const districtKey = cell.dataset.district;
+          const reportKey = cell.dataset.report;
+          
+          // Find matching district value in sheet data
+          let count = 0;
+          for (const [districtValue, reports] of Object.entries(data)) {
+            const displayDistrict = districtMap[districtValue] || districtValue;
+            if (displayDistrict === districtKey) {
+              // Find matching report type
+              for (const [reportType, reportCount] of Object.entries(reports)) {
+                if (reportMap[reportType] === reportKey) {
+                  count = reportCount;
+                  break;
+                }
+              }
+            }
+          }
+          
+          cell.textContent = count;
+        });
+        
+        // ✅ Optional: Update TOTAL column dynamically
+        updateTotals();
+      })
+      .catch(error => {
+        console.error('Failed to fetch statistics:', error);
+        alert('⚠️ Gagal memuat statistik. Cuba lagi nanti.');
+      });
+  }
+
+  // ✅ Optional: Recalculate totals based on cell values
+  function updateTotals() {
+    // Update row totals
+    document.querySelectorAll('.report-type-row').forEach(row => {
+      let total = 0;
+      row.querySelectorAll('td:not(:first-child):not(:last-child)').forEach(cell => {
+        if (cell.classList.contains('stat-cell')) {
+          total += parseInt(cell.textContent) || 0;
+        }
+      });
+      row.querySelector('td:last-child').textContent = total;
+    });
+    
+    // Update column totals (footer row)
+    const footerCells = document.querySelectorAll('tfoot td:not(:first-child)');
+    footerCells.forEach((cell, index) => {
+      if (index === footerCells.length - 1) return; // Skip grand total
+      
+      let colTotal = 0;
+      document.querySelectorAll(`tbody tr td:nth-child(${index + 2})`).forEach(td => {
+        if (td.classList.contains('stat-cell')) {
+          colTotal += parseInt(td.textContent) || 0;
+        }
+      });
+      cell.textContent = colTotal;
+    });
+    
+    // Update grand total
+    let grandTotal = 0;
+    footerCells.forEach((cell, index) => {
+      if (index < footerCells.length - 1) {
+        grandTotal += parseInt(cell.textContent) || 0;
+      }
+    });
+    footerCells[footerCells.length - 1].textContent = grandTotal;
   }
 
   // Setup section selection WITH report type tracking
@@ -1785,6 +1891,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   sectionBtns.forEach(btn => {
     btn.addEventListener('click', () => {
+      // ✅ SET REPORT TYPE VALUE WHEN BUTTON CLICKED
       document.getElementById('report-type').value = btn.dataset.section;
       
       sectionBtns.forEach(b => b.classList.remove('active'));
