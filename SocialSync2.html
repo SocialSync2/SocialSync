@@ -194,30 +194,6 @@ body {
     font-size: 11px;
   }
 }
-/* ADD THESE STYLES AT THE VERY BOTTOM OF YOUR <style> TAG */
-  .stat-cell {
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .stat-cell:hover {
-    background-color: #dbeafe;
-    transform: scale(1.03);
-  }
-  .stat-cell.active {
-    background-color: #bfdbfe;
-    border: 2px solid #3b82f6;
-  }
-  .district-header {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
-    font-weight: 600;
-  }
-  .report-type-row:nth-child(odd) {
-    background-color: #f8fafc;
-  }
-  .report-type-row:nth-child(even) {
-    background-color: #ffffff;
-  }
 </style>
 
 </head>
@@ -245,25 +221,11 @@ body {
           View Records
         </button>
 
-        <button id="view-statistics-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
-          View Statistics
-        </button>
-
         <button id="export-pdf-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
           Export as PDF
-        </button>
-
-        <button id="back-to-dashboard-btn" class="hidden px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Back to Dashboard
         </button>
       </div>
     </div>
@@ -271,8 +233,7 @@ body {
 
   <!-- Main Content -->
   <main class="flex-1 overflow-auto scroll-container p-6">
-    <div id="dashboard-view"> <!-- ✅ CORRECT: Wrapper starts HERE -->
-      <div class="max-w-6xl mx-auto">
+    <div class="max-w-6xl mx-auto">
       <!-- Section Selection -->
       <div class="bg-white rounded-xl p-6 mb-6 border border-slate-200 shadow-sm">
         <h2 class="title-font text-lg font-semibold text-cyan-600 mb-4">Select Report Type</h2>
@@ -659,119 +620,7 @@ body {
           </button>
         </div>
       </form>
-    </div> <!-- closes max-w-6xl mx-auto -->
-    </div> <!-- closes dashboard-view -->
-    <!-- STATISTICS VIEW -->
-<div id="statistics-view" class="hidden max-w-7xl mx-auto">
-  <!-- Page Title -->
-  <div class="mb-8">
-    <h2 class="title-font text-2xl font-bold text-cyan-600 mb-2">Programme Statistics Overview</h2>
-    <p class="text-slate-600">Click on any cell to view detailed reports for that district and report type combination</p>
-  </div>
-
-  <!-- Statistics Table -->
-  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-slate-200">
-        <thead class="bg-slate-50">
-          <tr>
-            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-700">Report Type</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">RESIDEN BAHAGIAN MUKAH</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">MUKAH</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">DARO</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">DALAT</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">MATU</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">TANJUNG MANIS</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL BALINGIAN</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL OYA</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL IGAN</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 bg-slate-100">TOTAL</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-200">
-          <!-- BULETIN DAERAH Row -->
-          <tr class="report-type-row">
-            <td class="px-6 py-4 whitespace-nowrap font-medium text-cyan-700">BULETIN DAERAH</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="BULETIN DAERAH">12</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="MUKAH" data-report="BULETIN DAERAH">8</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="DARO" data-report="BULETIN DAERAH">5</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="DALAT" data-report="BULETIN DAERAH">7</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="MATU" data-report="BULETIN DAERAH">4</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="TANJUNG MANIS" data-report="BULETIN DAERAH">6</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL BALINGIAN" data-report="BULETIN DAERAH">3</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL OYA" data-report="BULETIN DAERAH">2</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL IGAN" data-report="BULETIN DAERAH">4</td>
-            <td class="px-6 py-4 text-center font-bold bg-slate-100 text-cyan-800">51</td>
-          </tr>
-          
-          <!-- IP2M1 Row -->
-          <tr class="report-type-row">
-            <td class="px-6 py-4 whitespace-nowrap font-medium text-blue-700">IP2M1</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="IP2M1">9</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="MUKAH" data-report="IP2M1">11</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="DARO" data-report="IP2M1">6</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="DALAT" data-report="IP2M1">8</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="MATU" data-report="IP2M1">5</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="TANJUNG MANIS" data-report="IP2M1">7</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL BALINGIAN" data-report="IP2M1">4</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL OYA" data-report="IP2M1">3</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL IGAN" data-report="IP2M1">5</td>
-            <td class="px-6 py-4 text-center font-bold bg-slate-100 text-blue-800">58</td>
-          </tr>
-          
-          <!-- IP3M2 Row -->
-          <tr class="report-type-row">
-            <td class="px-6 py-4 whitespace-nowrap font-medium text-emerald-700">IP3M2</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="IP3M2">7</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="MUKAH" data-report="IP3M2">9</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="DARO" data-report="IP3M2">4</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="DALAT" data-report="IP3M2">6</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="MATU" data-report="IP3M2">3</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="TANJUNG MANIS" data-report="IP3M2">5</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL BALINGIAN" data-report="IP3M2">2</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL OYA" data-report="IP3M2">2</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL IGAN" data-report="IP3M2">3</td>
-            <td class="px-6 py-4 text-center font-bold bg-slate-100 text-emerald-800">41</td>
-          </tr>
-        </tbody>
-        <tfoot class="bg-slate-50 font-bold">
-          <tr>
-            <td class="px-6 py-4 text-right">TOTAL</td>
-            <td class="px-6 py-4 text-center text-cyan-700">28</td>
-            <td class="px-6 py-4 text-center text-cyan-700">28</td>
-            <td class="px-6 py-4 text-center text-cyan-700">15</td>
-            <td class="px-6 py-4 text-center text-cyan-700">21</td>
-            <td class="px-6 py-4 text-center text-cyan-700">12</td>
-            <td class="px-6 py-4 text-center text-cyan-700">18</td>
-            <td class="px-6 py-4 text-center text-cyan-700">9</td>
-            <td class="px-6 py-4 text-center text-cyan-700">7</td>
-            <td class="px-6 py-4 text-center text-cyan-700">12</td>
-            <td class="px-6 py-4 text-center bg-slate-200 text-indigo-800">150</td>
-          </tr>
-        </tfoot>
-      </table>
     </div>
-  </div>
-
-  <!-- Legend -->
-  <div class="mt-8 bg-white rounded-xl p-5 shadow-sm border border-slate-200">
-    <h3 class="font-semibold text-lg text-slate-800 mb-3">Legend</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-4 h-4 rounded-full bg-cyan-500"></div>
-        <span>BULETIN DAERAH reports</span>
-      </div>
-      <div class="flex items-center gap-3">
-        <div class="w-4 h-4 rounded-full bg-blue-500"></div>
-        <span>IP2M1 reports</span>
-      </div>
-      <div class="flex items-center gap-3">
-        <div class="w-4 h-4 rounded-full bg-emerald-500"></div>
-        <span>IP3M2 reports</span>
-      </div>
-    </div>
-  </div>
-</div>
   </main>
 </div>
 
@@ -1781,61 +1630,6 @@ document.addEventListener('DOMContentLoaded', () => {
       window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
     });
   }
-
-  // ADD THIS INSIDE DOMContentLoaded
-// Setup View Statistics button
-const viewStatisticsBtn = document.getElementById('view-statistics-btn');
-const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
-const dashboardView = document.getElementById('dashboard-view');
-const statisticsView = document.getElementById('statistics-view');
-
-// Setup navigation
-viewStatisticsBtn.addEventListener('click', () => {
-  dashboardView.classList.add('hidden');
-  statisticsView.classList.remove('hidden');
-  backToDashboardBtn.classList.remove('hidden');
-  viewStatisticsBtn.classList.add('hidden');
-});
-
-backToDashboardBtn.addEventListener('click', () => {
-  statisticsView.classList.add('hidden');
-  dashboardView.classList.remove('hidden');
-  backToDashboardBtn.classList.add('hidden');
-  viewStatisticsBtn.classList.remove('hidden');
-});
-
-// Make cells clickable
-document.querySelectorAll('.stat-cell').forEach(cell => {
-  cell.addEventListener('click', function() {
-    alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
-  });
-  
-  // Add hover effects
-  cell.addEventListener('mouseenter', () => cell.classList.add('active'));
-  cell.addEventListener('mouseleave', () => cell.classList.remove('active'));
-});
-
-// Setup navigation
-viewStatisticsBtn.addEventListener('click', () => {
-  document.getElementById('dashboard-view').classList.add('hidden');
-  statisticsView.classList.remove('hidden');
-  backToDashboardBtn.classList.remove('hidden');
-  viewStatisticsBtn.classList.add('hidden');
-});
-
-backToDashboardBtn.addEventListener('click', () => {
-  statisticsView.classList.add('hidden');
-  document.getElementById('dashboard-view').classList.remove('hidden');
-  backToDashboardBtn.classList.add('hidden');
-  viewStatisticsBtn.classList.remove('hidden');
-});
-
-// Make cells clickable
-document.querySelectorAll('.stat-cell').forEach(cell => {
-  cell.addEventListener('click', function() {
-    alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
-  });
-});
   
   // ✅ CRITICAL: Setup PDF export button HERE (inside DOMContentLoaded)
   const exportPdfBtn = document.getElementById('export-pdf-btn');
