@@ -951,6 +951,7 @@ async function submitForm(e) {
     const selectedMediaText = selectedMedia.join(', ');
     
     const formData = {
+      reportType: document.getElementById('report-type').value || '',
       programme_name: document.getElementById('programme').value,
       programme_date: document.getElementById('date').value,
       organizer: organizerText,
@@ -1784,7 +1785,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
   sectionBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      // ✅ SET REPORT TYPE VALUE WHEN BUTTON CLICKED
       document.getElementById('report-type').value = btn.dataset.section;
       
       sectionBtns.forEach(b => b.classList.remove('active'));
