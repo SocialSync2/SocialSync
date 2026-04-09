@@ -194,6 +194,30 @@ body {
     font-size: 11px;
   }
 }
+/* ADD THESE STYLES AT THE VERY BOTTOM OF YOUR <style> TAG */
+  .stat-cell {
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .stat-cell:hover {
+    background-color: #dbeafe;
+    transform: scale(1.03);
+  }
+  .stat-cell.active {
+    background-color: #bfdbfe;
+    border: 2px solid #3b82f6;
+  }
+  .district-header {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    font-weight: 600;
+  }
+  .report-type-row:nth-child(odd) {
+    background-color: #f8fafc;
+  }
+  .report-type-row:nth-child(even) {
+    background-color: #ffffff;
+  }
 </style>
 
 </head>
@@ -221,11 +245,25 @@ body {
           View Records
         </button>
 
+        <button id="view-statistics-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          View Statistics
+        </button>
+
         <button id="export-pdf-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
           Export as PDF
+        </button>
+
+        <button id="back-to-dashboard-btn" class="hidden px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-700 no-print">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Dashboard
         </button>
       </div>
     </div>
@@ -233,7 +271,8 @@ body {
 
   <!-- Main Content -->
   <main class="flex-1 overflow-auto scroll-container p-6">
-    <div class="max-w-6xl mx-auto">
+    <div id="dashboard-view"> <!-- ✅ CORRECT: Wrapper starts HERE -->
+      <div class="max-w-6xl mx-auto">
       <!-- Section Selection -->
       <div class="bg-white rounded-xl p-6 mb-6 border border-slate-200 shadow-sm">
         <h2 class="title-font text-lg font-semibold text-cyan-600 mb-4">Select Report Type</h2>
@@ -255,6 +294,7 @@ body {
 
       <!-- Form Container -->
       <form id="main-form" class="card-gradient rounded-2xl border border-slate-200 shadow-xl hidden">
+        <input type="hidden" id="report-type" name="reportType" value="">
         <!-- Programme Info Section -->
         <div class="p-6 border-b border-slate-200 bg-white/50 rounded-t-2xl">
           <h2 class="title-font text-lg font-semibold text-cyan-600 mb-4 flex items-center gap-2">
@@ -620,7 +660,119 @@ body {
           </button>
         </div>
       </form>
+    </div> <!-- closes max-w-6xl mx-auto -->
+    </div> <!-- closes dashboard-view -->
+    <!-- STATISTICS VIEW -->
+<div id="statistics-view" class="hidden max-w-7xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h2 class="title-font text-2xl font-bold text-cyan-600 mb-2">Programme Statistics Overview</h2>
+    <p class="text-slate-600">Click on any cell to view detailed reports for that district and report type combination</p>
+  </div>
+
+  <!-- Statistics Table -->
+  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-700">Report Type</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">RESIDEN BAHAGIAN MUKAH</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">MUKAH</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">DARO</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">DALAT</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">MATU</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">TANJUNG MANIS</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL BALINGIAN</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL OYA</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL IGAN</th>
+            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 bg-slate-100">TOTAL</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+          <!-- BULETIN DAERAH Row -->
+          <tr class="report-type-row">
+            <td class="px-6 py-4 whitespace-nowrap font-medium text-cyan-700">BULETIN DAERAH</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="BULETIN DAERAH">12</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="MUKAH" data-report="BULETIN DAERAH">8</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="DARO" data-report="BULETIN DAERAH">5</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="DALAT" data-report="BULETIN DAERAH">7</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="MATU" data-report="BULETIN DAERAH">4</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="TANJUNG MANIS" data-report="BULETIN DAERAH">6</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL BALINGIAN" data-report="BULETIN DAERAH">3</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL OYA" data-report="BULETIN DAERAH">2</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL IGAN" data-report="BULETIN DAERAH">4</td>
+            <td class="px-6 py-4 text-center font-bold bg-slate-100 text-cyan-800">51</td>
+          </tr>
+          
+          <!-- IP2M1 Row -->
+          <tr class="report-type-row">
+            <td class="px-6 py-4 whitespace-nowrap font-medium text-blue-700">IP2M1</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="IP2M1">9</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="MUKAH" data-report="IP2M1">11</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="DARO" data-report="IP2M1">6</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="DALAT" data-report="IP2M1">8</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="MATU" data-report="IP2M1">5</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="TANJUNG MANIS" data-report="IP2M1">7</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL BALINGIAN" data-report="IP2M1">4</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL OYA" data-report="IP2M1">3</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL IGAN" data-report="IP2M1">5</td>
+            <td class="px-6 py-4 text-center font-bold bg-slate-100 text-blue-800">58</td>
+          </tr>
+          
+          <!-- IP3M2 Row -->
+          <tr class="report-type-row">
+            <td class="px-6 py-4 whitespace-nowrap font-medium text-emerald-700">IP3M2</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="IP3M2">7</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="MUKAH" data-report="IP3M2">9</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="DARO" data-report="IP3M2">4</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="DALAT" data-report="IP3M2">6</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="MATU" data-report="IP3M2">3</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="TANJUNG MANIS" data-report="IP3M2">5</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL BALINGIAN" data-report="IP3M2">2</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL OYA" data-report="IP3M2">2</td>
+            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL IGAN" data-report="IP3M2">3</td>
+            <td class="px-6 py-4 text-center font-bold bg-slate-100 text-emerald-800">41</td>
+          </tr>
+        </tbody>
+        <tfoot class="bg-slate-50 font-bold">
+          <tr>
+            <td class="px-6 py-4 text-right">TOTAL</td>
+            <td class="px-6 py-4 text-center text-cyan-700">28</td>
+            <td class="px-6 py-4 text-center text-cyan-700">28</td>
+            <td class="px-6 py-4 text-center text-cyan-700">15</td>
+            <td class="px-6 py-4 text-center text-cyan-700">21</td>
+            <td class="px-6 py-4 text-center text-cyan-700">12</td>
+            <td class="px-6 py-4 text-center text-cyan-700">18</td>
+            <td class="px-6 py-4 text-center text-cyan-700">9</td>
+            <td class="px-6 py-4 text-center text-cyan-700">7</td>
+            <td class="px-6 py-4 text-center text-cyan-700">12</td>
+            <td class="px-6 py-4 text-center bg-slate-200 text-indigo-800">150</td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="mt-8 bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+    <h3 class="font-semibold text-lg text-slate-800 mb-3">Legend</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-4 h-4 rounded-full bg-cyan-500"></div>
+        <span>BULETIN DAERAH reports</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="w-4 h-4 rounded-full bg-blue-500"></div>
+        <span>IP2M1 reports</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="w-4 h-4 rounded-full bg-emerald-500"></div>
+        <span>IP3M2 reports</span>
+      </div>
+    </div>
+  </div>
+</div>
   </main>
 </div>
 
@@ -799,6 +951,7 @@ async function submitForm(e) {
     const selectedMediaText = selectedMedia.join(', ');
     
     const formData = {
+      reportType: document.getElementById('report-type').value || '',
       programme_name: document.getElementById('programme').value,
       programme_date: document.getElementById('date').value,
       organizer: organizerText,
@@ -851,7 +1004,7 @@ async function submitForm(e) {
       }
     }
     
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzIuXyMOE-cbrO1MxvhsVbINKZYjIMw8GOROAYGg74dVW4j3MDW6NzxkppnBQi4tc4tlQ/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbziW8N-lorPwmxAX4cKdap93l6cqSJZeOtE-5hPSPGB0PXENk77iyoI-u8oqyG8f6R5mQ/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -1589,56 +1742,216 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
 
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
-// Keep only this one inside DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
-  // ...
-  const exportPdfBtn = document.getElementById('export-pdf-btn');
-  if (exportPdfBtn) {
-    exportPdfBtn.addEventListener('click', exportAsPDF);
+  // Setup statistics navigation
+  const viewStatisticsBtn = document.getElementById('view-statistics-btn');
+  const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
+  const dashboardView = document.getElementById('dashboard-view');
+  const statisticsView = document.getElementById('statistics-view');
+
+  if (viewStatisticsBtn && backToDashboardBtn && dashboardView && statisticsView) {
+    viewStatisticsBtn.addEventListener('click', () => {
+      dashboardView.classList.add('hidden');
+      statisticsView.classList.remove('hidden');
+      backToDashboardBtn.classList.remove('hidden');
+      viewStatisticsBtn.classList.add('hidden');
+      
+      // ✅ FETCH REAL STATISTICS WHEN VIEWING
+      fetchStatistics();
+    });
+
+    backToDashboardBtn.addEventListener('click', () => {
+      statisticsView.classList.add('hidden');
+      dashboardView.classList.remove('hidden');
+      backToDashboardBtn.classList.add('hidden');
+      viewStatisticsBtn.classList.remove('hidden');
+    });
+
+    // Make cells clickable (for debugging)
+    document.querySelectorAll('.stat-cell').forEach(cell => {
+      cell.addEventListener('click', function() {
+        alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
+      });
+      
+      cell.addEventListener('mouseenter', () => cell.classList.add('active'));
+      cell.addEventListener('mouseleave', () => cell.classList.remove('active'));
+    });
   }
-});
 
-// Add IP2M1 satisfaction listeners
-['ip2-total-respondent', 'ip2-positive-respondent', 'media-cetak-checkbox', 'media-elektronik-checkbox', 'media-digital-checkbox', 'crowd-size', 'target-group']
-.forEach(id => {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener('input', updateIP2M1_2);
-});
+  // ✅ NEW: Fetch and display real statistics
+  function fetchStatistics() {
+    // REPLACE WITH YOUR ACTUAL DEPLOYED WEB APP URL
+    const STATS_URL = 'https://script.google.com/macros/s/AKfycbzIuXyMOE-cbrO1MxvhsVbINKZYjIMw8GOROAYGg74dVW4j3MDW6NzxkppnBQi4tc4tlQ/exec';
+    
+    fetch(STATS_URL)
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          console.error('Stats error:', data.error);
+          return;
+        }
+        
+        // Map report types to display names
+        const reportMap = {
+          'ip2m1-1': 'BULETIN DAERAH',
+          'ip2m1-2': 'IP2M1',
+          'ip3m2': 'IP3M2'
+        };
+        
+        // Map district values to display names
+        const districtMap = {
+          'Pejabat Residen Bahagian Mukah': 'RESIDEN BAHAGIAN MUKAH',
+          'Pejabat Daerah Mukah': 'MUKAH',
+          'Pejabat Daerah Dalat': 'DALAT',
+          'Pejabat Daerah Matu': 'MATU',
+          'Pejabat Daerah Daro': 'DARO',
+          'Pejabat Daerah Tanjung Manis': 'TANJUNG MANIS',
+          'Pejabat Daerah Kecil Balingian': 'KECIL BALINGIAN',
+          'Pejabat Daerah Kecil Oya': 'KECIL OYA',
+          'Pejabat Daerah Kecil Igan': 'KECIL IGAN'
+        };
+        
+        // Update each cell with real count
+        document.querySelectorAll('.stat-cell').forEach(cell => {
+          const districtKey = cell.dataset.district;
+          const reportKey = cell.dataset.report;
+          
+          // Find matching district value in sheet data
+          let count = 0;
+          for (const [districtValue, reports] of Object.entries(data)) {
+            const displayDistrict = districtMap[districtValue] || districtValue;
+            if (displayDistrict === districtKey) {
+              // Find matching report type
+              for (const [reportType, reportCount] of Object.entries(reports)) {
+                if (reportMap[reportType] === reportKey) {
+                  count = reportCount;
+                  break;
+                }
+              }
+            }
+          }
+          
+          cell.textContent = count;
+        });
+        
+        // ✅ Optional: Update TOTAL column dynamically
+        updateTotals();
+      })
+      .catch(error => {
+        console.error('Failed to fetch statistics:', error);
+        alert('⚠️ Gagal memuat statistik. Cuba lagi nanti.');
+      });
+  }
 
-// FIX: Add ALL IP3M2 fields including ROI entrepreneur fields (with exact typos from your HTML)
-  ['ip3-media-list', 'ip3-actual-attendance', 'ip3-target-attendance', 
-   'ip3-total-respondent', 'ip3-positive-respondent', 
-   'ip3-targeted-enterpreneur-involvement', 'ip3-actual-enterprenuer-involvement']
-  .forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('input', updateIP3M2);
+  // ✅ Optional: Recalculate totals based on cell values
+  function updateTotals() {
+    // Update row totals
+    document.querySelectorAll('.report-type-row').forEach(row => {
+      let total = 0;
+      row.querySelectorAll('td:not(:first-child):not(:last-child)').forEach(cell => {
+        if (cell.classList.contains('stat-cell')) {
+          total += parseInt(cell.textContent) || 0;
+        }
+      });
+      row.querySelector('td:last-child').textContent = total;
+    });
+    
+    // Update column totals (footer row)
+    const footerCells = document.querySelectorAll('tfoot td:not(:first-child)');
+    footerCells.forEach((cell, index) => {
+      if (index === footerCells.length - 1) return; // Skip grand total
+      
+      let colTotal = 0;
+      document.querySelectorAll(`tbody tr td:nth-child(${index + 2})`).forEach(td => {
+        if (td.classList.contains('stat-cell')) {
+          colTotal += parseInt(td.textContent) || 0;
+        }
+      });
+      cell.textContent = colTotal;
+    });
+    
+    // Update grand total
+    let grandTotal = 0;
+    footerCells.forEach((cell, index) => {
+      if (index < footerCells.length - 1) {
+        grandTotal += parseInt(cell.textContent) || 0;
+      }
+    });
+    footerCells[footerCells.length - 1].textContent = grandTotal;
+  }
+
+  // Setup section selection WITH report type tracking
+  const sectionBtns = document.querySelectorAll('.section-btn');
+  const form = document.getElementById('main-form');
+  const sections = {
+    'ip2m1-1': document.getElementById('section-ip2m1-1'),
+    'ip2m1-2': document.getElementById('section-ip2m1-2'),
+    'ip3m2': document.getElementById('section-ip3m2')
+  };
+  
+  sectionBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // ✅ SET REPORT TYPE VALUE WHEN BUTTON CLICKED
+      document.getElementById('report-type').value = btn.dataset.section;
+      
+      sectionBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      form.classList.remove('hidden');
+      Object.values(sections).forEach(section => section.classList.add('hidden'));
+      const sectionId = btn.dataset.section;
+      if (sections[sectionId]) {
+        sections[sectionId].classList.remove('hidden');
+      }
+    });
   });
 
-  setupSectionSelection();
-  setupImagePreview();
-  document.getElementById('main-form').addEventListener('submit', submitForm);
-  document.getElementById('view-records-btn').addEventListener('click', () => {
-  // Add PDF export event listener (INSIDE DOMContentLoaded)
-  document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
+  // Setup image preview
+  const imageInputs = [
+    { input: 'ip2m1-1-images', preview: 'ip2m1-1-image-preview' },
+    { input: 'ip2m1-2-images', preview: 'ip2m1-2-image-preview' },
+    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
+  ];
+  
+  imageInputs.forEach(({ input, preview }) => {
+    const inputEl = document.getElementById(input);
+    if (inputEl) {
+      inputEl.addEventListener('change', (e) => {
+        const previewEl = document.getElementById(preview);
+        previewEl.innerHTML = '';
+        Array.from(e.target.files).forEach(file => {
+          if (!file.type.match('image.*')) return;
+          const reader = new FileReader();
+          reader.onload = ev => {
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
+            previewEl.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+    }
   });
-  setupPrint();
 
-  // Setup View Records button
+  // Form submission
+  document.getElementById('main-form')?.addEventListener('submit', submitForm);
+  
+  // View Records button
   const viewRecordsBtn = document.getElementById('view-records-btn');
   if (viewRecordsBtn) {
     viewRecordsBtn.addEventListener('click', () => {
       window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
     });
   }
-  
-  // ✅ CRITICAL: Setup PDF export button HERE (inside DOMContentLoaded)
+
+  // Export PDF button
   const exportPdfBtn = document.getElementById('export-pdf-btn');
   if (exportPdfBtn) {
     exportPdfBtn.addEventListener('click', exportAsPDF);
   }
 
+  // Initialize calculations
   updateIP2M1_2();
   updateIP3M2();
+});
 </script>
-</body>
-</html>
