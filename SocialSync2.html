@@ -1805,10 +1805,6 @@ function fetchStatistics() {
         'Pejabat Daerah Kecil Igan': 'KECIL IGAN'
       };
 
-      document.querySelectorAll('.stat-cell').forEach(cell => {
-
-      });
-
       // Now process valid data
       let updatedAny = false;
       document.querySelectorAll('.stat-cell').forEach(cell => {
@@ -1840,61 +1836,38 @@ function fetchStatistics() {
         }
       });
 
+      // ✅ FIX: Recalculate totals AFTER cells are updated
+      updateTotals();
+
       if (!updatedAny) {
         console.warn("No valid statistics found in response. Keeping default values.");
-        // Optionally: show a toast or leave as-is
       }
 
     })
     .catch(error => {
       console.error('Failed to fetch statistics:', error);
-      // Optional: revert to default (or show warning)
-      // For now, do nothing — keep hardcoded values
     });
 }
 
-  // ✅ Optional: Recalculate totals based on cell values
-// ✅ Fixed: Recalculate totals based on cell values
 function updateTotals() {
-  // Update row totals
+  // Update row totals: Sum all district stat-cells → last cell (TOTAL column)
   document.querySelectorAll('.report-type-row').forEach(row => {
-    let total = 0;
-    row.querySelectorAll('td:not(:first-child):not(:last-child)').forEach(cell => {
-      if (cell.classList.contains('stat-cell')) {
-        total += parseInt(cell.textContent) || 0;
-      }
-    });
-    row.querySelector('td:last-child').textContent = total;
-  });
-  
-  // Update column totals (find the TOTAL row in tbody)
-  const totalRow = document.querySelector('tbody tr.font-bold');
-  if (!totalRow) return;
-  
-  // Update each column total (skip first and last columns)
-  const cells = totalRow.querySelectorAll('td:not(:first-child):not(:last-child)');
-  cells.forEach((cell, index) => {
-    if (index >= cells.length - 1) return; // Skip the grand total cell
+    const statCells = row.querySelectorAll('td.stat-cell');
+    if (statCells.length === 0) return; // Skip if no stat cells found
     
-    let colTotal = 0;
-    document.querySelectorAll(`tbody .report-type-row td:nth-child(${index + 2})`).forEach(td => {
-      if (td.classList.contains('stat-cell')) {
-        colTotal += parseInt(td.textContent) || 0;
-      }
+    let total = 0;
+    statCells.forEach(cell => {
+      const num = parseInt(cell.textContent.trim());
+      if (!isNaN(num)) total += num;
     });
-    cell.textContent = colTotal;
-  });
-  
-  // Update grand total
-  let grandTotal = 0;
-  cells.forEach((cell, index) => {
-    if (index < cells.length - 1) {
-      grandTotal += parseInt(cell.textContent) || 0;
+    
+    // Update the last cell in the row (TOTAL column)
+    const cells = row.querySelectorAll('td');
+    if (cells.length > 0) {
+      cells[cells.length - 1].textContent = total;
     }
   });
-  totalRow.querySelector('td:last-child').textContent = grandTotal;
 }
-
   // Setup section selection WITH report type tracking
   const sectionBtns = document.querySelectorAll('.section-btn');
   const form = document.getElementById('main-form');
