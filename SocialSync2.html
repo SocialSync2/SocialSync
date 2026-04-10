@@ -1765,7 +1765,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 function fetchStatistics() {
-  const STATS_URL = 'https://script.google.com/macros/s/AKfycbw9-vNPOMZoeYRANxM4Ku9Ih_RLMaWkunkkwwt4VY2zFW0sxJo7cQZvsSgvtjA44aQYJQ/exec';
+  const STATS_URL = 'https://script.google.com/macros/s/AKfycbzCxbLU_JcIFJvEp_X7g5YpLtXGDZvsMqSqbiTVEa96kgwWP90K-jzf_8SwGq0PaRjIQQ/exec';
 
   fetch(STATS_URL)
     .then(response => {
@@ -1805,7 +1805,6 @@ function fetchStatistics() {
         'Pejabat Daerah Kecil Igan': 'KECIL IGAN'
       };
 
-      // Reset all cells to original (hardcoded) values first — OR better: only update if data is valid
       document.querySelectorAll('.stat-cell').forEach(cell => {
 
       });
