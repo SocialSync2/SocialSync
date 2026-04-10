@@ -1817,7 +1817,7 @@ function fetchStatistics() {
         const reportKey = cell.dataset.report;
 
         let count = 0;
-        for (rawDistrict, reports] of Object.entries(data)) {
+        for (rawDistrict, reports of Object.entries(data)) {
           const displayDistrict = districtMap[rawDistrict] || rawDistrict;
           
           // Check if this is the district we're looking for
