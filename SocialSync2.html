@@ -1821,8 +1821,7 @@ function fetchStatistics() {
 
       // Reset all cells to original (hardcoded) values first — OR better: only update if data is valid
       document.querySelectorAll('.stat-cell').forEach(cell => {
-        // Do NOT overwrite unless we have valid data
-        // We'll only update if data is confirmed good
+
       });
 
       // Now process valid data
@@ -1865,41 +1864,46 @@ function fetchStatistics() {
 }
 
   // ✅ Optional: Recalculate totals based on cell values
-  function updateTotals() {
-    // Update row totals
-    document.querySelectorAll('.report-type-row').forEach(row => {
-      let total = 0;
-      row.querySelectorAll('td:not(:first-child):not(:last-child)').forEach(cell => {
-        if (cell.classList.contains('stat-cell')) {
-          total += parseInt(cell.textContent) || 0;
-        }
-      });
-      row.querySelector('td:last-child').textContent = total;
-    });
-    
-    // Update column totals (footer row)
-    const footerCells = document.querySelectorAll('tfoot td:not(:first-child)');
-    footerCells.forEach((cell, index) => {
-      if (index === footerCells.length - 1) return; // Skip grand total
-      
-      let colTotal = 0;
-      document.querySelectorAll(`tbody tr td:nth-child(${index + 2})`).forEach(td => {
-        if (td.classList.contains('stat-cell')) {
-          colTotal += parseInt(td.textContent) || 0;
-        }
-      });
-      cell.textContent = colTotal;
-    });
-    
-    // Update grand total
-    let grandTotal = 0;
-    footerCells.forEach((cell, index) => {
-      if (index < footerCells.length - 1) {
-        grandTotal += parseInt(cell.textContent) || 0;
+// ✅ Fixed: Recalculate totals based on cell values
+function updateTotals() {
+  // Update row totals
+  document.querySelectorAll('.report-type-row').forEach(row => {
+    let total = 0;
+    row.querySelectorAll('td:not(:first-child):not(:last-child)').forEach(cell => {
+      if (cell.classList.contains('stat-cell')) {
+        total += parseInt(cell.textContent) || 0;
       }
     });
-    footerCells[footerCells.length - 1].textContent = grandTotal;
-  }
+    row.querySelector('td:last-child').textContent = total;
+  });
+  
+  // Update column totals (find the TOTAL row in tbody)
+  const totalRow = document.querySelector('tbody tr.font-bold');
+  if (!totalRow) return;
+  
+  // Update each column total (skip first and last columns)
+  const cells = totalRow.querySelectorAll('td:not(:first-child):not(:last-child)');
+  cells.forEach((cell, index) => {
+    if (index >= cells.length - 1) return; // Skip the grand total cell
+    
+    let colTotal = 0;
+    document.querySelectorAll(`tbody .report-type-row td:nth-child(${index + 2})`).forEach(td => {
+      if (td.classList.contains('stat-cell')) {
+        colTotal += parseInt(td.textContent) || 0;
+      }
+    });
+    cell.textContent = colTotal;
+  });
+  
+  // Update grand total
+  let grandTotal = 0;
+  cells.forEach((cell, index) => {
+    if (index < cells.length - 1) {
+      grandTotal += parseInt(cell.textContent) || 0;
+    }
+  });
+  totalRow.querySelector('td:last-child').textContent = grandTotal;
+}
 
   // Setup section selection WITH report type tracking
   const sectionBtns = document.querySelectorAll('.section-btn');
