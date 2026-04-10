@@ -1778,70 +1778,91 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ✅ NEW: Fetch and display real statistics
-  function fetchStatistics() {
-    // REPLACE WITH YOUR ACTUAL DEPLOYED WEB APP URL
-    const STATS_URL = 'https://script.google.com/macros/s/AKfycbzIuXyMOE-cbrO1MxvhsVbINKZYjIMw8GOROAYGg74dVW4j3MDW6NzxkppnBQi4tc4tlQ/exec';
-    
-    fetch(STATS_URL)
-      .then(response => response.json())
-      .then(data => {
-        if (data.error) {
-          console.error('Stats error:', data.error);
-          return;
-        }
-        
-        // Map report types to display names
-        const reportMap = {
-          'ip2m1-1': 'BULETIN DAERAH',
-          'ip2m1-2': 'IP2M1',
-          'ip3m2': 'IP3M2'
-        };
-        
-        // Map district values to display names
-        const districtMap = {
-          'Pejabat Residen Bahagian Mukah': 'RESIDEN BAHAGIAN MUKAH',
-          'Pejabat Daerah Mukah': 'MUKAH',
-          'Pejabat Daerah Dalat': 'DALAT',
-          'Pejabat Daerah Matu': 'MATU',
-          'Pejabat Daerah Daro': 'DARO',
-          'Pejabat Daerah Tanjung Manis': 'TANJUNG MANIS',
-          'Pejabat Daerah Kecil Balingian': 'KECIL BALINGIAN',
-          'Pejabat Daerah Kecil Oya': 'KECIL OYA',
-          'Pejabat Daerah Kecil Igan': 'KECIL IGAN'
-        };
-        
-        // Update each cell with real count
-        document.querySelectorAll('.stat-cell').forEach(cell => {
-          const districtKey = cell.dataset.district;
-          const reportKey = cell.dataset.report;
-          
-          // Find matching district value in sheet data
-          let count = 0;
-          for (const [districtValue, reports] of Object.entries(data)) {
-            const displayDistrict = districtMap[districtValue] || districtValue;
-            if (displayDistrict === districtKey) {
-              // Find matching report type
-              for (const [reportType, reportCount] of Object.entries(reports)) {
-                if (reportMap[reportType] === reportKey) {
-                  count = reportCount;
-                  break;
-                }
+function fetchStatistics() {
+  const STATS_URL = 'https://script.google.com/macros/s/AKfycbw9-vNPOMZoeYRANxM4Ku9Ih_RLMaWkunkkwwt4VY2zFW0sxJo7cQZvsSgvtjA44aQYJQ/exec';
+
+  fetch(STATS_URL)
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      return response.text(); // First get raw text
+    })
+    .then(text => {
+      // Try to parse as JSON; if fails, assume it's an error page
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.warn("Response is not JSON. Assuming error page:", text.slice(0, 200));
+        throw new Error("Invalid response: Expected JSON, got HTML/error");
+      }
+
+      // Validate structure
+      if (!data || typeof data !== 'object' || Array.isArray(data)) {
+        throw new Error("Unexpected data format: expected object");
+      }
+
+      // Map report types & districts
+      const reportMap = {
+        'ip2m1-1': 'BULETIN DAERAH',
+        'ip2m1-2': 'IP2M1',
+        'ip3m2': 'IP3M2'
+      };
+      const districtMap = {
+        'Pejabat Residen Bahagian Mukah': 'RESIDEN BAHAGIAN MUKAH',
+        'Pejabat Daerah Mukah': 'MUKAH',
+        'Pejabat Daerah Dalat': 'DALAT',
+        'Pejabat Daerah Matu': 'MATU',
+        'Pejabat Daerah Daro': 'DARO',
+        'Pejabat Daerah Tanjung Manis': 'TANJUNG MANIS',
+        'Pejabat Daerah Kecil Balingian': 'KECIL BALINGIAN',
+        'Pejabat Daerah Kecil Oya': 'KECIL OYA',
+        'Pejabat Daerah Kecil Igan': 'KECIL IGAN'
+      };
+
+      // Reset all cells to original (hardcoded) values first — OR better: only update if data is valid
+      document.querySelectorAll('.stat-cell').forEach(cell => {
+        // Do NOT overwrite unless we have valid data
+        // We'll only update if data is confirmed good
+      });
+
+      // Now process valid data
+      let updatedAny = false;
+      document.querySelectorAll('.stat-cell').forEach(cell => {
+        const districtKey = cell.dataset.district;
+        const reportKey = cell.dataset.report;
+
+        let count = 0;
+        for (const [rawDistrict, reports] of Object.entries(data)) {
+          const displayDistrict = districtMap[rawDistrict] || rawDistrict;
+          if (displayDistrict === districtKey && typeof reports === 'object') {
+            for (const [rawReport, value] of Object.entries(reports)) {
+              if (reportMap[rawReport] === reportKey) {
+                count = parseInt(value) || 0;
+                updatedAny = true;
+                break;
               }
             }
           }
-          
+        }
+
+        // Only update if we found a match AND count is number
+        if (!isNaN(count)) {
           cell.textContent = count;
-        });
-        
-        // ✅ Optional: Update TOTAL column dynamically
-        updateTotals();
-      })
-      .catch(error => {
-        console.error('Failed to fetch statistics:', error);
-        alert('⚠️ Gagal memuat statistik. Cuba lagi nanti.');
+        }
       });
-  }
+
+      if (!updatedAny) {
+        console.warn("No valid statistics found in response. Keeping default values.");
+        // Optionally: show a toast or leave as-is
+      }
+
+    })
+    .catch(error => {
+      console.error('Failed to fetch statistics:', error);
+      // Optional: revert to default (or show warning)
+      // For now, do nothing — keep hardcoded values
+    });
+}
 
   // ✅ Optional: Recalculate totals based on cell values
   function updateTotals() {
