@@ -1334,7 +1334,6 @@ function exportAsPDF() {
       <div style="position:relative;height:100px;margin-bottom:25px;border-bottom:2px solid #1e40af">
         <!-- Left side: Borang KPI -->
         <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:14px;font-weight:bold;color:#000;width:180px">
-          Borang KPI IP2M1:1
         </div>
         
         <!-- Center: Main title and subtitle -->
@@ -1742,7 +1741,7 @@ document.addEventListener('DOMContentLoaded', () => {
       backToDashboardBtn.classList.remove('hidden');
       viewStatisticsBtn.classList.add('hidden');
       
-      // ✅ FETCH REAL STATISTICS WHEN VIEWING
+      //FETCH REAL STATISTICS WHEN VIEWING
       fetchStatistics();
     });
 
@@ -1836,7 +1835,7 @@ function fetchStatistics() {
         }
       });
 
-      // ✅ FIX: Recalculate totals AFTER cells are updated
+      //Recalculate totals AFTER cells are updated
       updateTotals();
 
       if (!updatedAny) {
@@ -1879,7 +1878,7 @@ function updateTotals() {
   
   sectionBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      // ✅ SET REPORT TYPE VALUE WHEN BUTTON CLICKED
+      // SET REPORT TYPE VALUE WHEN BUTTON CLICKED
       document.getElementById('report-type').value = btn.dataset.section;
       
       sectionBtns.forEach(b => b.classList.remove('active'));
