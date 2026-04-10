@@ -1817,12 +1817,17 @@ function fetchStatistics() {
         const reportKey = cell.dataset.report;
 
         let count = 0;
-        for (const [rawDistrict, reports] of Object.entries(data)) {
+        for (rawDistrict, reports] of Object.entries(data)) {
           const displayDistrict = districtMap[rawDistrict] || rawDistrict;
+          
+          // Check if this is the district we're looking for
           if (displayDistrict === districtKey && typeof reports === 'object') {
+            // Check all report types for this district
             for (const [rawReport, value] of Object.entries(reports)) {
+              // Check if this report type matches
               if (reportMap[rawReport] === reportKey) {
-                count = parseInt(value) || 0;
+                // Use value directly (no parseInt needed)
+                count = Number(value) || 0;
                 updatedAny = true;
                 break;
               }
