@@ -670,89 +670,75 @@ body {
     <p class="text-slate-600">Click on any cell to view detailed reports for that district and report type combination</p>
   </div>
 
-  <!-- Statistics Table -->
-  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-slate-200">
-        <thead class="bg-slate-50">
-          <tr>
-            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-700">Report Type</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">RESIDEN BAHAGIAN MUKAH</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">MUKAH</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">DARO</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">DALAT</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">MATU</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">TANJUNG MANIS</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL BALINGIAN</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL OYA</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL IGAN</th>
-            <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 bg-slate-100">TOTAL</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-200">
-          <!-- BULETIN DAERAH Row -->
-          <tr class="report-type-row">
-            <td class="px-6 py-4 whitespace-nowrap font-medium text-cyan-700">BULETIN DAERAH</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="BULETIN DAERAH">12</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="MUKAH" data-report="BULETIN DAERAH">8</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="DARO" data-report="BULETIN DAERAH">5</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="DALAT" data-report="BULETIN DAERAH">7</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="MATU" data-report="BULETIN DAERAH">4</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="TANJUNG MANIS" data-report="BULETIN DAERAH">6</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL BALINGIAN" data-report="BULETIN DAERAH">3</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL OYA" data-report="BULETIN DAERAH">2</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL IGAN" data-report="BULETIN DAERAH">4</td>
-            <td class="px-6 py-4 text-center font-bold bg-slate-100 text-cyan-800">51</td>
-          </tr>
-          
-          <!-- IP2M1 Row -->
-          <tr class="report-type-row">
-            <td class="px-6 py-4 whitespace-nowrap font-medium text-blue-700">IP2M1</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="IP2M1">9</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="MUKAH" data-report="IP2M1">11</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="DARO" data-report="IP2M1">6</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="DALAT" data-report="IP2M1">8</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="MATU" data-report="IP2M1">5</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="TANJUNG MANIS" data-report="IP2M1">7</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL BALINGIAN" data-report="IP2M1">4</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL OYA" data-report="IP2M1">3</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL IGAN" data-report="IP2M1">5</td>
-            <td class="px-6 py-4 text-center font-bold bg-slate-100 text-blue-800">58</td>
-          </tr>
-          
-          <!-- IP3M2 Row -->
-          <tr class="report-type-row">
-            <td class="px-6 py-4 whitespace-nowrap font-medium text-emerald-700">IP3M2</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="IP3M2">7</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="MUKAH" data-report="IP3M2">9</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="DARO" data-report="IP3M2">4</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="DALAT" data-report="IP3M2">6</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="MATU" data-report="IP3M2">3</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="TANJUNG MANIS" data-report="IP3M2">5</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL BALINGIAN" data-report="IP3M2">2</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL OYA" data-report="IP3M2">2</td>
-            <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL IGAN" data-report="IP3M2">3</td>
-            <td class="px-6 py-4 text-center font-bold bg-slate-100 text-emerald-800">41</td>
-          </tr>
-        </tbody>
-        <tfoot class="bg-slate-50 font-bold">
-          <tr>
-            <td class="px-6 py-4 text-right">TOTAL</td>
-            <td class="px-6 py-4 text-center text-cyan-700">28</td>
-            <td class="px-6 py-4 text-center text-cyan-700">28</td>
-            <td class="px-6 py-4 text-center text-cyan-700">15</td>
-            <td class="px-6 py-4 text-center text-cyan-700">21</td>
-            <td class="px-6 py-4 text-center text-cyan-700">12</td>
-            <td class="px-6 py-4 text-center text-cyan-700">18</td>
-            <td class="px-6 py-4 text-center text-cyan-700">9</td>
-            <td class="px-6 py-4 text-center text-cyan-700">7</td>
-            <td class="px-6 py-4 text-center text-cyan-700">12</td>
-            <td class="px-6 py-4 text-center bg-slate-200 text-indigo-800">150</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+<!-- Statistics Table -->
+<div class="bg-white rounded-xl shadow-lg overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="px-6 py-4 text-left text-sm font-semibold text-slate-700">Report Type</th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">RESIDEN BAHAGIAN MUKAH</th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">MUKAH</th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">DARO</th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">DALAT</th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">MATU</th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">TANJUNG MANIS</th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL BALINGIAN</th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL OYA</th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 district-header">KECIL IGAN</th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-slate-700 bg-slate-100">TOTAL</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+        <!-- BULETIN DAERAH Row -->
+        <tr class="report-type-row">
+          <td class="px-6 py-4 whitespace-nowrap font-medium text-cyan-700">BULETIN DAERAH</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="BULETIN DAERAH">12</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="MUKAH" data-report="BULETIN DAERAH">8</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="DARO" data-report="BULETIN DAERAH">5</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="DALAT" data-report="BULETIN DAERAH">7</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="MATU" data-report="BULETIN DAERAH">4</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="TANJUNG MANIS" data-report="BULETIN DAERAH">6</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL BALINGIAN" data-report="BULETIN DAERAH">3</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL OYA" data-report="BULETIN DAERAH">2</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="KECIL IGAN" data-report="BULETIN DAERAH">4</td>
+          <td class="px-6 py-4 text-center font-bold bg-slate-100 text-cyan-800">51</td>
+        </tr>
+        
+        <!-- IP2M1 Row -->
+        <tr class="report-type-row">
+          <td class="px-6 py-4 whitespace-nowrap font-medium text-blue-700">IP2M1</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="IP2M1">9</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="MUKAH" data-report="IP2M1">11</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="DARO" data-report="IP2M1">6</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="DALAT" data-report="IP2M1">8</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="MATU" data-report="IP2M1">5</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="TANJUNG MANIS" data-report="IP2M1">7</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL BALINGIAN" data-report="IP2M1">4</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL OYA" data-report="IP2M1">3</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="KECIL IGAN" data-report="IP2M1">5</td>
+          <td class="px-6 py-4 text-center font-bold bg-slate-100 text-blue-800">58</td>
+        </tr>
+        
+        <!-- IP3M2 Row -->
+        <tr class="report-type-row">
+          <td class="px-6 py-4 whitespace-nowrap font-medium text-emerald-700">IP3M2</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="IP3M2">7</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="MUKAH" data-report="IP3M2">9</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="DARO" data-report="IP3M2">4</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="DALAT" data-report="IP3M2">6</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="MATU" data-report="IP3M2">3</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="TANJUNG MANIS" data-report="IP3M2">5</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL BALINGIAN" data-report="IP3M2">2</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL OYA" data-report="IP3M2">2</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-emerald-600 hover-text-emerald-800" data-district="KECIL IGAN" data-report="IP3M2">3</td>
+          <td class="px-6 py-4 text-center font-bold bg-slate-100 text-emerald-800">41</td>
+        </tr>
+      </tbody>
+      <!-- REMOVED THE TFOOT SECTION HERE -->
+    </table>
   </div>
+</div>
 
   <!-- Legend -->
   <div class="mt-8 bg-white rounded-xl p-5 shadow-sm border border-slate-200">
