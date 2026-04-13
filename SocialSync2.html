@@ -1533,11 +1533,11 @@ function exportAsPDF() {
       `;
     }
 
-    // === ADD IMAGES SECTION ===
+// === ADD IMAGES SECTION (with controlled image sizes) ===
 pdfContent.innerHTML += `
   <div style="margin-top:30px">
     <h3 style="font-size:16px;font-weight:bold;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">GAMBAR PROGRAM</h3>
-    <div id="pdf-images-container" style="margin-top:15px"></div>
+    <div id="pdf-images-container" style="margin-top:15px;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-start;"></div>
   </div>
   <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:12px">
     <p style="font-weight:600;color:#1e40af;margin-bottom:6px">SocialSync Programme Management System</p>
@@ -1545,7 +1545,6 @@ pdfContent.innerHTML += `
     <p style="margin-top:8px;font-size:11px;color:#64748b">Dijana pada: ${new Date().toLocaleDateString('ms-MY', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
   </div>
 `;
-
     document.body.appendChild(pdfContent);
 
     // === HANDLE IMAGES ===
@@ -1555,56 +1554,63 @@ pdfContent.innerHTML += `
     let imagePromises = [];
     
     // Check for stored images first
-// Check for stored images first
-if (lastSubmittedImages && lastSubmittedImages[sectionId] && lastSubmittedImages[sectionId].length > 0) {
-  console.log('Using stored images from submission');
-  lastSubmittedImages[sectionId].forEach(imageData => {
-    const img = document.createElement('img');
-    img.src = `data:${imageData.mimeType};base64,${imageData.data}`;
-    // REMOVED fixed sizing - let image use original dimensions
-    img.style.maxWidth = '100%';  // Only constrain to container width
-    img.style.height = 'auto';     // Auto height to maintain aspect ratio
-    img.style.marginBottom = '15px'; // Space between images
-    img.style.borderRadius = '8px';
-    img.style.border = '1px solid #e2e8f0';
-    img.style.display = 'block';    // Each image on its own line
-    
-    const promise = new Promise((resolve) => {
-      img.onload = () => resolve(img);
-      img.onerror = () => resolve(null);
-    });
-    imagePromises.push(promise);
-    imageContainer.appendChild(img);
-  });
-} 
-// Otherwise use current file input
-else if (imageInput && imageInput.files && imageInput.files.length > 0) {
-  console.log('Using current file input images');
-  const imageFiles = Array.from(imageInput.files);
-  imageFiles.forEach(file => {
-    if (!file.type.match('image.*')) return;
-    
-    const reader = new FileReader();
-    const promise = new Promise((resolve) => {
-      reader.onload = (e) => {
+    if (lastSubmittedImages && lastSubmittedImages[sectionId] && lastSubmittedImages[sectionId].length > 0) {
+      console.log('Using stored images from submission');
+      lastSubmittedImages[sectionId].forEach(imageData => {
         const img = document.createElement('img');
-        img.src = e.target.result;
-        // REMOVED fixed sizing - let image use original dimensions
-        img.style.maxWidth = '100%';  // Only constrain to container width
-        img.style.height = 'auto';     // Auto height to maintain aspect ratio
-        img.style.marginBottom = '15px'; // Space between images
+        img.src = `data:${imageData.mimeType};base64,${imageData.data}`;
+        // CONTROLLED size - not too big, not too small
+        img.style.maxWidth = '400px';  // Max width 400px
+        img.style.width = 'auto';
+        img.style.height = 'auto';
+        img.style.maxHeight = '300px';  // Max height 300px
+        img.style.marginBottom = '20px';
+        img.style.marginRight = '20px';
         img.style.borderRadius = '8px';
         img.style.border = '1px solid #e2e8f0';
-        img.style.display = 'block';    // Each image on its own line
-        img.onload = () => resolve(img);
-        img.onerror = () => resolve(null);
+        img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+        img.style.display = 'inline-block';  // Allow images side by side
+        
+        const promise = new Promise((resolve) => {
+          img.onload = () => resolve(img);
+          img.onerror = () => resolve(null);
+        });
+        imagePromises.push(promise);
         imageContainer.appendChild(img);
-      };
-      reader.readAsDataURL(file);
-    });
-    imagePromises.push(promise);
-  });
-}
+      });
+    } 
+    // Otherwise use current file input
+    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
+      console.log('Using current file input images');
+      const imageFiles = Array.from(imageInput.files);
+      imageFiles.forEach(file => {
+        if (!file.type.match('image.*')) return;
+        
+        const reader = new FileReader();
+        const promise = new Promise((resolve) => {
+          reader.onload = (e) => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            // CONTROLLED size - not too big, not too small
+            img.style.maxWidth = '400px';  // Max width 400px
+            img.style.width = 'auto';
+            img.style.height = 'auto';
+            img.style.maxHeight = '300px';  // Max height 300px
+            img.style.marginBottom = '20px';
+            img.style.marginRight = '20px';
+            img.style.borderRadius = '8px';
+            img.style.border = '1px solid #e2e8f0';
+            img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            img.style.display = 'inline-block';  // Allow images side by side
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            imageContainer.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+        imagePromises.push(promise);
+      });
+    }
     // Otherwise use current file input
     else if (imageInput && imageInput.files && imageInput.files.length > 0) {
       console.log('Using current file input images');
