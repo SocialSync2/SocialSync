@@ -1342,20 +1342,18 @@ function exportAsPDF() {
       }
     }
 
-    // === SCRIPT 1 HEADER DESIGN ===
+    // === HEADER DESIGN (Script 1 style) ===
     pdfContent.innerHTML = `
       <div style="position:relative;height:100px;margin-bottom:25px;border-bottom:2px solid #1e40af">
         <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:14px;font-weight:bold;color:#000;width:180px">
         </div>
         <div style="text-align:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
-          <div style="font-size:24px;font-weight:bold;color:#000;margin-bottom:5px">${daerah}</div>
-          <div style="font-size:14px;color:#4b5563">${programmeName} | ${programmeDate}</div>
-          <div style="font-size:12px;color:#6b7280">Pengelola: ${organizerText}</div>
+          <div style="font-size:24px;font-weight:bold;color:#000;margin-bottom:5px">PEJABAT DAERAH MUKAH</div>
         </div>
       </div>
     `;
 
-    // === BULETIN DAERAH SECTION (Script 1 styling) ===
+    // === BULETIN DAERAH SECTION ===
     if (sectionId === 'buletin-daerah') {
       let vipGuestText = 'Tiada tetamu kehormat';
       if (lastSubmittedData && isFormEmpty) {
@@ -1414,7 +1412,7 @@ function exportAsPDF() {
         </div>
       `;
     } 
-    // === IP2M1 SECTION (Script 1 styling) ===
+    // === IP2M1 SECTION ===
     else if (sectionId === 'ip2m1') {
       let mediaItems = [];
       if (document.getElementById('media-cetak-checkbox')?.checked) {
@@ -1480,7 +1478,7 @@ function exportAsPDF() {
         </div>
       `;
     } 
-    // === IP3M2 SECTION (Script 1 styling) ===
+    // === IP3M2 SECTION ===
     else if (sectionId === 'ip3m2') {
       const mediaList = isFormEmpty && lastSubmittedData ? lastSubmittedData.ip3_media_list?.replace(/\n/g, '<br>') || 'Tiada media' : (document.getElementById('ip3-media-list')?.value.replace(/\n/g, '<br>') || 'Tiada media');
       const mediaPercent = isFormEmpty && lastSubmittedData ? (lastSubmittedData.ip3_media_percent + '%') : (document.getElementById('ip3-media-percent')?.textContent || '0%');
@@ -1494,6 +1492,13 @@ function exportAsPDF() {
       const actualEntrepreneur = isFormEmpty && lastSubmittedData ? lastSubmittedData.actual_enterpreneur_involvement : (document.getElementById('ip3-actual-enterprenuer-involvement')?.value || '0');
       const roiPercent = isFormEmpty && lastSubmittedData ? (lastSubmittedData.roi_percent + '%') : (document.getElementById('ip3-roi-percent')?.textContent || '0%');
       
+      pdfContent.innerHTML += `
+        <div style="margin-bottom:15px">
+          <div style="margin-bottom:8px"><strong>Pejabat:</strong> ${daerah}</div>
+          <div style="margin-bottom:8px"><strong>Nama Program:</strong> ${programmeName}</div>
+          <div style="margin-bottom:8px"><strong>Tarikh Pelaksanaan:</strong> ${programmeDate}</div>
+          <div style="margin-bottom:8px"><strong>Pengelola:</strong> ${organizerText}</div>
+        </div>
         
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">IP3M2 - INDEKS KECEKAPAN PENGURUSAN ACARA</h2>
@@ -1528,7 +1533,7 @@ function exportAsPDF() {
       `;
     }
 
-    // === ADD IMAGES SECTION (Script 2 working image system) ===
+    // === ADD IMAGES SECTION ===
     pdfContent.innerHTML += `
       <div style="margin-top:30px">
         <h3 style="font-size:16px;font-weight:bold;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">GAMBAR PROGRAM</h3>
@@ -1543,7 +1548,7 @@ function exportAsPDF() {
 
     document.body.appendChild(pdfContent);
 
-    // === HANDLE IMAGES (Script 2 working approach) ===
+    // === HANDLE IMAGES ===
     const imageContainer = pdfContent.querySelector('#pdf-images-container');
     const imageInput = document.getElementById(`${sectionId}-images`);
     
@@ -1661,6 +1666,7 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
     });
   }, 500);
 }
+
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
 document.addEventListener('DOMContentLoaded', () => {
