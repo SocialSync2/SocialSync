@@ -1494,13 +1494,6 @@ function exportAsPDF() {
       const actualEntrepreneur = isFormEmpty && lastSubmittedData ? lastSubmittedData.actual_enterpreneur_involvement : (document.getElementById('ip3-actual-enterprenuer-involvement')?.value || '0');
       const roiPercent = isFormEmpty && lastSubmittedData ? (lastSubmittedData.roi_percent + '%') : (document.getElementById('ip3-roi-percent')?.textContent || '0%');
       
-      pdfContent.innerHTML += `
-        <div style="margin-bottom:15px">
-          <div style="margin-bottom:8px"><strong>Pejabat:</strong> ${daerah}</div>
-          <div style="margin-bottom:8px"><strong>Nama Program:</strong> ${programmeName}</div>
-          <div style="margin-bottom:8px"><strong>Tarikh Pelaksanaan:</strong> ${programmeDate}</div>
-          <div style="margin-bottom:8px"><strong>Pengelola:</strong> ${organizerText}</div>
-        </div>
         
         <div style="margin-bottom:25px">
           <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">IP3M2 - INDEKS KECEKAPAN PENGURUSAN ACARA</h2>
