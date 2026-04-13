@@ -1592,8 +1592,8 @@ function exportAsPDF() {
       imageInputId = 'ip2m1-images';
     }
 // Bina SEMUA kandungan PDF dalam SATU STRING sahaja
-let fullPdfHtml = pdfContent.innerHTML; // Header
-fullPdfHtml += sectionContent; // Kandungan section
+let fullPdfHtml = pdfContent.innerHTML
+fullPdfHtml += sectionContent; 
 fullPdfHtml += `<div id="pdf-image-container" style="margin-top:20px;grid-template-columns:repeat(2,1fr);gap:15px;display:grid;"></div>`;
 fullPdfHtml += `
   <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:12px">
@@ -1604,12 +1604,10 @@ fullPdfHtml += `
         year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
   </div>
 `;
-pdfContent.innerHTML = fullPdfHtml; // SET SEKALI SAHAJA!
+pdfContent.innerHTML = fullPdfHtml;
 
     document.body.appendChild(pdfContent);
 
-
-    // === LOAD IMAGES PROPERLY ===
     const imageInput = document.getElementById(imageInputId);
     const pdfImageContainer = pdfContent.querySelector('#pdf-image-container');
     
@@ -1658,7 +1656,6 @@ pdfContent.innerHTML = fullPdfHtml; // SET SEKALI SAHAJA!
       });
       
     } else {
-      // No images uploaded
       pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>`;
       generatePDF(pdfContent, programmeName, btn, originalText);
     }
@@ -1764,7 +1761,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 function fetchStatistics() {
-  const STATS_URL = 'https://script.google.com/macros/s/AKfycbzCxbLU_JcIFJvEp_X7g5YpLtXGDZvsMqSqbiTVEa96kgwWP90K-jzf_8SwGq0PaRjIQQ/exec';
+  const STATS_URL = 'https://script.google.com/macros/s/AKfycbzZHhOo5IBboKybRzDn_FcSmqJkGTXEdBML-xmZZFmmpPeJec-CdTIjV18gHaKUwWWQ4A/exec';
 
   fetch(STATS_URL)
     .then(response => {
