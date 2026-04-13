@@ -764,6 +764,7 @@ body {
 
 <!-- Live Logic -->
 <script>
+
 function num(val) {
   const n = parseFloat(val);
   return isNaN(n) ? 0 : n;
@@ -837,6 +838,13 @@ function fileToBase64(file) {
 }
 
 let lastSubmittedData = null;
+
+// Add this after lastSubmittedData
+let lastSubmittedImages = {
+    'buletin-daerah': [],
+    'ip2m1': [],
+    'ip3m2': []
+};
 
 async function submitForm(e) {
   e.preventDefault();
@@ -976,11 +984,16 @@ async function submitForm(e) {
       'ip2m1': document.getElementById('ip2m1-images')?.files || [],
       'ip3m2': document.getElementById('ip3m2-images')?.files || []
     };
+
     const images = [];
     const selectedImages = imageFiles[selectedSection] || [];
     for (let i = 0; i < selectedImages.length; i++) {
-      images.push(await fileToBase64(selectedImages[i]));
+        const imageData = await fileToBase64(selectedImages[i]);
+        images.push(imageData);
     }
+
+// STORE IMAGES FOR PDF EXPORT
+lastSubmittedImages[selectedSection] = images;
     
     const pdfs = [];
     if (selectedSection === 'ip2m1') {
@@ -1289,128 +1302,67 @@ function exportAsPDF() {
 
   try {
     const sectionId = activeSectionBtn.dataset.section;
-    const pdfContent = document.createElement('div');
-    pdfContent.id = 'pdf-export-content';
-    pdfContent.style.width = '800px';
-    pdfContent.style.padding = '30px 40px';
-    pdfContent.style.fontFamily = '"DM Sans", sans-serif';
-    pdfContent.style.color = '#1e293b';
-    pdfContent.style.backgroundColor = 'white';
-    pdfContent.style.lineHeight = '1.5';
-    pdfContent.style.margin = '0 auto';
-    pdfContent.style.boxSizing = 'border-box';
-    pdfContent.style.position = 'relative';
-
-    // === GET FORM DATA (WITH FALLBACK TO lastSubmittedData AFTER SUBMISSION) ===
+    
+    // Get form data
     let programmeName = document.getElementById('programme')?.value?.trim() || 'Programme';
     let programmeDate = document.getElementById('date')?.value || 'Date';
     let organizerText = 'Organizer';
     let daerah = 'Daerah';
     
-    // Check if form is empty (after submission)
-    const isFormEmpty = !document.getElementById('programme').value.trim();
-    if (lastSubmittedData && isFormEmpty) {
-      // Use stored submitted data
-      programmeName = lastSubmittedData.programme_name;
-      programmeDate = lastSubmittedData.programme_date;
-      organizerText = lastSubmittedData.organizer;
-      daerah = lastSubmittedData.daerah;
-    } else {
-      // Get current form data
-      const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
-      const organizerValues = Array.from(organizerInputs)
-        .map(input => input.value.trim())
-        .filter(value => value !== '');
-      organizerText = organizerValues.join(', ') || organizerText;
-      
-      const daerahEl = document.getElementById('daerah-dropdown');
-      if (daerahEl && daerahEl.selectedIndex >= 0) {
-        daerah = daerahEl.options[daerahEl.selectedIndex]?.text || daerah;
-      }
+    const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
+    const organizerValues = Array.from(organizerInputs).map(input => input.value.trim()).filter(value => value !== '');
+    organizerText = organizerValues.join(', ') || organizerText;
+    
+    const daerahEl = document.getElementById('daerah-dropdown');
+    if (daerahEl && daerahEl.selectedIndex >= 0) {
+      daerah = daerahEl.options[daerahEl.selectedIndex]?.text || daerah;
     }
 
-    // === EXACT HEADER DESIGN FROM REFERENCE IMAGE ===
-    pdfContent.innerHTML = `
-      <div style="position:relative;height:100px;margin-bottom:25px;border-bottom:2px solid #1e40af">
-        <!-- Left side: Borang KPI -->
-        <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:14px;font-weight:bold;color:#000;width:180px">
-        </div>
-        
-        <!-- Center: Main title and subtitle -->
-        <div style="text-align:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
-          <div style="font-size:24px;font-weight:bold;color:#000;margin-bottom:5px">PEJABAT DAERAH MUKAH</div>
-        </div>
+    // Create PDF content container
+    const pdfContent = document.createElement('div');
+    pdfContent.id = 'pdf-export-content';
+    pdfContent.style.width = '800px';
+    pdfContent.style.padding = '30px 40px';
+    pdfContent.style.fontFamily = '"DM Sans", sans-serif';
+    pdfContent.style.backgroundColor = 'white';
+    pdfContent.style.margin = '0 auto';
 
+    // Build header
+    let html = `
+      <div style="text-align:center;margin-bottom:30px;padding-bottom:20px;border-bottom:2px solid #1e40af">
+        <div style="font-size:24px;font-weight:bold;color:#000;margin-bottom:5px">${daerah}</div>
+        <div style="font-size:18px;font-weight:bold;color:#1e40af;margin-bottom:10px">LAPORAN PROGRAM</div>
+        <div style="font-size:14px;color:#4b5563">${programmeName} | ${programmeDate}</div>
+        <div style="font-size:14px;color:#4b5563">Pengelola: ${organizerText}</div>
       </div>
     `;
 
-        // === SECTION CONTENT ===
-    let sectionContent = '';
-    let imageInputId = '';
-    
-    // === BULETIN DAERAH SECTION ===
+    // Add section-specific content
     if (sectionId === 'buletin-daerah') {
-      let vipGuestText = 'Tiada tetamu kehormat';
-      if (lastSubmittedData && isFormEmpty) {
-        vipGuestText = lastSubmittedData.vip_guest || vipGuestText;
-      } else {
-        const vipGuestInputs = document.querySelectorAll('input[name="vip_guest[]"]');
-        const vipGuestValues = Array.from(vipGuestInputs)
-          .map(input => input.value.trim())
-          .filter(value => value !== '');
-        vipGuestText = vipGuestValues.join(', ') || vipGuestText;
-      }
+      const tempat = document.getElementById('ip1-tempat')?.value || 'N/A';
+      const objektif = document.getElementById('ip1-objektif')?.value || 'N/A';
+      const impak = document.getElementById('ip1-impak')?.value || 'N/A';
       
-      const tempat = isFormEmpty && lastSubmittedData ? lastSubmittedData.venue_capacity : document.getElementById('ip1-tempat').value || 'N/A';
-      const objektif = isFormEmpty && lastSubmittedData ? lastSubmittedData.objective : document.getElementById('ip1-objektif').value || 'N/A';
-      const impak = isFormEmpty && lastSubmittedData ? lastSubmittedData.impact : document.getElementById('ip1-impak').value || 'N/A';
-      const tetamuHadir = isFormEmpty && lastSubmittedData ? lastSubmittedData.total_attendance : document.getElementById('ip1-bil-tetamu').value || '0';
-      const mediaHadir = isFormEmpty && lastSubmittedData ? lastSubmittedData.media_present : document.getElementById('ip1-pihak-media').value || 'Tiada';
+      const vipGuestInputs = document.querySelectorAll('input[name="vip_guest[]"]');
+      const vipGuestValues = Array.from(vipGuestInputs).map(input => input.value.trim()).filter(v => v !== '');
+      const vipGuestText = vipGuestValues.join(', ') || 'Tiada';
+      const tetamuHadir = document.getElementById('ip1-bil-tetamu')?.value || '0';
+      const mediaHadir = document.getElementById('ip1-pihak-media')?.value || 'Tiada';
       
-      pdfContent.innerHTML += `
-        <div style="margin-bottom:15px">
-          <div style="margin-bottom:8px"><strong>Pejabat:</strong> ${daerah}</div>
-          <div style="margin-bottom:8px"><strong>Nama Program:</strong> ${programmeName}</div>
-          <div style="margin-bottom:8px"><strong>Tarikh Pelaksanaan:</strong> ${programmeDate}</div>
-          <div style="margin-bottom:8px"><strong>Pengelola:</strong> ${organizerText}</div>
-        </div>
-        
-        <div style="margin-bottom:25px">
-          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">BULETIN DAERAH</h2>
-          
-          <table style="width:100%;border-collapse:collapse;margin-top:15px;font-size:14px">
-            <tr>
-              <td style="padding:10px 0;width:35%;font-weight:600;color:#4b5563;background:#f8fafc;border-right:1px solid #e2e8f0">Tempat & Kapasiti</td>
-              <td style="padding:10px 0;color:#1e293b;border-bottom:1px solid #e2e8f0">${tempat}</td>
-            </tr>
-            <tr>
-              <td style="padding:10px 0;font-weight:600;color:#4b5563;background:#f8fafc;border-right:1px solid #e2e8f0">Objektif/Deskripsi Program</td>
-              <td style="padding:10px 0;color:#1e293b;border-bottom:1px solid #e2e8f0">${objektif}</td>
-            </tr>
-            <tr>
-              <td style="padding:10px 0;font-weight:600;color:#4b5563;background:#f8fafc;border-right:1px solid #e2e8f0">Impak Program</td>
-              <td style="padding:10px 0;color:#1e293b;border-bottom:1px solid #e2e8f0">${impak}</td>
-            </tr>
-            <tr>
-              <td style="padding:10px 0;font-weight:600;color:#4b5563;background:#f8fafc;border-right:1px solid #e2e8f0">Tetamu Kehormat</td>
-              <td style="padding:10px 0;color:#1e293b;border-bottom:1px solid #e2e8f0">${vipGuestText}</td>
-            </tr>
-            <tr>
-              <td style="padding:10px 0;font-weight:600;color:#4b5563;background:#f8fafc;border-right:1px solid #e2e8f0">Bilangan Tetamu Yang Hadir</td>
-              <td style="padding:10px 0;color:#1e293b;border-bottom:1px solid #e2e8f0">${tetamuHadir}</td>
-            </tr>
-            <tr>
-              <td style="padding:10px 0;font-weight:600;color:#4b5563;background:#f8fafc;border-right:1px solid #e2e8f0">Pihak Media Yang Hadir</td>
-              <td style="padding:10px 0;color:#1e293b">${mediaHadir}</td>
-            </tr>
-          </table>
-        </div>
+      html += `
+        <h2 style="font-size:20px;font-weight:bold;color:#2563eb;margin-bottom:20px;border-left:4px solid #2563eb;padding-left:12px">BULETIN DAERAH</h2>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:25px">
+          <tr><td style="padding:10px;background:#f8fafc;width:35%;font-weight:600">Tempat & Kapasiti</td><td style="padding:10px;border-bottom:1px solid #e2e8f0">${tempat}</td></tr>
+          <tr><td style="padding:10px;background:#f8fafc;font-weight:600">Objektif Program</td><td style="padding:10px;border-bottom:1px solid #e2e8f0">${objektif}</td></tr>
+          <tr><td style="padding:10px;background:#f8fafc;font-weight:600">Impak Program</td><td style="padding:10px;border-bottom:1px solid #e2e8f0">${impak}</td></tr>
+          <tr><td style="padding:10px;background:#f8fafc;font-weight:600">Tetamu Kehormat</td><td style="padding:10px;border-bottom:1px solid #e2e8f0">${vipGuestText}</td></tr>
+          <tr><td style="padding:10px;background:#f8fafc;font-weight:600">Bilangan Tetamu Hadir</td><td style="padding:10px;border-bottom:1px solid #e2e8f0">${tetamuHadir}</td></tr>
+          <tr><td style="padding:10px;background:#f8fafc;font-weight:600">Pihak Media Hadir</td><td style="padding:10px">${mediaHadir}</td></tr>
+        </table>
       `;
-      imageInputId = 'buletin-daerah-images';
-    } 
-    // === IP2M1:2 SECTION ===
+    }
     else if (sectionId === 'ip2m1') {
-      // Media channels
+      // Get media channels
       let mediaItems = [];
       if (document.getElementById('media-cetak-checkbox')?.checked) {
         mediaItems.push(`Media Cetak: ${document.getElementById('media-cetak-example')?.value || 'N/A'}`);
@@ -1422,199 +1374,134 @@ function exportAsPDF() {
         mediaItems.push(`Media Digital: ${document.getElementById('media-digital-example')?.value || 'N/A'}`);
       }
       
-      // Use stored data if form is empty
-      if (isFormEmpty && lastSubmittedData) {
-        mediaItems = lastSubmittedData.selected_media_channels ? 
-          lastSubmittedData.selected_media_channels.split(', ') : [];
-      }
+      const mediaCoverage = document.getElementById('media-coverage')?.textContent || '0%';
+      const totalRespondent = document.getElementById('ip2-total-respondent')?.value || '0';
+      const positiveRespondent = document.getElementById('ip2-positive-respondent')?.value || '0';
+      const satisfactionPercent = document.getElementById('ip2-satisfaction-percent')?.textContent || '0%';
+      const crowdSize = document.getElementById('crowd-size')?.value || '0';
+      const targetGroup = document.getElementById('target-group')?.value || '0';
+      const participantPercent = document.getElementById('participant-percent')?.textContent || '0%';
+      const totalScore = document.getElementById('total-ip2m1')?.textContent || '0';
       
-      const mediaText = mediaItems.length > 0 ? mediaItems.join('<br>') : 'Tiada saluran media';
-      
-      // Get values with fallback to stored data
-      const mediaCoverage = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.media_coverage_percent + '%') : 
-        (document.getElementById('media-coverage')?.textContent || '0%');
-      
-      const totalRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip2_total_respondent : 
-        (document.getElementById('ip2-total-respondent')?.value || '0');
-      
-      const positiveRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip2_positive_respondent : 
-        (document.getElementById('ip2-positive-respondent')?.value || '0');
-      
-      const satisfactionPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip2_satisfaction_percent + '%') : 
-        (document.getElementById('ip2-satisfaction-percent')?.textContent || '0%');
-      
-      const crowdSize = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.crowd_size : 
-        (document.getElementById('crowd-size')?.value || '0');
-      
-      const targetGroup = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.target_group : 
-        (document.getElementById('target-group')?.value || '0');
-      
-      const participantPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.survey_participation_percent + '%') : 
-        (document.getElementById('participant-percent')?.textContent || '0%');
-      
-      const totalScore = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.total_ip2m1_score : 
-        (document.getElementById('total-ip2m1')?.textContent || '0');
-      
-      pdfContent.innerHTML += `
-        <div style="margin-bottom:15px">
-          <div style="margin-bottom:8px"><strong>Pejabat:</strong> ${daerah}</div>
-          <div style="margin-bottom:8px"><strong>Nama Program:</strong> ${programmeName}</div>
-          <div style="margin-bottom:8px"><strong>Tarikh Pelaksanaan:</strong> ${programmeDate}</div>
-          <div style="margin-bottom:8px"><strong>Pengelola:</strong> ${organizerText}</div>
+      html += `
+        <h2 style="font-size:20px;font-weight:bold;color:#2563eb;margin-bottom:20px;border-left:4px solid #2563eb;padding-left:12px">IP2M1 - INDEKS PENYERTAAN KOMUNITI</h2>
+        
+        <div style="background:#f3f4f6;padding:15px;margin-bottom:15px;border-radius:8px">
+          <h3 style="font-weight:bold;margin-bottom:10px">A. Perkongsian Maklumat & Penyiaran</h3>
+          <p><strong>Saluran:</strong> ${mediaItems.join(', ') || 'Tiada'}</p>
+          <p><strong>Peratus Liputan:</strong> ${mediaCoverage}</p>
         </div>
         
-        <div style="margin-bottom:25px">
-          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">IP2M1 - INDEKS PENYERTAAN KOMUNITI</h2>
-          
-          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">A. Perkongsian Maklumat & Penyiaran (100%)</h3>
-            <p style="margin:8px 0"><strong>Saluran:</strong><br>${mediaText}</p>
-            <p style="margin:10px 0 6px;font-weight:600"><strong>Peratus Liputan Saluran:</strong> <span style="color:#000;font-size:19px">${mediaCoverage}</span></p>
-          </div>
-          
-          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">B. Tahap Kepuasan Peserta</h3>
-            <p style="margin:8px 0"><strong>Jumlah Responden:</strong> ${totalRespondent}</p>
-            <p style="margin:8px 0"><strong>Responden Positif:</strong> ${positiveRespondent}</p>
-            <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${satisfactionPercent}</span></p>
-          </div>
-          
-          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">C. Penyertaan Peserta (100%)</h3>
-            <p style="margin:8px 0"><strong>Saiz Kehadiran:</strong> ${crowdSize}</p>
-            <p style="margin:8px 0"><strong>Kumpulan Sasaran:</strong> ${targetGroup}</p>
-            <p style="margin:8px 0"><strong>Markah:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${participantPercent}</span></p>
-          </div>
-          
-          <div style="background:#f3f4f6;color:#000;padding:25px;border-radius:14px;text-align:center;margin:25px 0;box-shadow:0 8px 20px rgba(6, 182, 212, 0.25)">
-            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:26px;margin:0 0 12px;letter-spacing:-0.5px;text-shadow:0 2px 4px rgba(0,0,0,0.2)">JUMLAH SKOR</h3>
-            <p style="font-size:48px;font-weight:800;margin:0;letter-spacing:-1.5px;text-shadow:0 4px 6px rgba(0,0,0,0.2)">${totalScore}%</p>
-            <p style="opacity:0.95;margin:12px 0 0;font-size:15px">(Purata: Liputan Media + Kepuasan + Penyertaan)</p>
-          </div>
-        </div>
-      `;
-       imageInputId = 'ip2m1-images';
-    } 
-    // === IP3M2 SECTION ===
-    else if (sectionId === 'ip3m2') {
-      // Get values with fallback to stored data
-      const mediaList = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_media_list.replace(/\n/g, '<br>') : 
-        (document.getElementById('ip3-media-list')?.value.replace(/\n/g, '<br>') || 'Tiada media');
-      
-      const mediaPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip3_media_percent + '%') : 
-        (document.getElementById('ip3-media-percent')?.textContent || '0%');
-      
-      const actualAttendance = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_actual_attendance : 
-        (document.getElementById('ip3-actual-attendance')?.value || '0');
-      
-      const targetAttendance = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_target_attendance : 
-        (document.getElementById('ip3-target-attendance')?.value || '0');
-      
-      const participationPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip3_participation_percent + '%') : 
-        (document.getElementById('ip3-participation-percent')?.textContent || '0%');
-      
-      const totalRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_total_respondent : 
-        (document.getElementById('ip3-total-respondent')?.value || '0');
-      
-      const positiveRespondent = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.ip3_positive_respondent : 
-        (document.getElementById('ip3-positive-respondent')?.value || '0');
-      
-      const satisfactionPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.ip3_satisfaction_percent + '%') : 
-        (document.getElementById('ip3-satisfaction-percent')?.textContent || '0%');
-      
-      const targetedEntrepreneur = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.targeted_enterpreneur_involvement : 
-        (document.getElementById('ip3-targeted-enterpreneur-involvement')?.value || '0');
-      
-      const actualEntrepreneur = isFormEmpty && lastSubmittedData ? 
-        lastSubmittedData.actual_enterpreneur_involvement : 
-        (document.getElementById('ip3-actual-enterprenuer-involvement')?.value || '0');
-      
-      const roiPercent = isFormEmpty && lastSubmittedData ? 
-        (lastSubmittedData.roi_percent + '%') : 
-        (document.getElementById('ip3-roi-percent')?.textContent || '0%');
-      
-      pdfContent.innerHTML += `
-        <div style="margin-bottom:15px">
-          <div style="margin-bottom:8px"><strong>Pejabat:</strong> ${daerah}</div>
-          <div style="margin-bottom:8px"><strong>Nama Program:</strong> ${programmeName}</div>
-          <div style="margin-bottom:8px"><strong>Tarikh Pelaksanaan:</strong> ${programmeDate}</div>
-          <div style="margin-bottom:8px"><strong>Pengelola:</strong> ${organizerText}</div>
+        <div style="background:#f3f4f6;padding:15px;margin-bottom:15px;border-radius:8px">
+          <h3 style="font-weight:bold;margin-bottom:10px">B. Tahap Kepuasan Peserta</h3>
+          <p><strong>Jumlah Responden:</strong> ${totalRespondent}</p>
+          <p><strong>Responden Positif:</strong> ${positiveRespondent}</p>
+          <p><strong>Peratus Kepuasan:</strong> ${satisfactionPercent}</p>
         </div>
         
-        <div style="margin-bottom:25px">
-          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">IP3M2 - INDEKS KECEKAPAN PENGURUSAN ACARA</h2>
-          
-          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">A. Promosi & Jangkauan (Liputan Media)</h3>
-            <p style="margin:8px 0"><strong>Senarai Media:</strong><br>${mediaList}</p>
-            <p style="margin:10px 0 6px;font-weight:600"><strong>Peratus Liputan Media:</strong> <span style="color:#000;font-size:19px">${mediaPercent}</span></p>
-          </div>
-          
-          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">B. Penyertaan</h3>
-            <p style="margin:8px 0"><strong>Kehadiran Sebenar:</strong> ${actualAttendance}</p>
-            <p style="margin:8px 0"><strong>Sasaran Kehadiran:</strong> ${targetAttendance}</p>
-            <p style="margin:8px 0"><strong>Markah Penyertaan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${participationPercent}</span></p>
-          </div>
-          
-          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">C. Tahap Kepuasan Peserta</h3>
-            <p style="margin:8px 0"><strong>Jumlah Responden:</strong> ${totalRespondent}</p>
-            <p style="margin:8px 0"><strong>Responden Positif:</strong> ${positiveRespondent}</p>
-            <p style="margin:8px 0"><strong>Peratus Kepuasan:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${satisfactionPercent}</span></p>
-          </div>
-          
-          <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;border-radius:0 6px 6px 0">
-            <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">D. Penjanaan Ekonomi</h3>
-            <p style="margin:8px 0"><strong>Bilangan Sasaran Penyertaan Usahawan:</strong> ${targetedEntrepreneur}</p>
-            <p style="margin:8px 0"><strong>Bilangan Sebenar Penyertaan Usahawan:</strong> ${actualEntrepreneur}</p>
-            <p style="margin:8px 0"><strong>ROI:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${roiPercent}</span></p>
-          </div>
+        <div style="background:#f3f4f6;padding:15px;margin-bottom:15px;border-radius:8px">
+          <h3 style="font-weight:bold;margin-bottom:10px">C. Penyertaan Peserta</h3>
+          <p><strong>Saiz Kehadiran:</strong> ${crowdSize}</p>
+          <p><strong>Kumpulan Sasaran:</strong> ${targetGroup}</p>
+          <p><strong>Markah:</strong> ${participantPercent}</p>
+        </div>
+        
+        <div style="background:#2563eb;color:white;padding:20px;text-align:center;border-radius:8px;margin:20px 0">
+          <h3 style="font-size:18px;margin-bottom:10px">JUMLAH SKOR</h3>
+          <p style="font-size:36px;font-weight:bold;margin:0">${totalScore}%</p>
         </div>
       `;
-      imageInputId = 'ip2m1-images';
     }
-// Bina SEMUA kandungan PDF dalam SATU STRING sahaja
-let fullPdfHtml = pdfContent.innerHTML
-fullPdfHtml += sectionContent; 
-fullPdfHtml += `<div id="pdf-image-container" style="margin-top:20px;grid-template-columns:repeat(2,1fr);gap:15px;display:grid;"></div>`;
-fullPdfHtml += `
-  <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:12px">
-    <p style="font-weight:600;color:#1e40af;margin-bottom:6px">SocialSync Programme Management System</p>
-    <p style="font-weight:500;margin-bottom:4px">Dokumen Rasmi Kerajaan • Sulit</p>
-    <p style="margin-top:8px;font-size:11px;color:#64748b">
-      Dijana pada: ${new Date().toLocaleDateString('ms-MY', { 
-        year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
-  </div>
-`;
-pdfContent.innerHTML = fullPdfHtml;
+    else if (sectionId === 'ip3m2') {
+      const mediaList = document.getElementById('ip3-media-list')?.value.replace(/\n/g, '<br>') || 'Tiada';
+      const mediaPercent = document.getElementById('ip3-media-percent')?.textContent || '0%';
+      const actualAttendance = document.getElementById('ip3-actual-attendance')?.value || '0';
+      const targetAttendance = document.getElementById('ip3-target-attendance')?.value || '0';
+      const participationPercent = document.getElementById('ip3-participation-percent')?.textContent || '0%';
+      const totalRespondent = document.getElementById('ip3-total-respondent')?.value || '0';
+      const positiveRespondent = document.getElementById('ip3-positive-respondent')?.value || '0';
+      const satisfactionPercent = document.getElementById('ip3-satisfaction-percent')?.textContent || '0%';
+      const targetedEntrepreneur = document.getElementById('ip3-targeted-enterpreneur-involvement')?.value || '0';
+      const actualEntrepreneur = document.getElementById('ip3-actual-enterprenuer-involvement')?.value || '0';
+      const roiPercent = document.getElementById('ip3-roi-percent')?.textContent || '0%';
+      
+      html += `
+        <h2 style="font-size:20px;font-weight:bold;color:#2563eb;margin-bottom:20px;border-left:4px solid #2563eb;padding-left:12px">IP3M2 - INDEKS KECEKAPAN PENGURUSAN ACARA</h2>
+        
+        <div style="background:#f3f4f6;padding:15px;margin-bottom:15px;border-radius:8px">
+          <h3 style="font-weight:bold;margin-bottom:10px">A. Promosi & Jangkauan Media</h3>
+          <p><strong>Senarai Media:</strong><br>${mediaList}</p>
+          <p><strong>Peratus Liputan:</strong> ${mediaPercent}</p>
+        </div>
+        
+        <div style="background:#f3f4f6;padding:15px;margin-bottom:15px;border-radius:8px">
+          <h3 style="font-weight:bold;margin-bottom:10px">B. Penyertaan</h3>
+          <p><strong>Kehadiran Sebenar:</strong> ${actualAttendance}</p>
+          <p><strong>Sasaran Kehadiran:</strong> ${targetAttendance}</p>
+          <p><strong>Markah:</strong> ${participationPercent}</p>
+        </div>
+        
+        <div style="background:#f3f4f6;padding:15px;margin-bottom:15px;border-radius:8px">
+          <h3 style="font-weight:bold;margin-bottom:10px">C. Tahap Kepuasan Peserta</h3>
+          <p><strong>Jumlah Responden:</strong> ${totalRespondent}</p>
+          <p><strong>Responden Positif:</strong> ${positiveRespondent}</p>
+          <p><strong>Peratus Kepuasan:</strong> ${satisfactionPercent}</p>
+        </div>
+        
+        <div style="background:#f3f4f6;padding:15px;margin-bottom:15px;border-radius:8px">
+          <h3 style="font-weight:bold;margin-bottom:10px">D. Penjanaan Ekonomi</h3>
+          <p><strong>Sasaran Usahawan:</strong> ${targetedEntrepreneur}</p>
+          <p><strong>Usahawan Sebenar:</strong> ${actualEntrepreneur}</p>
+          <p><strong>ROI:</strong> ${roiPercent}</p>
+        </div>
+      `;
+    }
 
+    // Add images section
+    html += `
+      <div style="margin-top:30px">
+        <h3 style="font-size:16px;font-weight:bold;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">GAMBAR PROGRAM</h3>
+        <div id="pdf-images-container" style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:15px"></div>
+      </div>
+      
+      <div style="margin-top:40px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:12px">
+        <p>SocialSync Programme Management System • Dokumen Rasmi Kerajaan</p>
+        <p>Dijana pada: ${new Date().toLocaleDateString('ms-MY')}</p>
+      </div>
+    `;
+    
+    pdfContent.innerHTML = html;
     document.body.appendChild(pdfContent);
 
-    const imageInput = document.getElementById(imageInputId);
-    const pdfImageContainer = pdfContent.querySelector('#pdf-image-container');
+    // Get stored images or current file input images
+    const imageInput = document.getElementById(`${sectionId}-images`);
+    const imageContainer = pdfContent.querySelector('#pdf-images-container');
     
-    if (imageInput && imageInput.files && imageInput.files.length > 0) {
+    // Check if we have stored images from submission OR current file input
+    let imagePromises = [];
+    
+    if (lastSubmittedImages[sectionId] && lastSubmittedImages[sectionId].length > 0) {
+      // Use stored images from previous submission
+      lastSubmittedImages[sectionId].forEach(imageData => {
+        const img = document.createElement('img');
+        img.src = `data:${imageData.mimeType};base64,${imageData.data}`;
+        img.style.width = '100%';
+        img.style.height = '150px';
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '8px';
+        img.style.border = '1px solid #e2e8f0';
+        
+        const promise = new Promise((resolve) => {
+          img.onload = () => resolve(img);
+          img.onerror = () => resolve(null);
+        });
+        imagePromises.push(promise);
+        imageContainer.appendChild(img);
+      });
+    } 
+    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
+      // Use current file input images
       const imageFiles = Array.from(imageInput.files).slice(0, 4);
-      const imagePromises = [];
-      
       imageFiles.forEach(file => {
         if (!file.type.match('image.*')) return;
         
@@ -1628,63 +1515,42 @@ pdfContent.innerHTML = fullPdfHtml;
             img.style.objectFit = 'cover';
             img.style.borderRadius = '8px';
             img.style.border = '1px solid #e2e8f0';
-            
-            // CRITICAL: Wait for image to fully render
             img.onload = () => resolve(img);
             img.onerror = () => resolve(null);
+            imageContainer.appendChild(img);
           };
           reader.readAsDataURL(file);
         });
         imagePromises.push(promise);
       });
-      
-      // Wait for ALL images to load before generating PDF
-      Promise.all(imagePromises).then((imgs) => {
-        imgs.filter(img => img !== null).forEach(img => {
-          pdfImageContainer.appendChild(img);
-        });
-        
-        if (imgs.filter(img => img !== null).length === 0) {
-          pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b">Tiada gambar dimuat naik</div>`;
-        }
-        
+    }
+    
+    if (imagePromises.length === 0) {
+      imageContainer.innerHTML = '<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>';
+      generatePDF(pdfContent, programmeName, btn, originalText);
+    } else {
+      Promise.all(imagePromises).then(() => {
         generatePDF(pdfContent, programmeName, btn, originalText);
-      }).catch(err => {
-        console.error('Image loading error:', err);
-        pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b">Ralat memuatkan gambar</div>`;
+      }).catch(() => {
         generatePDF(pdfContent, programmeName, btn, originalText);
       });
-      
-    } else {
-      pdfImageContainer.innerHTML = `<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>`;
-      generatePDF(pdfContent, programmeName, btn, originalText);
     }
     
   } catch (error) {
     console.error('Export error:', error);
     alert('⚠️ Ralat semasa menjana PDF: ' + error.message);
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-    }
+    btn.disabled = false;
+    btn.innerHTML = originalText;
   }
 }
 
 function generatePDF(pdfContent, programmeName, btn, originalText) {
-  // ✅ HAPUS element lama untuk elak konflik
-  const existing = document.getElementById('pdf-export-content');
-  if (existing) existing.remove();
-  
-  document.body.appendChild(pdfContent);
-  
   setTimeout(() => {
     html2canvas(pdfContent, {
       scale: 2,
-      useCORS: true,
       backgroundColor: '#ffffff',
       logging: false,
-      width: 800,
-      windowWidth: 800
+      width: 800
     }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
       const { jsPDF } = window.jspdf;
@@ -1710,7 +1576,6 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       
       pdf.save(`${programmeName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
       alert('✅ Laporan PDF telah dijana dan dimuat turun!');
-      
     }).catch(err => {
       console.error('PDF generation error:', err);
       alert('⚠️ Gagal menjana PDF. Cuba semula.');
@@ -1719,7 +1584,7 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       btn.disabled = false;
       btn.innerHTML = originalText;
     });
-  }, 500); 
+  }, 500);
 }
 
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
