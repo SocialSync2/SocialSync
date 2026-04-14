@@ -233,7 +233,7 @@ body {
           </svg>
         </div>
         <div>
-          <h1 id="app-title" class="title-font text-xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">SocialSync</h1>
+          <h1 id="app-title" class="title-font text-xl font-bold bg-gradient-to-r from-cyan-600 to-cyan-600 bg-clip-text text-transparent">SocialSync</h1>
           <p id="app-tagline" class="text-xs text-slate-600">Event & Programme Management System</p>
         </div>
       </div>
@@ -351,68 +351,76 @@ body {
         <!-- Sections Container -->
         <div id="sections-container" class="p-6 space-y-6">
           <!-- BULETIN DAERAH Section - FIXED -->
-          <div id="section-buletin-daerah" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
-            <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
-              <h3 class="text-md font-semibold text-cyan-700 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                BULETIN DAERAH - Programme Details
-              </h3>
+
+        <div id="section-buletin-daerah" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
+          <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
+            <h3 class="text-md font-semibold text-cyan-700 flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              BULETIN DAERAH - Programme Details
+            </h3>
+          </div>
+          <div class="p-5 space-y-6">
+            <!-- Tempat (styled like IP2M1 info blocks) -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">📍 Tempat & Kapasiti</h4>
+              <input type="text" id="ip1-tempat" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Tempat dan Kapasiti">
             </div>
-            <div class="p-5 space-y-4">
-              <div>
-                <label for="ip1-tempat" class="block text-sm text-slate-700 mb-1">Tempat</label>
-                <input type="text" id="ip1-tempat" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Tempat dan Kapasiti">
-              </div>
-              <div>
-                <label for="ip1-objektif" class="block text-sm text-slate-700 mb-1">Objektif/Deskripsi Program</label>
-                <textarea id="ip1-objektif" name="ip1-objektif" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Objektif Program"></textarea>
-              </div>
-              <div>
-                <label for="ip1-impak" class="block text-sm text-slate-700 mb-1">Impak Program/PCDS2030 & SDG2030</label>
-                <textarea id="ip1-impak" name="ip1-impak" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Impak Program"></textarea>
-              </div>
-              
-              <!-- Attendance Info -->
+
+            <!-- Objektif -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">📋 Objektif/Deskripsi Program</h4>
+              <textarea id="ip1-objektif" rows="3" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Objektif Program"></textarea>
+            </div>
+
+            <!-- Impak -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">🌍 Impak Program / PCDS2030 & SDG2030</h4>
+              <textarea id="ip1-impak" rows="3" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Impak Program"></textarea>
+            </div>
+
+            <!-- Tetamu Kehormat & Bilangan Tetamu (grid layout same as IP2M1 satisfaction grid) -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">👥 Kehadiran & VIP</h4>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm text-slate-700 mb-1">Tetamu Kehormat</label>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Tetamu Kehormat</label>
                   <div id="vip-guests-container" class="space-y-2">
                     <div class="flex gap-2">
-                      <input type="text" name="vip_guest[]" class="flex-1 px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Nama tetamu kehormat">
+                      <input type="text" name="vip_guest[]" class="flex-1 px-4 py-3 rounded-lg input-style text-slate-800" placeholder="Nama tetamu kehormat">
                       <button type="button" class="px-3 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700" onclick="addVipGuest()">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                       </button>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <label for="ip1-bil-tetamu" class="block text-sm text-slate-700 mb-1">Bilangan Tetamu Yang Hadir</label>
+                  <label for="ip1-bil-tetamu" class="block text-sm font-medium text-slate-700 mb-1">Bilangan Tetamu Yang Hadir</label>
                   <input type="number" id="ip1-bil-tetamu" min="0" class="w-full px-4 py-3 rounded-lg input-style text-slate-800" placeholder="Bilangan Tetamu">
                 </div>
-                <div class="md:col-span-2">
-                  <label for="ip1-pihak-media" class="block text-sm text-slate-700 mb-1">Pihak Media Yang Hadir</label>
-                  <textarea id="ip1-pihak-media" name="ip1-pihak-media" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Pihak Media yang hadir"></textarea>
-                </div>
-              </div>
-
-              <!-- Gambar Program -->
-              <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
-                <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
-                <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
-                <div class="flex flex-col gap-3">
-                  <label for="buletin-daerah-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                  <input type="file" id="buletin-daerah-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
-                  <div id="buletin-daerah-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
-                </div>
-                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
               </div>
             </div>
-          </div>
 
+            <!-- Pihak Media -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">📺 Pihak Media Yang Hadir</h4>
+              <textarea id="ip1-pihak-media" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Pihak Media yang hadir"></textarea>
+            </div>
+
+            <!-- Gambar Program (consistent with IP2M1 image upload block) -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">🖼️ Gambar Program / Tangkap Layar Media</h4>
+              <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
+              <div class="flex flex-col gap-3">
+                <label for="buletin-daerah-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
+                <input type="file" id="buletin-daerah-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
+                <div id="buletin-daerah-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+              </div>
+              <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
+            </div>
+          </div>
+        </div>
           <!-- IP2M1:2 Section -->
           <div id="section-ip2m1" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
             <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
