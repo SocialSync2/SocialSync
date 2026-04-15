@@ -552,17 +552,18 @@ body {
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
                   <label for="ip2m1-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                <div class="flex gap-2 items-start">
-                  <input type="file" id="ip2m1-images" class="flex-1 px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg">
-                  <button type="button" id="add-ip2m1-btn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all">📷 Tambah Gambar</button>
-                  <button type="button" id="clear-ip2m1-btn" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-all hidden">Kosongkan</button>
+                  <div class="flex gap-2 items-start">
+                    <input type="file" id="ip2m1-images" class="flex-1 px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg">
+                    <button type="button" id="add-ip2m1-btn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all">📷 Tambah Gambar</button>
+                    <button type="button" id="clear-ip2m1-btn" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-all hidden">Kosongkan</button>
+                  </div>
+                  <div id="ip2m1-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                  <p class="text-xs text-slate-500 mt-1">Klik "Tambah Gambar" untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
                 </div>
-                <div id="ip2m1-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
-                <p class="text-xs text-slate-500 mt-1">Klik "Tambah Gambar" untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
               </div>
             </div>
           </div>
-
+              
           <!-- IP3M2 Section -->
           <div id="section-ip3m2" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
             <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
@@ -649,19 +650,20 @@ body {
                 </div>
               </div>
 
-              <!-- Gambar Program -->
+               <!-- Gambar Program -->
               <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
                 <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
                   <label for="ip3m2-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                <div class="flex gap-2 items-start">
-                  <input type="file" id="ip3m2-images" class="flex-1 px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg">
-                  <button type="button" id="add-ip3m2-btn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all">📷 Tambah Gambar</button>
-                  <button type="button" id="clear-ip3m2-btn" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-all hidden">Kosongkan</button>
+                  <div class="flex gap-2 items-start">
+                    <input type="file" id="ip3m2-images" class="flex-1 px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg">
+                    <button type="button" id="add-ip3m2-btn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all">📷 Tambah Gambar</button>
+                    <button type="button" id="clear-ip3m2-btn" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-all hidden">Kosongkan</button>
+                  </div>
+                  <div id="ip3m2-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                  <p class="text-xs text-slate-500 mt-1">Klik "Tambah Gambar" untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
                 </div>
-                <div id="ip3m2-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
-                <p class="text-xs text-slate-500 mt-1">Klik "Tambah Gambar" untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
               </div>
             </div>
           </div>
@@ -1144,6 +1146,7 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
   
   // Handle add button click
   addButton.addEventListener('click', () => {
+    console.log('Button clicked for:', inputId);
     fileInput.click();
   });
   
@@ -1927,33 +1930,8 @@ function updateTotals() {
     });
   });
 
-  // Setup image preview
-  const imageInputs = [
-    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
-    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
-    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
-  ];
-  
-  imageInputs.forEach(({ input, preview }) => {
-    const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
-          if (!file.type.match('image.*')) return;
-          const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-    }
-  });
+  // Setup progressive image upload
+  setupImagePreview();
 
   // Form submission
   document.getElementById('main-form')?.addEventListener('submit', submitForm);
