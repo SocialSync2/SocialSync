@@ -1154,7 +1154,7 @@ function setupFileUploadButtons() {
             });
         }
     }
-    
+
     // IP2M1 images
     const ip2m1Btn = document.getElementById('add-ip2m1-btn');
     const ip2m1Input = document.getElementById('ip2m1-images');
@@ -1217,6 +1217,25 @@ function setupFileUploadButtons() {
             });
         }
     }
+}
+function setupMediaCheckboxes() {
+    const checkboxes = [
+        { cb: 'media-cetak-checkbox', input: 'media-cetak-example' },
+        { cb: 'media-elektronik-checkbox', input: 'media-elektronik-example' },
+        { cb: 'media-digital-checkbox', input: 'media-digital-example' }
+    ];
+    checkboxes.forEach(({ cb, input }) => {
+        const checkbox = document.getElementById(cb);
+        const inputField = document.getElementById(input);
+        if (checkbox && inputField) {
+            checkbox.addEventListener('change', () => {
+                inputField.disabled = !checkbox.checked;
+                if (!checkbox.checked) inputField.value = '';
+                updateIP2M1();
+            });
+            inputField.addEventListener('input', () => updateIP2M1());
+        }
+    });
 }
 
 function updateImagePreview(files, previewEl) {
@@ -1715,7 +1734,7 @@ pdfContent.innerHTML += `
         imageContainer.appendChild(img);
       });
     } 
-    
+
     // Otherwise use current file input
     else if (imageInput && imageInput.files && imageInput.files.length > 0) {
       console.log('Using current file input images');
@@ -2022,6 +2041,8 @@ function updateTotals() {
   }
 
   // Initialize calculations
+  setupImagePreview();
+  setupMediaCheckboxes();    
   setupFileUploadButtons();
   updateIP2M1();
   updateIP3M2();
