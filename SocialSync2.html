@@ -1103,37 +1103,19 @@ function setupSectionSelection() {
   });
 }
 
-function setupImagePreview() {
-  const imageInputs = [
-    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
-    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
-    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
-  ];
-  
-  imageInputs.forEach(({ input, preview }) => {
-    const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
-          if (!file.type.match('image.*')) return;
-          const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-    }
-  });
-}
-
-// Setup file upload buttons with "Pilih" and "Kosongkan" functionality
 function setupFileUploadButtons() {
+    // Helper function to append files
+    function appendFilesToInput(inputElement, newFiles) {
+        const dataTransfer = new DataTransfer();
+        // Add existing files
+        const existingFiles = Array.from(inputElement.files);
+        existingFiles.forEach(file => dataTransfer.items.add(file));
+        // Add new files
+        Array.from(newFiles).forEach(file => dataTransfer.items.add(file));
+        inputElement.files = dataTransfer.files;
+        return inputElement.files;
+    }
+
     // Buletin Daerah images
     const buletinBtn = document.getElementById('add-buletin-daerah-btn');
     const buletinInput = document.getElementById('buletin-daerah-images');
@@ -1144,7 +1126,8 @@ function setupFileUploadButtons() {
         buletinBtn.addEventListener('click', () => buletinInput.click());
         buletinInput.addEventListener('change', (e) => {
             if (buletinClear) buletinClear.classList.remove('hidden');
-            updateImagePreview(e.target.files, buletinPreview);
+            appendFilesToInput(buletinInput, e.target.files);
+            updateImagePreview(buletinInput.files, buletinPreview);
         });
         if (buletinClear) {
             buletinClear.addEventListener('click', () => {
@@ -1165,7 +1148,8 @@ function setupFileUploadButtons() {
         ip2m1Btn.addEventListener('click', () => ip2m1Input.click());
         ip2m1Input.addEventListener('change', (e) => {
             if (ip2m1Clear) ip2m1Clear.classList.remove('hidden');
-            updateImagePreview(e.target.files, ip2m1Preview);
+            appendFilesToInput(ip2m1Input, e.target.files);
+            updateImagePreview(ip2m1Input.files, ip2m1Preview);
         });
         if (ip2m1Clear) {
             ip2m1Clear.addEventListener('click', () => {
@@ -1186,7 +1170,8 @@ function setupFileUploadButtons() {
         ip3m2Btn.addEventListener('click', () => ip3m2Input.click());
         ip3m2Input.addEventListener('change', (e) => {
             if (ip3m2Clear) ip3m2Clear.classList.remove('hidden');
-            updateImagePreview(e.target.files, ip3m2Preview);
+            appendFilesToInput(ip3m2Input, e.target.files);
+            updateImagePreview(ip3m2Input.files, ip3m2Preview);
         });
         if (ip3m2Clear) {
             ip3m2Clear.addEventListener('click', () => {
@@ -1197,7 +1182,7 @@ function setupFileUploadButtons() {
         }
     }
     
-    // PDF upload buttons
+    // PDF upload buttons (same append logic)
     const pdfBtn = document.getElementById('add-pdf-btn');
     const pdfInput = document.getElementById('supporting-docs-pdf');
     const pdfClear = document.getElementById('clear-pdf-btn');
@@ -1207,7 +1192,8 @@ function setupFileUploadButtons() {
         pdfBtn.addEventListener('click', () => pdfInput.click());
         pdfInput.addEventListener('change', (e) => {
             if (pdfClear) pdfClear.classList.remove('hidden');
-            updatePdfPreview(e.target.files, pdfPreview);
+            appendFilesToInput(pdfInput, e.target.files);
+            updatePdfPreview(pdfInput.files, pdfPreview);
         });
         if (pdfClear) {
             pdfClear.addEventListener('click', () => {
@@ -1218,29 +1204,27 @@ function setupFileUploadButtons() {
         }
     }
 }
-function setupMediaCheckboxes() {
-    const checkboxes = [
-        { cb: 'media-cetak-checkbox', input: 'media-cetak-example' },
-        { cb: 'media-elektronik-checkbox', input: 'media-elektronik-example' },
-        { cb: 'media-digital-checkbox', input: 'media-digital-example' }
-    ];
-    checkboxes.forEach(({ cb, input }) => {
-        const checkbox = document.getElementById(cb);
-        const inputField = document.getElementById(input);
-        if (checkbox && inputField) {
-            checkbox.addEventListener('change', () => {
-                inputField.disabled = !checkbox.checked;
-                if (!checkbox.checked) inputField.value = '';
-                updateIP2M1();
-            });
-            inputField.addEventListener('input', () => updateIP2M1());
-        }
+
+// Update this function to show ALL images
+function updateImagePreview(files, previewEl) {
+    previewEl.innerHTML = '';
+    Array.from(files).slice(0, 12).forEach(file => {
+        if (!file.type.match('image.*')) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
+            previewEl.appendChild(img);
+        };
+        reader.readAsDataURL(file);
     });
 }
 
+// Update this function to show ALL PDFs
 function updatePdfPreview(files, previewEl) {
     previewEl.innerHTML = '';
-    Array.from(files).slice(0, 6).forEach(file => {
+    Array.from(files).slice(0, 10).forEach(file => {
         const div = document.createElement('div');
         div.className = 'bg-white rounded-lg border border-slate-200 p-2 text-center';
         div.innerHTML = `
@@ -1252,7 +1236,6 @@ function updatePdfPreview(files, previewEl) {
         previewEl.appendChild(div);
     });
 }
-
 function setupPrint() {
   const printBtn = document.getElementById('print-btn');
   const printModal = document.getElementById('print-modal');
@@ -1978,34 +1961,6 @@ function updateTotals() {
         sections[sectionId].classList.remove('hidden');
       }
     });
-  });
-
-  // Setup image preview
-  const imageInputs = [
-    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
-    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
-    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
-  ];
-  
-  imageInputs.forEach(({ input, preview }) => {
-    const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
-          if (!file.type.match('image.*')) return;
-          const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-    }
   });
 
   // Form submission
