@@ -1099,11 +1099,16 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
   const previewContainer = document.getElementById(previewId);
   const addButton = document.getElementById(buttonId);
   
+  // Debug: Check if elements exist
+  if (!fileInput) console.error('File input not found:', inputId);
+  if (!addButton) console.error('Button not found:', buttonId);
+  
   // Store accumulated files
   let accumulatedFiles = [];
   
   // Function to update preview display
   function updatePreview() {
+    if (!previewContainer) return;
     previewContainer.innerHTML = '';
     accumulatedFiles.forEach((file, index) => {
       if (!file.type.match('image.*')) return;
@@ -1113,14 +1118,14 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
         imgDiv.className = 'relative group';
         imgDiv.innerHTML = `
           <img src="${ev.target.result}" class="w-full h-24 object-cover rounded-lg border border-slate-200">
-          <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" data-index="${index}">×</button>
+          <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:opacity-100" data-index="${index}">×</button>
         `;
         const removeBtn = imgDiv.querySelector('button');
         removeBtn.addEventListener('click', (e) => {
           e.stopPropagation();
+          e.preventDefault();
           accumulatedFiles.splice(index, 1);
           updatePreview();
-          // Update the actual file input's files property
           updateFileInput();
         });
         previewContainer.appendChild(imgDiv);
@@ -1134,7 +1139,38 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
     const dataTransfer = new DataTransfer();
     accumulatedFiles.forEach(file => dataTransfer.items.add(file));
     fileInput.files = dataTransfer.files;
+    // Trigger change event so form submission captures all files
+    const changeEvent = new Event('change', { bubbles: true });
+    fileInput.dispatchEvent(changeEvent);
   }
+  
+  // Handle add button click - THIS IS THE KEY FIX
+  if (addButton) {
+    addButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      // Clear the input value so same file can be selected again
+      fileInput.value = '';
+      // Trigger file selection
+      fileInput.click();
+    });
+  }
+  
+  // Handle file selection
+  fileInput.addEventListener('change', (e) => {
+    e.preventDefault();
+    const newFiles = Array.from(e.target.files);
+    newFiles.forEach(file => {
+      if (file.type.match('image.*')) {
+        accumulatedFiles.push(file);
+      }
+    });
+    updatePreview();
+    updateFileInput();
+    // Clear the input value so same file can be selected again
+    fileInput.value = '';
+  });
+}
   
   // Handle add button click
   addButton.addEventListener('click', () => {
@@ -1154,7 +1190,6 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
     // Clear the input value so same file can be selected again
     fileInput.value = '';
   });
-}
 
 function setupImagePreview() {
   // Setup progressive image upload for all three sections
