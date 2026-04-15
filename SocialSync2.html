@@ -552,10 +552,13 @@ body {
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
                   <label for="ip2m1-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                  <input type="file" id="ip2m1-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
-                  <div id="ip2m1-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                <div class="flex gap-2 items-start">
+                  <input type="file" id="ip2m1-images" class="flex-1 px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg">
+                  <button type="button" id="add-ip2m1-btn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all">📷 Tambah Gambar</button>
+                  <button type="button" id="clear-ip2m1-btn" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-all hidden">Kosongkan</button>
                 </div>
-                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
+                <div id="ip2m1-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                <p class="text-xs text-slate-500 mt-1">Klik "Tambah Gambar" untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
               </div>
             </div>
           </div>
@@ -652,10 +655,13 @@ body {
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
                   <label for="ip3m2-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                  <input type="file" id="ip3m2-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
-                  <div id="ip3m2-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                <div class="flex gap-2 items-start">
+                  <input type="file" id="ip3m2-images" class="flex-1 px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg">
+                  <button type="button" id="add-ip3m2-btn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all">📷 Tambah Gambar</button>
+                  <button type="button" id="clear-ip3m2-btn" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-all hidden">Kosongkan</button>
                 </div>
-                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
+                <div id="ip3m2-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                <p class="text-xs text-slate-500 mt-1">Klik "Tambah Gambar" untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
               </div>
             </div>
           </div>
@@ -1099,16 +1105,11 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
   const previewContainer = document.getElementById(previewId);
   const addButton = document.getElementById(buttonId);
   
-  // Debug: Check if elements exist
-  if (!fileInput) console.error('File input not found:', inputId);
-  if (!addButton) console.error('Button not found:', buttonId);
-  
   // Store accumulated files
   let accumulatedFiles = [];
   
   // Function to update preview display
   function updatePreview() {
-    if (!previewContainer) return;
     previewContainer.innerHTML = '';
     accumulatedFiles.forEach((file, index) => {
       if (!file.type.match('image.*')) return;
@@ -1118,14 +1119,14 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
         imgDiv.className = 'relative group';
         imgDiv.innerHTML = `
           <img src="${ev.target.result}" class="w-full h-24 object-cover rounded-lg border border-slate-200">
-          <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:opacity-100" data-index="${index}">×</button>
+          <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" data-index="${index}">×</button>
         `;
         const removeBtn = imgDiv.querySelector('button');
         removeBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          e.preventDefault();
           accumulatedFiles.splice(index, 1);
           updatePreview();
+          // Update the actual file input's files property
           updateFileInput();
         });
         previewContainer.appendChild(imgDiv);
@@ -1139,38 +1140,7 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
     const dataTransfer = new DataTransfer();
     accumulatedFiles.forEach(file => dataTransfer.items.add(file));
     fileInput.files = dataTransfer.files;
-    // Trigger change event so form submission captures all files
-    const changeEvent = new Event('change', { bubbles: true });
-    fileInput.dispatchEvent(changeEvent);
   }
-  
-  // Handle add button click - THIS IS THE KEY FIX
-  if (addButton) {
-    addButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      // Clear the input value so same file can be selected again
-      fileInput.value = '';
-      // Trigger file selection
-      fileInput.click();
-    });
-  }
-  
-  // Handle file selection
-  fileInput.addEventListener('change', (e) => {
-    e.preventDefault();
-    const newFiles = Array.from(e.target.files);
-    newFiles.forEach(file => {
-      if (file.type.match('image.*')) {
-        accumulatedFiles.push(file);
-      }
-    });
-    updatePreview();
-    updateFileInput();
-    // Clear the input value so same file can be selected again
-    fileInput.value = '';
-  });
-}
   
   // Handle add button click
   addButton.addEventListener('click', () => {
@@ -1190,6 +1160,7 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
     // Clear the input value so same file can be selected again
     fileInput.value = '';
   });
+}
 
 function setupImagePreview() {
   // Setup progressive image upload for all three sections
