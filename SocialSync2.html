@@ -1238,21 +1238,6 @@ function setupMediaCheckboxes() {
     });
 }
 
-function updateImagePreview(files, previewEl) {
-    previewEl.innerHTML = '';
-    Array.from(files).slice(0, 8).forEach(file => {
-        if (!file.type.match('image.*')) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
 function updatePdfPreview(files, previewEl) {
     previewEl.innerHTML = '';
     Array.from(files).slice(0, 6).forEach(file => {
@@ -2041,7 +2026,6 @@ function updateTotals() {
   }
 
   // Initialize calculations
-  setupImagePreview();
   setupMediaCheckboxes();    
   setupFileUploadButtons();
   updateIP2M1();
