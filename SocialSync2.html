@@ -1103,6 +1103,26 @@ function setupSectionSelection() {
   });
 }
 
+function setupMediaCheckboxes() {
+    const checkboxes = [
+        { cb: 'media-cetak-checkbox', input: 'media-cetak-example' },
+        { cb: 'media-elektronik-checkbox', input: 'media-elektronik-example' },
+        { cb: 'media-digital-checkbox', input: 'media-digital-example' }
+    ];
+    checkboxes.forEach(({ cb, input }) => {
+        const checkbox = document.getElementById(cb);
+        const inputField = document.getElementById(input);
+        if (checkbox && inputField) {
+            checkbox.addEventListener('change', () => {
+                inputField.disabled = !checkbox.checked;
+                if (!checkbox.checked) inputField.value = '';
+                updateIP2M1();
+            });
+            inputField.addEventListener('input', () => updateIP2M1());
+        }
+    });
+}
+
 function setupFileUploadButtons() {
     // Helper function to append files
     function appendFilesToInput(inputElement, newFiles) {
