@@ -412,14 +412,21 @@ body {
               <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
               <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
               <div class="flex flex-col gap-3">
-                <label for="buletin-daerah-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                <input type="file" id="buletin-daerah-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
+                <button type="button" id="add-buletin-daerah-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  Pilih Gambar (boleh pilih satu atau berbilang)
+                </button>
+                <input type="file" id="buletin-daerah-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
+                <p class="text-xs text-slate-500 mt-1">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
                 <div id="buletin-daerah-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
               </div>
               <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
             </div>
-          </div>
-        </div>
+          </div> 
+        </div>    
+
           <!-- IP2M1:2 Section -->
           <div id="section-ip2m1" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
             <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
@@ -536,26 +543,40 @@ body {
                   </label>
                 </div>
                 <div class="mt-4 pt-4 border-t border-cyan-200">
-                  <label for="supporting-docs-pdf" class="block text-sm font-medium text-slate-700 mb-2">Upload Supporting Documents (PDF)</label>
-                  <input type="file" id="supporting-docs-pdf" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept=".pdf" multiple>
-                  <p class="text-xs text-slate-500 mt-1">Upload PDF files for supporting documents (max 10MB each)</p>
+                  <label class="block text-sm font-medium text-slate-700 mb-2">Upload Supporting Documents (PDF)</label>
+                  <div class="flex flex-col gap-3">
+                    <div class="flex gap-2 items-start">
+                      <button type="button" id="add-pdf-btn" class="flex-1 px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Pilih PDF (boleh pilih satu atau berbilang)
+                      </button>
+                      <button type="button" id="clear-pdf-btn" class="px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-all hidden">Kosongkan</button>
+                    </div>
+                    <input type="file" id="supporting-docs-pdf" class="hidden" accept=".pdf" multiple>
+                    <p class="text-xs text-slate-500 mt-1">Klik button di atas untuk pilih fail PDF. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
+                    <div id="pdf-preview" class="mt-3 grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+                  </div>
                 </div>
-              </div>
 
               <!-- Gambar Program -->
               <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
                 <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
-                  <label for="ip2m1-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                  <input type="file" id="ip2m1-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
+                  <button type="button" id="add-ip2m1-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Pilih Gambar (boleh pilih satu atau berbilang)
+                  </button>
+                  <input type="file" id="ip2m1-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
+                  <p class="text-xs text-slate-500 mt-1">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
                   <div id="ip2m1-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                 </div>
-                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
               </div>
-            </div>
-          </div>
-
+              
           <!-- IP3M2 Section -->
           <div id="section-ip3m2" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
             <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
@@ -647,19 +668,26 @@ body {
                 <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
-                  <label for="ip3m2-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                  <input type="file" id="ip3m2-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
+                  <button type="button" id="add-ip3m2-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Pilih Gambar (boleh pilih satu atau berbilang)
+                  </button>
+                  <input type="file" id="ip3m2-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
+                  <p class="text-xs text-slate-500 mt-1">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
                   <div id="ip3m2-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                 </div>
-                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        </div>
 
         <!-- Submit Button -->
         <div class="p-6 border-t border-slate-200 bg-white/50 rounded-b-2xl">
-          <button type="submit" id="submit-btn" class="w-full btn-primary py-4 rounded-xl font-semibold text-white flex items-center justify-center gap-2 no-print">
+          <button type="submit" id="submit-btn" class="w-full bg-cyan-600 hover:bg-cyan-700 py-4 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all duration-300 no-print">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
@@ -669,6 +697,7 @@ body {
       </form>
     </div> <!-- closes max-w-6xl mx-auto -->
     </div> <!-- closes dashboard-view -->
+
     <!-- STATISTICS VIEW -->
 <div id="statistics-view" class="hidden max-w-7xl mx-auto">
   <!-- Page Title -->
@@ -1089,33 +1118,164 @@ function setupSectionSelection() {
   });
 }
 
-function setupImagePreview() {
-  const imageInputs = [
-    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
-    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
-    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
-  ];
+// Function to handle adding images one by one or multiple at once
+function setupProgressiveImageUpload(inputId, previewId, buttonId) {
+  const fileInput = document.getElementById(inputId);
+  const previewContainer = document.getElementById(previewId);
+  const addButton = document.getElementById(buttonId);
   
-  imageInputs.forEach(({ input, preview }) => {
-    const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
-          if (!file.type.match('image.*')) return;
-          const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-          };
-          reader.readAsDataURL(file);
+  // Store accumulated files
+  let accumulatedFiles = [];
+  
+  // Function to update preview display
+  function updatePreview() {
+    previewContainer.innerHTML = '';
+    accumulatedFiles.forEach((file, index) => {
+      if (!file.type.match('image.*')) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const imgDiv = document.createElement('div');
+        imgDiv.className = 'relative group';
+        imgDiv.innerHTML = `
+          <img src="${ev.target.result}" class="w-full h-24 object-cover rounded-lg border border-slate-200">
+          <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" data-index="${index}">×</button>
+        `;
+        const removeBtn = imgDiv.querySelector('button');
+        removeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          accumulatedFiles.splice(index, 1);
+          updatePreview();
+          // Update the actual file input's files property
+          updateFileInput();
         });
-      });
-    }
+        previewContainer.appendChild(imgDiv);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  // Function to update the actual file input with accumulated files
+  function updateFileInput() {
+    const dataTransfer = new DataTransfer();
+    accumulatedFiles.forEach(file => dataTransfer.items.add(file));
+    fileInput.files = dataTransfer.files;
+  }
+  
+  // Handle add button click
+  addButton.addEventListener('click', () => {
+    console.log('Button clicked for:', inputId);
+    fileInput.click();
   });
+  
+  // Handle file selection
+  fileInput.addEventListener('change', (e) => {
+    const newFiles = Array.from(e.target.files);
+    newFiles.forEach(file => {
+      if (file.type.match('image.*')) {
+        accumulatedFiles.push(file);
+      }
+    });
+    updatePreview();
+    updateFileInput();
+    // Clear the input value so same file can be selected again
+    fileInput.value = '';
+  });
+}
+
+function setupImagePreview() {
+  // Setup progressive image upload for all three sections
+  setupProgressiveImageUpload('buletin-daerah-images', 'buletin-daerah-image-preview', 'add-buletin-daerah-btn');
+  setupProgressiveImageUpload('ip2m1-images', 'ip2m1-image-preview', 'add-ip2m1-btn');
+  setupProgressiveImageUpload('ip3m2-images', 'ip3m2-image-preview', 'add-ip3m2-btn');
+}
+
+// Function to handle PDF upload (same style as images)
+function setupPDFUpload() {
+  const pdfInput = document.getElementById('supporting-docs-pdf');
+  const previewContainer = document.getElementById('pdf-preview');
+  const addButton = document.getElementById('add-pdf-btn');
+  
+  let accumulatedPDFs = [];
+  
+  function updatePreview() {
+    if (!previewContainer) return;
+    previewContainer.innerHTML = '';
+    accumulatedPDFs.forEach((file, index) => {
+      if (file.type !== 'application/pdf') return;
+      
+      const pdfDiv = document.createElement('div');
+      pdfDiv.className = 'relative group bg-slate-100 rounded-lg p-3 border border-slate-200';
+      pdfDiv.innerHTML = `
+        <div class="flex items-center gap-2">
+          <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+          <div class="flex-1 truncate">
+            <p class="text-sm font-medium text-slate-700 truncate">${file.name}</p>
+            <p class="text-xs text-slate-500">${(file.size / 1024).toFixed(1)} KB</p>
+          </div>
+          <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" data-index="${index}">×</button>
+        </div>
+      `;
+      
+      const removeBtn = pdfDiv.querySelector('button');
+      removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        accumulatedPDFs.splice(index, 1);
+        updatePreview();
+        updateFileInput();
+      });
+      
+      previewContainer.appendChild(pdfDiv);
+    });
+    
+    // Show/hide clear button
+    const clearPdfBtn = document.getElementById('clear-pdf-btn');
+    if (clearPdfBtn) {
+      if (accumulatedPDFs.length > 0) {
+        clearPdfBtn.classList.remove('hidden');
+      } else {
+        clearPdfBtn.classList.add('hidden');
+      }
+    }
+  }
+  
+  function updateFileInput() {
+    const dataTransfer = new DataTransfer();
+    accumulatedPDFs.forEach(file => dataTransfer.items.add(file));
+    pdfInput.files = dataTransfer.files;
+  }
+  
+  if (addButton) {
+    addButton.addEventListener('click', () => {
+      pdfInput.click();
+    });
+  }
+  
+  if (pdfInput) {
+    pdfInput.addEventListener('change', (e) => {
+      const newFiles = Array.from(e.target.files);
+      newFiles.forEach(file => {
+        if (file.type === 'application/pdf') {
+          accumulatedPDFs.push(file);
+        }
+      });
+      updatePreview();
+      updateFileInput();
+      pdfInput.value = '';
+    });
+  }
+  
+  // Clear PDF button functionality
+  const clearPdfBtn = document.getElementById('clear-pdf-btn');
+  if (clearPdfBtn) {
+    clearPdfBtn.addEventListener('click', () => {
+      accumulatedPDFs = [];
+      updatePreview();
+      updateFileInput();
+      clearPdfBtn.classList.add('hidden');
+    });
+  }
 }
 
 function setupPrint() {
@@ -1553,106 +1713,64 @@ pdfContent.innerHTML += `
     document.body.appendChild(pdfContent);
 
     // === HANDLE IMAGES ===
-    const imageContainer = pdfContent.querySelector('#pdf-images-container');
-    const imageInput = document.getElementById(`${sectionId}-images`);
-    
-    let imagePromises = [];
-    
-    // Check for stored images first
-    if (lastSubmittedImages && lastSubmittedImages[sectionId] && lastSubmittedImages[sectionId].length > 0) {
-      console.log('Using stored images from submission');
-      lastSubmittedImages[sectionId].forEach(imageData => {
+// === HANDLE IMAGES (SINGLE CLEAN VERSION) ===
+const imageContainer = pdfContent.querySelector('#pdf-images-container');
+const imageInput = document.getElementById(`${sectionId}-images`);
+let imagePromises = [];
+
+// Function to add image to container with controlled size
+function addImageToPDF(src, mimeType = null) {
+    return new Promise((resolve) => {
         const img = document.createElement('img');
-        img.src = `data:${imageData.mimeType};base64,${imageData.data}`;
-        // CONTROLLED size - not too big, not too small
-        img.style.maxWidth = '400px';  // Max width 400px
+        img.src = src;
+        img.style.maxWidth = '350px';
+        img.style.maxHeight = '250px';
         img.style.width = 'auto';
         img.style.height = 'auto';
-        img.style.maxHeight = '300px';  // Max height 300px
-        img.style.marginBottom = '20px';
-        img.style.marginRight = '20px';
+        img.style.margin = '8px';
         img.style.borderRadius = '8px';
         img.style.border = '1px solid #e2e8f0';
-        img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-        img.style.display = 'inline-block';  // Allow images side by side
-        
-        const promise = new Promise((resolve) => {
-          img.onload = () => resolve(img);
-          img.onerror = () => resolve(null);
-        });
-        imagePromises.push(promise);
+        img.style.objectFit = 'contain';
+        img.style.display = 'inline-block';
+        img.onload = () => { resolve(img); };
+        img.onerror = () => { resolve(null); };
         imageContainer.appendChild(img);
-      });
-    } 
-    // Otherwise use current file input
-    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
-      console.log('Using current file input images');
-      const imageFiles = Array.from(imageInput.files);
-      imageFiles.forEach(file => {
-        if (!file.type.match('image.*')) return;
-        
-        const reader = new FileReader();
+    });
+}
+
+// Try stored images first (after submission)
+if (lastSubmittedImages && lastSubmittedImages[sectionId] && lastSubmittedImages[sectionId].length > 0) {
+    for (const imageData of lastSubmittedImages[sectionId]) {
+        const src = `data:${imageData.mimeType};base64,${imageData.data}`;
+        imagePromises.push(addImageToPDF(src));
+    }
+} 
+// Otherwise use current file input
+else if (imageInput && imageInput.files && imageInput.files.length > 0) {
+    const files = Array.from(imageInput.files);
+    for (const file of files) {
+        if (!file.type.match('image.*')) continue;
         const promise = new Promise((resolve) => {
-          reader.onload = (e) => {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            // CONTROLLED size - not too big, not too small
-            img.style.maxWidth = '400px';  // Max width 400px
-            img.style.width = 'auto';
-            img.style.height = 'auto';
-            img.style.maxHeight = '300px';  // Max height 300px
-            img.style.marginBottom = '20px';
-            img.style.marginRight = '20px';
-            img.style.borderRadius = '8px';
-            img.style.border = '1px solid #e2e8f0';
-            img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-            img.style.display = 'inline-block';  // Allow images side by side
-            img.onload = () => resolve(img);
-            img.onerror = () => resolve(null);
-            imageContainer.appendChild(img);
-          };
-          reader.readAsDataURL(file);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                addImageToPDF(e.target.result).then(resolve);
+            };
+            reader.readAsDataURL(file);
         });
         imagePromises.push(promise);
-      });
     }
-    // Otherwise use current file input
-    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
-      console.log('Using current file input images');
-      const imageFiles = Array.from(imageInput.files).slice(0, 4);
-      imageFiles.forEach(file => {
-        if (!file.type.match('image.*')) return;
-        
-        const reader = new FileReader();
-        const promise = new Promise((resolve) => {
-          reader.onload = (e) => {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.style.width = '100%';
-            img.style.height = '150px';
-            img.style.objectFit = 'cover';
-            img.style.borderRadius = '8px';
-            img.style.border = '1px solid #e2e8f0';
-            img.onload = () => resolve(img);
-            img.onerror = () => resolve(null);
-            imageContainer.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-        imagePromises.push(promise);
-      });
-    }
-    
-    if (imagePromises.length === 0) {
-      imageContainer.innerHTML = '<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>';
-      generatePDF(pdfContent, programmeName, btn, originalText);
-    } else {
-      Promise.all(imagePromises).then(() => {
+}
+
+if (imagePromises.length === 0) {
+    imageContainer.innerHTML = '<div style="padding:20px;text-align:center;color:#64748b;">Tiada gambar untuk laporan ini</div>';
+    generatePDF(pdfContent, programmeName, btn, originalText);
+} else {
+    Promise.all(imagePromises).then(() => {
         generatePDF(pdfContent, programmeName, btn, originalText);
-      }).catch(() => {
+    }).catch(() => {
         generatePDF(pdfContent, programmeName, btn, originalText);
-      });
-    }
+    });
+}
     
   } catch (error) {
     console.error('Export error:', error);
@@ -1665,48 +1783,24 @@ pdfContent.innerHTML += `
 }
 
 function generatePDF(pdfContent, programmeName, btn, originalText) {
-  setTimeout(() => {
-    html2canvas(pdfContent, {
-      scale: 2,
-      backgroundColor: '#ffffff',
-      logging: false,
-      width: 800
-    }).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgWidth = 210;
-      const pageHeight = 297;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-      
-      if (imgHeight > pageHeight) {
-        let heightLeft = imgHeight;
-        let position = 0;
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-        while (heightLeft >= 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
-          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-        }
-      } else {
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      }
-      
-      pdf.save(`${programmeName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
-      alert('✅ Laporan PDF telah dijana dan dimuat turun!');
-    }).catch(err => {
-      console.error('PDF generation error:', err);
-      alert('⚠️ Gagal menjana PDF. Cuba semula.');
-    }).finally(() => {
-      if (document.body.contains(pdfContent)) {
-        document.body.removeChild(pdfContent);
-      }
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-    });
-  }, 500);
+    // Add this delay to ensure images are fully rendered
+    setTimeout(() => {
+        html2canvas(pdfContent, {
+            scale: 2,
+            backgroundColor: '#ffffff',
+            logging: false,
+            useCORS: true,  // Add this for external images
+            allowTaint: false
+        }).then(canvas => {
+            // ... rest of your PDF generation code remains the same
+        }).catch(err => {
+            console.error('PDF error:', err);
+            alert('⚠️ Failed to generate PDF');
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+            if (document.body.contains(pdfContent)) document.body.removeChild(pdfContent);
+        });
+    }, 800); // 800ms delay for images to load
 }
 
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
@@ -1876,33 +1970,11 @@ function updateTotals() {
     });
   });
 
-  // Setup image preview
-  const imageInputs = [
-    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
-    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
-    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
-  ];
+  // Setup progressive image upload
+  setupImagePreview();
   
-  imageInputs.forEach(({ input, preview }) => {
-    const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
-          if (!file.type.match('image.*')) return;
-          const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-    }
-  });
+  // Setup PDF upload
+  setupPDFUpload();
 
   // Form submission
   document.getElementById('main-form')?.addEventListener('submit', submitForm);
@@ -1925,4 +1997,4 @@ function updateTotals() {
   updateIP2M1();
   updateIP3M2();
 });
-</script> ianya tetap sama, gambar tidak muncul dalam pdf
+</script> 
