@@ -422,6 +422,7 @@ body {
                   </button>
                   <input type="file" id="buletin-daerah-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
                   <p class="text-xs text-slate-500 mt-2">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
+                  <div id="buletin-daerah-image-preview" class="flex flex-wrap gap-3 mt-4 min-h-[60px]"></div>
                 </div>
               </div>
             </div>
@@ -565,6 +566,7 @@ body {
                     </button>
                     <input type="file" id="ip2m1-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
                     <p class="text-xs text-slate-500 mt-2">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
+                    <div id="ip2m1-image-preview" class="flex flex-wrap gap-3 mt-4 min-h-[60px]"></div>
                   </div>
                 </div>
               </div>
@@ -672,6 +674,7 @@ body {
                     </button>
                     <input type="file" id="ip3m2-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
                     <p class="text-xs text-slate-500 mt-2">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
+                    <div id="ip3m2-image-preview" class="flex flex-wrap gap-3 mt-4 min-h-[60px]"></div>
                   </div>
                 </div>
               </div>
@@ -1117,30 +1120,52 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
   const previewContainer = document.getElementById(previewId);
   const addButton = document.getElementById(buttonId);
   
-  // Store accumulated files
+  if (!fileInput || !previewContainer || !addButton) {
+    console.warn(`Missing elements for ${inputId}`);
+    return;
+  }
+  
+  // Store accumulated files in closure
   let accumulatedFiles = [];
+  
+  // Helper: Check if file already exists (by name + size + lastModified)
+  function isFileDuplicate(file, fileList) {
+    return fileList.some(f => 
+      f.name === file.name && 
+      f.size === file.size && 
+      f.lastModified === file.lastModified
+    );
+  }
   
   // Function to update preview display
   function updatePreview() {
     previewContainer.innerHTML = '';
+    
+    if (accumulatedFiles.length === 0) {
+      previewContainer.innerHTML = '<p class="text-sm text-slate-400 italic">Tiada gambar dipilih</p>';
+      return;
+    }
+    
     accumulatedFiles.forEach((file, index) => {
       if (!file.type.match('image.*')) return;
+      
       const reader = new FileReader();
       reader.onload = (ev) => {
         const imgDiv = document.createElement('div');
         imgDiv.className = 'relative group';
         imgDiv.innerHTML = `
-          <img src="${ev.target.result}" class="w-full h-24 object-cover rounded-lg border border-slate-200">
-          <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" data-index="${index}">×</button>
+          <img src="${ev.target.result}" class="w-24 h-24 object-cover rounded-lg border border-slate-200 shadow-sm">
+          <button type="button" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 text-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600" data-index="${index}">×</button>
         `;
+        
         const removeBtn = imgDiv.querySelector('button');
         removeBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           accumulatedFiles.splice(index, 1);
           updatePreview();
-          // Update the actual file input's files property
           updateFileInput();
         });
+        
         previewContainer.appendChild(imgDiv);
       };
       reader.readAsDataURL(file);
@@ -1156,23 +1181,28 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
   
   // Handle add button click
   addButton.addEventListener('click', () => {
-    console.log('Button clicked for:', inputId);
     fileInput.click();
   });
-    
-  // Handle file selection
+  
+  // Handle file selection - KEY FIX: Accumulate instead of replace
   fileInput.addEventListener('change', (e) => {
-    const newFiles = Array.from(e.target.files);
+    const newFiles = Array.from(e.target.files || []);
+    
     newFiles.forEach(file => {
-      if (file.type.match('image.*')) {
+      if (file.type.match('image.*') && !isFileDuplicate(file, accumulatedFiles)) {
         accumulatedFiles.push(file);
       }
     });
+    
     updatePreview();
     updateFileInput();
-    // Clear the input value so same file can be selected again
+    
+    // Clear input value to allow re-selecting same file if needed
     fileInput.value = '';
   });
+  
+  // Initialize preview on load
+  updatePreview();
 }
 
 function setupImagePreview() {
