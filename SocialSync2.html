@@ -1616,6 +1616,32 @@ pdfContent.innerHTML += `
         imagePromises.push(promise);
       });
     }
+    // Otherwise use current file input
+    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
+      console.log('Using current file input images');
+      const imageFiles = Array.from(imageInput.files).slice(0, 4);
+      imageFiles.forEach(file => {
+        if (!file.type.match('image.*')) return;
+        
+        const reader = new FileReader();
+        const promise = new Promise((resolve) => {
+          reader.onload = (e) => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.width = '100%';
+            img.style.height = '150px';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '8px';
+            img.style.border = '1px solid #e2e8f0';
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            imageContainer.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+        imagePromises.push(promise);
+      });
+    }
     
     if (imagePromises.length === 0) {
       imageContainer.innerHTML = '<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>';
@@ -1644,9 +1670,7 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       scale: 2,
       backgroundColor: '#ffffff',
       logging: false,
-      width: 800,
-      useCORS: true,
-      allowTaint: false
+      width: 800
     }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
       const { jsPDF } = window.jspdf;
@@ -1682,8 +1706,9 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       btn.disabled = false;
       btn.innerHTML = originalText;
     });
-  }, 1000);
+  }, 500);
 }
+
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1900,4 +1925,4 @@ function updateTotals() {
   updateIP2M1();
   updateIP3M2();
 });
-</script> this?
+</script> ianya tetap sama, gambar tidak muncul dalam pdf
