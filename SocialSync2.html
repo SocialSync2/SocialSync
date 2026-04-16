@@ -412,20 +412,22 @@ body {
               <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
               <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
               <div class="flex flex-col gap-3">
-                <button type="button" id="add-buletin-daerah-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  Pilih Gambar (boleh pilih satu atau berbilang)
-                </button>
-                <input type="file" id="buletin-daerah-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
-                <p class="text-xs text-slate-500 mt-1">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
-                <div id="buletin-daerah-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                <label for="buletin-daerah-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
+                <div>
+                  <button type="button" id="add-buletin-daerah-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Pilih Gambar (boleh pilih satu atau berbilang)
+                  </button>
+                  <input type="file" id="buletin-daerah-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
+                  <p class="text-xs text-slate-500 mt-2">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
+                  <div id="buletin-daerah-image-preview" class="flex flex-wrap gap-3 mt-4 min-h-[60px]"></div>
+                </div>
               </div>
-              <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
             </div>
-          </div> 
-        </div>    
+          </div>
+        </div>
 
           <!-- IP2M1:2 Section -->
           <div id="section-ip2m1" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
@@ -543,40 +545,34 @@ body {
                   </label>
                 </div>
                 <div class="mt-4 pt-4 border-t border-cyan-200">
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Upload Supporting Documents (PDF)</label>
-                  <div class="flex flex-col gap-3">
-                    <div class="flex gap-2 items-start">
-                      <button type="button" id="add-pdf-btn" class="flex-1 px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Pilih PDF (boleh pilih satu atau berbilang)
-                      </button>
-                      <button type="button" id="clear-pdf-btn" class="px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-all hidden">Kosongkan</button>
-                    </div>
-                    <input type="file" id="supporting-docs-pdf" class="hidden" accept=".pdf" multiple>
-                    <p class="text-xs text-slate-500 mt-1">Klik button di atas untuk pilih fail PDF. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
-                    <div id="pdf-preview" class="mt-3 grid grid-cols-2 md:grid-cols-3 gap-3"></div>
-                  </div>
+                  <label for="supporting-docs-pdf" class="block text-sm font-medium text-slate-700 mb-2">Upload Supporting Documents (PDF)</label>
+                  <input type="file" id="supporting-docs-pdf" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept=".pdf" multiple>
+                  <p class="text-xs text-slate-500 mt-1">Upload PDF files for supporting documents (max 10MB each)</p>
                 </div>
+              </div>
 
               <!-- Gambar Program -->
               <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
                 <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
-                  <button type="button" id="add-ip2m1-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    Pilih Gambar (boleh pilih satu atau berbilang)
-                  </button>
-                  <input type="file" id="ip2m1-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
-                  <p class="text-xs text-slate-500 mt-1">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
-                  <div id="ip2m1-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                  <label for="ip2m1-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
+                  <div>
+                    <button type="button" id="add-ip2m1-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      Pilih Gambar (boleh pilih satu atau berbilang)
+                    </button>
+                    <input type="file" id="ip2m1-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
+                    <p class="text-xs text-slate-500 mt-2">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
+                    <div id="ip2m1-image-preview" class="flex flex-wrap gap-3 mt-4 min-h-[60px]"></div>
+                  </div>
                 </div>
               </div>
-              
+            </div>
+          </div>
+
           <!-- IP3M2 Section -->
           <div id="section-ip3m2" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
             <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
@@ -653,13 +649,13 @@ body {
                     <input type="number" id="ip3-targeted-enterpreneur-involvement" min="0" step="0.01" class="w-full px-4 py-3 rounded-lg input-style text-slate-800" placeholder="Enter amount" value="0">
                   </div>
                   <div>
-                    <label for="ip3-actual-enterprenuer-involvement" class="block text-sm text-slate-700 mb-1">No of Actual Enterpreneur Involvement</label>
+                    <label for="ip3-actual-enterprenuer-involvement" class="block text-sm text-slate-700 mb-1">No of Actual Enterpreneur Involvement </label>
                     <input type="number" id="ip3-actual-enterprenuer-involvement" min="0" step="0.01" class="w-full px-4 py-3 rounded-lg input-style text-slate-800" placeholder="Enter amount" value="0">
                   </div>
                 </div>
                 <div class="mt-4 p-3 bg-white rounded-lg border border-blue-200">
                   <p class="text-sm text-slate-700">ROI: <span id="ip3-roi-percent" class="text-cyan-600 font-semibold">0%</span></p>
-                  <p class="text-xs text-slate-500">((Targeted - Actual) / Actual) × 100%</p>
+                  <p class="text-xs text-slate-500">(No of Targeted Enterpreneur Involvement - No of Actual Enterpreneur Involvement) / No of Actual Enterpreneur Involvement × 100%</p>
                 </div>
               </div>
 
@@ -668,22 +664,28 @@ body {
                 <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
-                  <button type="button" id="add-ip3m2-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    Pilih Gambar (boleh pilih satu atau berbilang)
-                  </button>
-                  <input type="file" id="ip3m2-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
-                  <p class="text-xs text-slate-500 mt-1">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
-                  <div id="ip3m2-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                  <label for="ip3m2-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
+                  <div>
+                    <button type="button" id="add-ip3m2-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      Pilih Gambar (boleh pilih satu atau berbilang)
+                    </button>
+                    <input type="file" id="ip3m2-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
+                    <p class="text-xs text-slate-500 mt-2">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
+                    <div id="ip3m2-image-preview" class="flex flex-wrap gap-3 mt-4 min-h-[60px]"></div>
+                  </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+
         <!-- Submit Button -->
         <div class="p-6 border-t border-slate-200 bg-white/50 rounded-b-2xl">
-          <button type="submit" id="submit-btn" class="w-full bg-cyan-600 hover:bg-cyan-700 py-4 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all duration-300 no-print">
+          <button type="submit" id="submit-btn" class="w-full btn-primary py-4 rounded-xl font-semibold text-white flex items-center justify-center gap-2 no-print">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
@@ -693,7 +695,6 @@ body {
       </form>
     </div> <!-- closes max-w-6xl mx-auto -->
     </div> <!-- closes dashboard-view -->
-
     <!-- STATISTICS VIEW -->
 <div id="statistics-view" class="hidden max-w-7xl mx-auto">
   <!-- Page Title -->
@@ -1120,30 +1121,52 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
   const previewContainer = document.getElementById(previewId);
   const addButton = document.getElementById(buttonId);
   
-  // Store accumulated files
+  if (!fileInput || !previewContainer || !addButton) {
+    console.warn(`Missing elements for ${inputId}`);
+    return;
+  }
+  
+  // Store accumulated files in closure
   let accumulatedFiles = [];
+  
+  // Helper: Check if file already exists (by name + size + lastModified)
+  function isFileDuplicate(file, fileList) {
+    return fileList.some(f => 
+      f.name === file.name && 
+      f.size === file.size && 
+      f.lastModified === file.lastModified
+    );
+  }
   
   // Function to update preview display
   function updatePreview() {
     previewContainer.innerHTML = '';
+    
+    if (accumulatedFiles.length === 0) {
+      previewContainer.innerHTML = '<p class="text-sm text-slate-400 italic">Tiada gambar dipilih</p>';
+      return;
+    }
+    
     accumulatedFiles.forEach((file, index) => {
       if (!file.type.match('image.*')) return;
+      
       const reader = new FileReader();
       reader.onload = (ev) => {
         const imgDiv = document.createElement('div');
         imgDiv.className = 'relative group';
         imgDiv.innerHTML = `
-          <img src="${ev.target.result}" class="w-full h-24 object-cover rounded-lg border border-slate-200">
-          <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" data-index="${index}">×</button>
+          <img src="${ev.target.result}" class="w-24 h-24 object-cover rounded-lg border border-slate-200 shadow-sm">
+          <button type="button" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 text-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600" data-index="${index}">×</button>
         `;
+        
         const removeBtn = imgDiv.querySelector('button');
         removeBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           accumulatedFiles.splice(index, 1);
           updatePreview();
-          // Update the actual file input's files property
           updateFileInput();
         });
+        
         previewContainer.appendChild(imgDiv);
       };
       reader.readAsDataURL(file);
@@ -1159,23 +1182,28 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
   
   // Handle add button click
   addButton.addEventListener('click', () => {
-    console.log('Button clicked for:', inputId);
     fileInput.click();
   });
   
-  // Handle file selection
+  // Handle file selection - KEY FIX: Accumulate instead of replace
   fileInput.addEventListener('change', (e) => {
-    const newFiles = Array.from(e.target.files);
+    const newFiles = Array.from(e.target.files || []);
+    
     newFiles.forEach(file => {
-      if (file.type.match('image.*')) {
+      if (file.type.match('image.*') && !isFileDuplicate(file, accumulatedFiles)) {
         accumulatedFiles.push(file);
       }
     });
+    
     updatePreview();
     updateFileInput();
-    // Clear the input value so same file can be selected again
+    
+    // Clear input value to allow re-selecting same file if needed
     fileInput.value = '';
   });
+  
+  // Initialize preview on load
+  updatePreview();
 }
 
 function setupImagePreview() {
@@ -1183,95 +1211,6 @@ function setupImagePreview() {
   setupProgressiveImageUpload('buletin-daerah-images', 'buletin-daerah-image-preview', 'add-buletin-daerah-btn');
   setupProgressiveImageUpload('ip2m1-images', 'ip2m1-image-preview', 'add-ip2m1-btn');
   setupProgressiveImageUpload('ip3m2-images', 'ip3m2-image-preview', 'add-ip3m2-btn');
-}
-
-// Function to handle PDF upload (same style as images)
-function setupPDFUpload() {
-  const pdfInput = document.getElementById('supporting-docs-pdf');
-  const previewContainer = document.getElementById('pdf-preview');
-  const addButton = document.getElementById('add-pdf-btn');
-  
-  let accumulatedPDFs = [];
-  
-  function updatePreview() {
-    if (!previewContainer) return;
-    previewContainer.innerHTML = '';
-    accumulatedPDFs.forEach((file, index) => {
-      if (file.type !== 'application/pdf') return;
-      
-      const pdfDiv = document.createElement('div');
-      pdfDiv.className = 'relative group bg-slate-100 rounded-lg p-3 border border-slate-200';
-      pdfDiv.innerHTML = `
-        <div class="flex items-center gap-2">
-          <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-          </svg>
-          <div class="flex-1 truncate">
-            <p class="text-sm font-medium text-slate-700 truncate">${file.name}</p>
-            <p class="text-xs text-slate-500">${(file.size / 1024).toFixed(1)} KB</p>
-          </div>
-          <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" data-index="${index}">×</button>
-        </div>
-      `;
-      
-      const removeBtn = pdfDiv.querySelector('button');
-      removeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        accumulatedPDFs.splice(index, 1);
-        updatePreview();
-        updateFileInput();
-      });
-      
-      previewContainer.appendChild(pdfDiv);
-    });
-    
-    // Show/hide clear button
-    const clearPdfBtn = document.getElementById('clear-pdf-btn');
-    if (clearPdfBtn) {
-      if (accumulatedPDFs.length > 0) {
-        clearPdfBtn.classList.remove('hidden');
-      } else {
-        clearPdfBtn.classList.add('hidden');
-      }
-    }
-  }
-  
-  function updateFileInput() {
-    const dataTransfer = new DataTransfer();
-    accumulatedPDFs.forEach(file => dataTransfer.items.add(file));
-    pdfInput.files = dataTransfer.files;
-  }
-  
-  if (addButton) {
-    addButton.addEventListener('click', () => {
-      pdfInput.click();
-    });
-  }
-  
-  if (pdfInput) {
-    pdfInput.addEventListener('change', (e) => {
-      const newFiles = Array.from(e.target.files);
-      newFiles.forEach(file => {
-        if (file.type === 'application/pdf') {
-          accumulatedPDFs.push(file);
-        }
-      });
-      updatePreview();
-      updateFileInput();
-      pdfInput.value = '';
-    });
-  }
-  
-  // Clear PDF button functionality
-  const clearPdfBtn = document.getElementById('clear-pdf-btn');
-  if (clearPdfBtn) {
-    clearPdfBtn.addEventListener('click', () => {
-      accumulatedPDFs = [];
-      updatePreview();
-      updateFileInput();
-      clearPdfBtn.classList.add('hidden');
-    });
-  }
 }
 
 function setupPrint() {
@@ -2034,9 +1973,6 @@ function updateTotals() {
 
   // Setup progressive image upload
   setupImagePreview();
-  
-  // Setup PDF upload
-  setupPDFUpload();
 
   // Form submission
   document.getElementById('main-form')?.addEventListener('submit', submitForm);
