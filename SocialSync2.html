@@ -1647,115 +1647,160 @@ pdfContent.innerHTML += `
     document.body.appendChild(pdfContent);
 
     // === HANDLE IMAGES ===
-// === HANDLE IMAGES ===
-const imageContainer = pdfContent.querySelector('#pdf-images-container');
-const imageInput = document.getElementById(`${sectionId}-images`);
-
-let imagePromises = [];
-
-// Helper function to create image element with proper loading handling
-function createImageElement(src, isBase64 = false) {
-  return new Promise((resolve) => {
-    const img = document.createElement('img');
+    const imageContainer = pdfContent.querySelector('#pdf-images-container');
+    const imageInput = document.getElementById(`${sectionId}-images`);
     
-    // Set styles FIRST
-    img.style.maxWidth = '400px';
-    img.style.width = 'auto';
-    img.style.height = 'auto';
-    img.style.maxHeight = '300px';
-    img.style.marginBottom = '20px';
-    img.style.marginRight = '20px';
-    img.style.borderRadius = '8px';
-    img.style.border = '1px solid #e2e8f0';
-    img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-    img.style.display = 'inline-block';
+    let imagePromises = [];
     
-    // Set onload BEFORE setting src (critical for cached images)
-    img.onload = () => resolve(img);
-    img.onerror = () => {
-      console.warn('Failed to load image:', src.substring(0, 50) + '...');
-      resolve(null);
-    };
+    // Check for stored images first
+    if (lastSubmittedImages && lastSubmittedImages[sectionId] && lastSubmittedImages[sectionId].length > 0) {
+      console.log('Using stored images from submission');
+      lastSubmittedImages[sectionId].forEach(imageData => {
+        const img = document.createElement('img');
+        img.src = `data:${imageData.mimeType};base64,${imageData.data}`;
+        // CONTROLLED size - not too big, not too small
+        img.style.maxWidth = '400px';  // Max width 400px
+        img.style.width = 'auto';
+        img.style.height = 'auto';
+        img.style.maxHeight = '300px';  // Max height 300px
+        img.style.marginBottom = '20px';
+        img.style.marginRight = '20px';
+        img.style.borderRadius = '8px';
+        img.style.border = '1px solid #e2e8f0';
+        img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+        img.style.display = 'inline-block';  // Allow images side by side
+        
+        const promise = new Promise((resolve) => {
+          img.onload = () => resolve(img);
+          img.onerror = () => resolve(null);
+        });
+        imagePromises.push(promise);
+        imageContainer.appendChild(img);
+      });
+    } 
+    // Otherwise use current file input
+    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
+      console.log('Using current file input images');
+      const imageFiles = Array.from(imageInput.files);
+      imageFiles.forEach(file => {
+        if (!file.type.match('image.*')) return;
+        
+        const reader = new FileReader();
+        const promise = new Promise((resolve) => {
+          reader.onload = (e) => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            // CONTROLLED size - not too big, not too small
+            img.style.maxWidth = '400px';  // Max width 400px
+            img.style.width = 'auto';
+            img.style.height = 'auto';
+            img.style.maxHeight = '300px';  // Max height 300px
+            img.style.marginBottom = '20px';
+            img.style.marginRight = '20px';
+            img.style.borderRadius = '8px';
+            img.style.border = '1px solid #e2e8f0';
+            img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            img.style.display = 'inline-block';  // Allow images side by side
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            imageContainer.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+        imagePromises.push(promise);
+      });
+    }
+    // Otherwise use current file input
+    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
+      console.log('Using current file input images');
+      const imageFiles = Array.from(imageInput.files).slice(0, 4);
+      imageFiles.forEach(file => {
+        if (!file.type.match('image.*')) return;
+        
+        const reader = new FileReader();
+        const promise = new Promise((resolve) => {
+          reader.onload = (e) => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.width = '100%';
+            img.style.height = '150px';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '8px';
+            img.style.border = '1px solid #e2e8f0';
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            imageContainer.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+        imagePromises.push(promise);
+      });
+    }
     
-    // Handle base64 vs regular src
-    if (isBase64 && src.startsWith('data:')) {
-      img.src = src;
-    } else if (isBase64) {
-      // FIX: Proper data URL format
-      img.src = `data:image/jpeg;base64,${src}`;
+    if (imagePromises.length === 0) {
+      imageContainer.innerHTML = '<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>';
+      generatePDF(pdfContent, programmeName, btn, originalText);
     } else {
-      img.src = src;
+      Promise.all(imagePromises).then(() => {
+        generatePDF(pdfContent, programmeName, btn, originalText);
+      }).catch(() => {
+        generatePDF(pdfContent, programmeName, btn, originalText);
+      });
     }
     
-    // Handle cached images that load instantly
-    if (img.complete && img.naturalWidth !== 0) {
-      resolve(img);
+  } catch (error) {
+    console.error('Export error:', error);
+    alert('⚠️ Ralat semasa menjana PDF: ' + error.message);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
     }
-    
-    // Append AFTER setting onload (prevents race condition)
-    imageContainer.appendChild(img);
-  });
+  }
 }
 
-// Check for stored images first (after submission)
-if (lastSubmittedImages && lastSubmittedImages[sectionId] && lastSubmittedImages[sectionId].length > 0) {
-  console.log('Using stored images from submission:', lastSubmittedImages[sectionId].length);
-  
-  lastSubmittedImages[sectionId].forEach(imageData => {
-    if (!imageData || !imageData.data) return;
-    
-    // FIX: Proper data URL construction
-    const mimeType = imageData.mimeType || 'image/jpeg';
-    const dataUrl = `data:${mimeType};base64,${imageData.data}`;
-    
-    const promise = createImageElement(dataUrl, true);
-    imagePromises.push(promise);
-  });
-} 
-// Otherwise use current file input (before submission)
-else if (imageInput && imageInput.files && imageInput.files.length > 0) {
-  console.log('Using current file input images:', imageInput.files.length);
-  
-  const imageFiles = Array.from(imageInput.files);
-  imageFiles.forEach(file => {
-    if (!file.type.match('image.*')) return;
-    
-    const reader = new FileReader();
-    const promise = new Promise((resolve) => {
-      reader.onload = (e) => {
-        const promise = createImageElement(e.target.result, false);
-        promise.then(resolve);
-      };
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(file);
+function generatePDF(pdfContent, programmeName, btn, originalText) {
+  setTimeout(() => {
+    html2canvas(pdfContent, {
+      scale: 2,
+      backgroundColor: '#ffffff',
+      logging: false,
+      width: 800
+    }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 210;
+      const pageHeight = 297;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      
+      if (imgHeight > pageHeight) {
+        let heightLeft = imgHeight;
+        let position = 0;
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+      } else {
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      }
+      
+      pdf.save(`${programmeName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
+      alert('✅ Laporan PDF telah dijana dan dimuat turun!');
+    }).catch(err => {
+      console.error('PDF generation error:', err);
+      alert('⚠️ Gagal menjana PDF. Cuba semula.');
+    }).finally(() => {
+      if (document.body.contains(pdfContent)) {
+        document.body.removeChild(pdfContent);
+      }
+      btn.disabled = false;
+      btn.innerHTML = originalText;
     });
-    imagePromises.push(promise);
-  });
-}
-
-// Wait for ALL images to load before generating PDF
-if (imagePromises.length === 0) {
-  imageContainer.innerHTML = '<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>';
-  generatePDF(pdfContent, programmeName, btn, originalText);
-} else {
-  console.log(`Waiting for ${imagePromises.length} images to load...`);
-  
-  Promise.all(imagePromises).then((loadedImages) => {
-    const successfulImages = loadedImages.filter(img => img !== null);
-    console.log(`Successfully loaded ${successfulImages.length}/${imagePromises.length} images`);
-    
-    // Small delay to ensure rendering is complete
-    setTimeout(() => {
-      generatePDF(pdfContent, programmeName, btn, originalText);
-    }, 300);
-    
-  }).catch((err) => {
-    console.error('Image loading error:', err);
-    // Still generate PDF even if some images fail
-    setTimeout(() => {
-      generatePDF(pdfContent, programmeName, btn, originalText);
-    }, 300);
-  });
+  }, 500);
 }
 
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
