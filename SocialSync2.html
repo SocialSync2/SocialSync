@@ -1783,24 +1783,46 @@ if (imagePromises.length === 0) {
 }
 
 function generatePDF(pdfContent, programmeName, btn, originalText) {
-    // Add this delay to ensure images are fully rendered
     setTimeout(() => {
         html2canvas(pdfContent, {
             scale: 2,
             backgroundColor: '#ffffff',
             logging: false,
-            useCORS: true,  // Add this for external images
-            allowTaint: false
+            useCORS: true
         }).then(canvas => {
-            // ... rest of your PDF generation code remains the same
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const imgWidth = 210;
+            const pageHeight = 297;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            let position = 0;
+            
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            
+            if (imgHeight > pageHeight) {
+                let heightLeft = imgHeight - pageHeight;
+                position = -pageHeight;
+                while (heightLeft > 0) {
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                    position -= pageHeight;
+                }
+            }
+            
+            pdf.save(`${programmeName || 'report'}_${new Date().toISOString().slice(0,19)}.pdf`);
+            document.body.removeChild(pdfContent);
+            btn.disabled = false;
+            btn.innerHTML = originalText;
         }).catch(err => {
             console.error('PDF error:', err);
-            alert('⚠️ Failed to generate PDF');
+            alert('⚠️ Failed to generate PDF: ' + err.message);
             btn.disabled = false;
             btn.innerHTML = originalText;
             if (document.body.contains(pdfContent)) document.body.removeChild(pdfContent);
         });
-    }, 800); // 800ms delay for images to load
+    }, 1000);
 }
 
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
@@ -1996,5 +2018,35 @@ function updateTotals() {
   // Initialize calculations
   updateIP2M1();
   updateIP3M2();
+
+    const calcInputs = ['#ip2-total-respondent', '#ip2-positive-respondent', '#crowd-size', '#target-group',
+                      '#ip3-media-list', '#ip3-actual-attendance', '#ip3-target-attendance',
+                      '#ip3-total-respondent', '#ip3-positive-respondent',
+                      '#ip3-targeted-enterpreneur-involvement', '#ip3-actual-enterprenuer-involvement'];
+  calcInputs.forEach(selector => {
+      const el = document.querySelector(selector);
+      if (el) el.addEventListener('input', () => { updateIP2M1(); updateIP3M2(); });
+  });
+  
+  // Trigger on checkbox changes for media coverage
+  document.querySelectorAll('#media-cetak-checkbox, #media-elektronik-checkbox, #media-digital-checkbox').forEach(cb => {
+      if (cb) cb.addEventListener('change', () => updateIP2M1());
+  });
+  
+  // Enable/disable media example inputs
+  const setupMediaCheckboxes = () => {
+      const cetakCheck = document.getElementById('media-cetak-checkbox');
+      const cetakInput = document.getElementById('media-cetak-example');
+      const elektronikCheck = document.getElementById('media-elektronik-checkbox');
+      const elektronikInput = document.getElementById('media-elektronik-example');
+      const digitalCheck = document.getElementById('media-digital-checkbox');
+      const digitalInput = document.getElementById('media-digital-example');
+      
+      if (cetakCheck) cetakCheck.addEventListener('change', () => cetakInput.disabled = !cetakCheck.checked);
+      if (elektronikCheck) elektronikCheck.addEventListener('change', () => elektronikInput.disabled = !elektronikCheck.checked);
+      if (digitalCheck) digitalCheck.addEventListener('change', () => digitalInput.disabled = !digitalCheck.checked);
+  };
+  setupMediaCheckboxes();
+  
 });
-</script> 
+</script>
