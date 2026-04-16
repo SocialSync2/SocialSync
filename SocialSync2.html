@@ -413,16 +413,21 @@ body {
               <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
               <div class="flex flex-col gap-3">
                 <label for="buletin-daerah-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                <div class="flex gap-2 items-start">
-                  <input type="file" id="buletin-daerah-images" class="flex-1 px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg">
-                  <button type="button" id="add-buletin-daerah-btn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all">Tambah Gambar</button>
+                <div>
+                  <button type="button" id="add-buletin-daerah-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Pilih Gambar (boleh pilih satu atau berbilang)
+                  </button>
+                  <input type="file" id="buletin-daerah-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
+                  <p class="text-xs text-slate-500 mt-2">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
                 </div>
-                <p class="text-xs text-slate-500 mt-1">Klik "Tambah Gambar" untuk memilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekali.</p>
               </div>
             </div>
           </div>
         </div>
-        
+
           <!-- IP2M1:2 Section -->
           <div id="section-ip2m1" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
             <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
@@ -551,11 +556,16 @@ body {
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
                   <label for="ip2m1-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                  <div class="flex gap-2 items-start">
-                    <input type="file" id="ip2m1-images" class="flex-1 px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg">
-                    <button type="button" id="add-ip2m1-btn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all">Tambah Gambar</button>
+                  <div>
+                    <button type="button" id="add-ip2m1-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      Pilih Gambar (boleh pilih satu atau berbilang)
+                    </button>
+                    <input type="file" id="ip2m1-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
+                    <p class="text-xs text-slate-500 mt-2">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
                   </div>
-                  <p class="text-xs text-slate-500 mt-1">Klik "Tambah Gambar" untuk memilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekali.</p>
                 </div>
               </div>
             </div>
@@ -653,11 +663,17 @@ body {
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
                   <label for="ip3m2-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                  <div class="flex gap-2 items-start">
-                    <input type="file" id="ip3m2-images" class="flex-1 px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg">
-                    <button type="button" id="add-ip3m2-btn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all">Tambah Gambar</button>
+                  <div>
+                    <button type="button" id="add-ip3m2-btn" class="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      Pilih Gambar (boleh pilih satu atau berbilang)
+                    </button>
+                    <input type="file" id="ip3m2-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
+                    <p class="text-xs text-slate-500 mt-2">Klik button di atas untuk pilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekaligus.</p>
                   </div>
-                  <p class="text-xs text-slate-500 mt-1">Klik "Tambah Gambar" untuk memilih fail. Boleh tambah satu persatu atau pilih berbilang fail sekali.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -1140,9 +1156,10 @@ function setupProgressiveImageUpload(inputId, previewId, buttonId) {
   
   // Handle add button click
   addButton.addEventListener('click', () => {
+    console.log('Button clicked for:', inputId);
     fileInput.click();
   });
-  
+    
   // Handle file selection
   fileInput.addEventListener('change', (e) => {
     const newFiles = Array.from(e.target.files);
@@ -1923,33 +1940,8 @@ function updateTotals() {
     });
   });
 
-  // Setup image preview
-  const imageInputs = [
-    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
-    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
-    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
-  ];
-  
-  imageInputs.forEach(({ input, preview }) => {
-    const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
-          if (!file.type.match('image.*')) return;
-          const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-    }
-  });
+  // Setup progressive image upload
+  setupImagePreview();
 
   // Form submission
   document.getElementById('main-form')?.addEventListener('submit', submitForm);
