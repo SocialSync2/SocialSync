@@ -1783,26 +1783,51 @@ if (imagePromises.length === 0) {
 }
 
 function generatePDF(pdfContent, programmeName, btn, originalText) {
-    // Add this delay to ensure images are fully rendered
     setTimeout(() => {
         html2canvas(pdfContent, {
             scale: 2,
             backgroundColor: '#ffffff',
             logging: false,
-            useCORS: true,  // Add this for external images
+            useCORS: true,
             allowTaint: false
         }).then(canvas => {
-            // ... rest of your PDF generation code remains the same
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const imgWidth = 210;
+            const pageHeight = 297;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            
+            if (imgHeight > pageHeight) {
+                let heightLeft = imgHeight;
+                let position = 0;
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+            } else {
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+            }
+            
+            pdf.save(`${programmeName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
+            alert('✅ Laporan PDF telah dijana dan dimuat turun!');
+            
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+            if (document.body.contains(pdfContent)) document.body.removeChild(pdfContent);
         }).catch(err => {
             console.error('PDF error:', err);
-            alert('⚠️ Failed to generate PDF');
+            alert('⚠️ Failed to generate PDF: ' + err.message);
             btn.disabled = false;
             btn.innerHTML = originalText;
             if (document.body.contains(pdfContent)) document.body.removeChild(pdfContent);
         });
-    }, 800); // 800ms delay for images to load
+    }, 800);
 }
-
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
 document.addEventListener('DOMContentLoaded', () => {
