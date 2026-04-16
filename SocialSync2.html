@@ -1713,7 +1713,7 @@ pdfContent.innerHTML += `
     document.body.appendChild(pdfContent);
 
     // === HANDLE IMAGES ===
-// === HANDLE IMAGES (SINGLE CLEAN VERSION) ===
+// === HANDLE IMAGES ===
 const imageContainer = pdfContent.querySelector('#pdf-images-container');
 const imageInput = document.getElementById(`${sectionId}-images`);
 let imagePromises = [];
@@ -1732,8 +1732,19 @@ function addImageToPDF(src, mimeType = null) {
         img.style.border = '1px solid #e2e8f0';
         img.style.objectFit = 'contain';
         img.style.display = 'inline-block';
-        img.onload = () => { resolve(img); };
-        img.onerror = () => { resolve(null); };
+        
+        // CRITICAL: Wait for image to load
+        img.onload = () => { 
+            resolve(img); 
+        };
+        img.onerror = () => { 
+            console.warn('Failed to load image:', src.substring(0, 100));
+            resolve(null); 
+        };
+        
+        // Set timeout to avoid infinite waiting
+        setTimeout(() => resolve(null), 5000);
+        
         imageContainer.appendChild(img);
     });
 }
@@ -1755,6 +1766,7 @@ else if (imageInput && imageInput.files && imageInput.files.length > 0) {
             reader.onload = (e) => {
                 addImageToPDF(e.target.result).then(resolve);
             };
+            reader.onerror = () => resolve(null);
             reader.readAsDataURL(file);
         });
         imagePromises.push(promise);
@@ -1763,24 +1775,26 @@ else if (imageInput && imageInput.files && imageInput.files.length > 0) {
 
 if (imagePromises.length === 0) {
     imageContainer.innerHTML = '<div style="padding:20px;text-align:center;color:#64748b;">Tiada gambar untuk laporan ini</div>';
-    generatePDF(pdfContent, programmeName, btn, originalText);
+    // Give extra time for DOM to render
+    setTimeout(() => {
+        generatePDF(pdfContent, programmeName, btn, originalText);
+    }, 500);
 } else {
+    // Wait for ALL images to load before generating PDF
     Promise.all(imagePromises).then(() => {
-        generatePDF(pdfContent, programmeName, btn, originalText);
-    }).catch(() => {
-        generatePDF(pdfContent, programmeName, btn, originalText);
+        // Extra delay to ensure images are fully rendered in DOM
+        setTimeout(() => {
+            generatePDF(pdfContent, programmeName, btn, originalText);
+        }, 800);
+    }).catch((err) => {
+        console.error('Image loading error:', err);
+        setTimeout(() => {
+            generatePDF(pdfContent, programmeName, btn, originalText);
+        }, 500);
     });
 }
-    
-  } catch (error) {
-    console.error('Export error:', error);
-    alert('⚠️ Ralat semasa menjana PDF: ' + error.message);
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-    }
-  }
-}
+
+
 
 function generatePDF(pdfContent, programmeName, btn, originalText) {
     setTimeout(() => {
