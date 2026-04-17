@@ -1113,24 +1113,36 @@ function setupImagePreview() {
     if (inputEl) {
       inputEl.addEventListener('change', (e) => {
         const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
+        // previewEl.innerHTML = '';
         
         // Loop setiap gambar yang dipilih
         Array.from(e.target.files).forEach(file => {
           if (!file.type.match('image.*')) return;
           
-          const reader = new FileReader();
+        const reader = new FileReader();
           reader.onload = ev => {
             const img = document.createElement('img');
             img.src = ev.target.result;
             img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200 shadow-sm';
-            previewEl.appendChild(img);
+            previewEl.appendChild(img);  // Append, bukan replace
           };
           reader.readAsDataURL(file);
         });
       });
     }
   });
+}
+
+function clearImages(previewId, inputId) {
+  const previewEl = document.getElementById(previewId);
+  const inputEl = document.getElementById(inputId);
+  
+  if (previewEl) {
+    previewEl.innerHTML = '';  // Kosongkan preview
+  }
+  if (inputEl) {
+    inputEl.value = '';  // Kosongkan file input
+  }
 }
 
 function setupPrint() {
