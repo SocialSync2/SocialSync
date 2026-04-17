@@ -1903,34 +1903,6 @@ function updateTotals() {
     });
   });
 
-  // Setup image preview
-  const imageInputs = [
-    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
-    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
-    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
-  ];
-  
-  imageInputs.forEach(({ input, preview }) => {
-    const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
-          if (!file.type.match('image.*')) return;
-          const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-    }
-  });
-
   // Form submission
   document.getElementById('main-form')?.addEventListener('submit', submitForm);
   
