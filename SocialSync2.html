@@ -1237,12 +1237,11 @@ function setupPDFUpload() {
 }
 
 function setupImagePreview() {
-  // Setup progressive image upload for all three sections
-  setupProgressiveImageUpload('buletin-daerah-images', 'buletin-daerah-image-preview', 'add-buletin-daerah-btn');
-  setupProgressiveImageUpload('ip2m1-images', 'ip2m1-image-preview', 'add-ip2m1-btn');
-  setupProgressiveImageUpload('ip3m2-images', 'ip3m2-image-preview', 'add-ip3m2-btn');
-}
-
+  const imageInputs = [
+    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
+    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
+    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
+  ];
   
   imageInputs.forEach(({ input, preview }) => {
     const inputEl = document.getElementById(input);
@@ -1265,45 +1264,6 @@ function setupImagePreview() {
     }
   });
 }
-
-// function setupPrint() {
-//   const printBtn = document.getElementById('print-btn');
-//   const printModal = document.getElementById('print-modal');
-//   const printCancel = document.getElementById('print-cancel');
-//   const printConfirm = document.getElementById('print-confirm');
-  
-//   printBtn.addEventListener('click', () => {
-//     printModal.classList.remove('hidden');
-//   });
-  
-//   printCancel.addEventListener('click', () => {
-//     printModal.classList.add('hidden');
-//   });
-  
-//   printConfirm.addEventListener('click', () => {
-//     const buletin_daerah = document.getElementById('print-buletin-daerah').checked;
-//     const ip2m1 = document.getElementById('print-ip2m1').checked;
-//     const ip3m2 = document.getElementById('print-ip3m2').checked;
-    
-//     if (!buletin_daerah && !ip2m1 && !ip3m2) {
-//       alert('Please select at least one section to print.');
-//       return;
-//     }
-    
-//     const printContent = document.createElement('div');
-//     printContent.id = 'print-content';
-    
-//     const programmeName = document.getElementById('programme').value || 'Programme';
-//     const programmeDate = document.getElementById('date').value || 'Date';
-//     const organizer = document.querySelector('input[name="organizer[]"]')?.value || 'Organizer';
-    
-//     printContent.innerHTML = `
-//       <div class="print-header">
-//         <h1 class="print-title">SocialSync Official Report</h1>
-//         <p class="print-subtitle">${programmeName} • ${programmeDate} • ${organizer}</p>
-//       </div>
-//     `;
-    
     function createQAField(question, answer) {
       if (!answer) return '';
       return `
@@ -2073,4 +2033,4 @@ function updateTotals() {
   updateIP2M1();
   updateIP3M2();
 });
-</script>
+</script> the interface cant be clicked. just tell me which one of the coding have error and guide me how to fix it
