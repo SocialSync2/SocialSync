@@ -1307,34 +1307,34 @@ function setupPDFUpload() {
   }
 }
 
-// function setupImagePreview() {
-//   const imageInputs = [
-//     { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
-//     { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
-//     { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
-//   ];
+function setupImagePreview() {
+  const imageInputs = [
+    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
+    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
+    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
+  ];
   
-//   imageInputs.forEach(({ input, preview }) => {
-//     const inputEl = document.getElementById(input);
-//     if (inputEl) {
-//       inputEl.addEventListener('change', (e) => {
-//         const previewEl = document.getElementById(preview);
-//         previewEl.innerHTML = '';
-//         Array.from(e.target.files).forEach(file => {
-//           if (!file.type.match('image.*')) return;
-//           const reader = new FileReader();
-//           reader.onload = ev => {
-//             const img = document.createElement('img');
-//             img.src = ev.target.result;
-//             img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-//             previewEl.appendChild(img);
-//           };
-//           reader.readAsDataURL(file);
-//         });
-//       });
-//     }
-//   });
-// }
+  imageInputs.forEach(({ input, preview }) => {
+    const inputEl = document.getElementById(input);
+    if (inputEl) {
+      inputEl.addEventListener('change', (e) => {
+        const previewEl = document.getElementById(preview);
+        previewEl.innerHTML = '';
+        Array.from(e.target.files).forEach(file => {
+          if (!file.type.match('image.*')) return;
+          const reader = new FileReader();
+          reader.onload = ev => {
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
+            previewEl.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+    }
+  });
+}
 
 function exportAsPDF() {
   const activeSectionBtn = document.querySelector('.section-btn.active');
@@ -1752,28 +1752,66 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
 
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
-// ============================================
-// FETCH STATISTICS FUNCTION (GLOBAL SCOPE)
-// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  // Setup statistics navigation
+  const viewStatisticsBtn = document.getElementById('view-statistics-btn');
+  const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
+  const dashboardView = document.getElementById('dashboard-view');
+  const statisticsView = document.getElementById('statistics-view');
+
+  if (viewStatisticsBtn && backToDashboardBtn && dashboardView && statisticsView) {
+    viewStatisticsBtn.addEventListener('click', () => {
+      dashboardView.classList.add('hidden');
+      statisticsView.classList.remove('hidden');
+      backToDashboardBtn.classList.remove('hidden');
+      viewStatisticsBtn.classList.add('hidden');
+      
+      //FETCH REAL STATISTICS WHEN VIEWING
+      fetchStatistics();
+    });
+
+    backToDashboardBtn.addEventListener('click', () => {
+      statisticsView.classList.add('hidden');
+      dashboardView.classList.remove('hidden');
+      backToDashboardBtn.classList.add('hidden');
+      viewStatisticsBtn.classList.remove('hidden');
+    });
+
+    // Make cells clickable (for debugging)
+    document.querySelectorAll('.stat-cell').forEach(cell => {
+      cell.addEventListener('click', function() {
+        alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
+      });
+      
+      cell.addEventListener('mouseenter', () => cell.classList.add('active'));
+      cell.addEventListener('mouseleave', () => cell.classList.remove('active'));
+    });
+  }
+
 function fetchStatistics() {
   const STATS_URL = 'https://script.google.com/macros/s/AKfycby14OKUQqHUyw86pcdvX9ob5qYwzDGHMV3W6EZGD2vTx2jaTb9N26m32wCb2tXFuudA4A/exec';
 
   fetch(STATS_URL)
     .then(response => {
       if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      return response.text();
+      return response.text(); // First get raw text
     })
     .then(text => {
+      // Try to parse as JSON; if fails, assume it's an error page
       let data;
       try {
         data = JSON.parse(text);
       } catch (e) {
-        console.warn("Response is not JSON:", text.slice(0, 200));
-        return;
+        console.warn("Response is not JSON. Assuming error page:", text.slice(0, 200));
+        throw new Error("Invalid response: Expected JSON, got HTML/error");
       }
 
-      if (!data || typeof data !== 'object') return;
+      // Validate structure
+      if (!data || typeof data !== 'object' || Array.isArray(data)) {
+        throw new Error("Unexpected data format: expected object");
+      }
 
+      // Map report types & districts
       const reportMap = {
         'buletin-daerah': 'BULETIN DAERAH',
         'ip2m1': 'IP2M1',
@@ -1791,38 +1829,55 @@ function fetchStatistics() {
         'Pejabat Daerah Kecil Igan': 'KECIL IGAN'
       };
 
+      // Now process valid data
+      let updatedAny = false;
       document.querySelectorAll('.stat-cell').forEach(cell => {
         const districtKey = cell.dataset.district;
         const reportKey = cell.dataset.report;
 
-        for (let [rawDistrict, reports] of Object.entries(data)) {
+        let count = 0;
+        for ([rawDistrict, reports] of Object.entries(data)) {
           const displayDistrict = districtMap[rawDistrict] || rawDistrict;
           
+          // Check if this is the district we're looking for
           if (displayDistrict === districtKey && typeof reports === 'object') {
+            // Check all report types for this district
             for (const [rawReport, value] of Object.entries(reports)) {
+              // Check if this report type matches
               if (reportMap[rawReport] === reportKey) {
-                cell.textContent = Number(value) || 0;
+                // Use value directly (no parseInt needed)
+                count = Number(value) || 0;
+                updatedAny = true;
                 break;
               }
             }
           }
         }
+
+        // Only update if we found a match AND count is number
+        if (!isNaN(count)) {
+          cell.textContent = count;
+        }
       });
 
+      //Recalculate totals AFTER cells are updated
       updateTotals();
+
+      if (!updatedAny) {
+        console.warn("No valid statistics found in response. Keeping default values.");
+      }
+
     })
     .catch(error => {
       console.error('Failed to fetch statistics:', error);
     });
 }
 
-// ============================================
-// UPDATE TOTALS FUNCTION (GLOBAL SCOPE)
-// ============================================
 function updateTotals() {
+  // Update row totals: Sum all district stat-cells → last cell (TOTAL column)
   document.querySelectorAll('.report-type-row').forEach(row => {
     const statCells = row.querySelectorAll('td.stat-cell');
-    if (statCells.length === 0) return;
+    if (statCells.length === 0) return; // Skip if no stat cells found
     
     let total = 0;
     statCells.forEach(cell => {
@@ -1830,81 +1885,85 @@ function updateTotals() {
       if (!isNaN(num)) total += num;
     });
     
+    // Update the last cell in the row (TOTAL column)
     const cells = row.querySelectorAll('td');
     if (cells.length > 0) {
       cells[cells.length - 1].textContent = total;
     }
   });
 }
-
-// ============================================
-// DOM CONTENT LOADED
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOM fully loaded and parsed');
+  // Setup section selection WITH report type tracking
+  const sectionBtns = document.querySelectorAll('.section-btn');
+  const form = document.getElementById('main-form');
+  const sections = {
+    'buletin-daerah': document.getElementById('section-buletin-daerah'),
+    'ip2m1': document.getElementById('section-ip2m1'),
+    'ip3m2': document.getElementById('section-ip3m2')
+  };
   
-  // Statistics Navigation
-  const viewStatisticsBtn = document.getElementById('view-statistics-btn');
-  const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
-  const dashboardView = document.getElementById('dashboard-view');
-  const statisticsView = document.getElementById('statistics-view');
-
-  if (viewStatisticsBtn && backToDashboardBtn && dashboardView && statisticsView) {
-    viewStatisticsBtn.addEventListener('click', function() {
-      dashboardView.classList.add('hidden');
-      statisticsView.classList.remove('hidden');
-      backToDashboardBtn.classList.remove('hidden');
-      viewStatisticsBtn.classList.add('hidden');
-      fetchStatistics();
+  sectionBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // SET REPORT TYPE VALUE WHEN BUTTON CLICKED
+      document.getElementById('report-type').value = btn.dataset.section;
+      
+      sectionBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      form.classList.remove('hidden');
+      Object.values(sections).forEach(section => section.classList.add('hidden'));
+      const sectionId = btn.dataset.section;
+      if (sections[sectionId]) {
+        sections[sectionId].classList.remove('hidden');
+      }
     });
+  });
 
-    backToDashboardBtn.addEventListener('click', function() {
-      statisticsView.classList.add('hidden');
-      dashboardView.classList.remove('hidden');
-      backToDashboardBtn.classList.add('hidden');
-      viewStatisticsBtn.classList.remove('hidden');
-    });
-
-    document.querySelectorAll('.stat-cell').forEach(function(cell) {
-      cell.addEventListener('click', function() {
-        alert('District: ' + this.dataset.district + '\nReport: ' + this.dataset.report + '\nCount: ' + this.textContent);
+  // Setup image preview
+  const imageInputs = [
+    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
+    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
+    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
+  ];
+  
+  imageInputs.forEach(({ input, preview }) => {
+    const inputEl = document.getElementById(input);
+    if (inputEl) {
+      inputEl.addEventListener('change', (e) => {
+        const previewEl = document.getElementById(preview);
+        previewEl.innerHTML = '';
+        Array.from(e.target.files).forEach(file => {
+          if (!file.type.match('image.*')) return;
+          const reader = new FileReader();
+          reader.onload = ev => {
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
+            previewEl.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
       });
-      cell.addEventListener('mouseenter', function() { cell.classList.add('active'); });
-      cell.addEventListener('mouseleave', function() { cell.classList.remove('active'); });
-    });
-  }
+    }
+  });
 
-  // Initialize Section Selection
-  setupSectionSelection();
-
-  // Initialize Progressive Image Upload
-  setupProgressiveImageUpload('buletin-daerah-images', 'buletin-daerah-image-preview', 'add-buletin-daerah-photo-btn');
-  setupProgressiveImageUpload('ip2m1-images', 'ip2m1-image-preview', 'add-ip2m1-photo-btn');
-  setupProgressiveImageUpload('ip3m2-images', 'ip3m2-image-preview', 'add-ip3m2-photo-btn');
-
-  // Form Submission
-  var form = document.getElementById('main-form');
-  if (form) {
-    form.addEventListener('submit', submitForm);
-  }
+  // Form submission
+  document.getElementById('main-form')?.addEventListener('submit', submitForm);
   
-  // View Records Button
-  var viewRecordsBtn = document.getElementById('view-records-btn');
+  // View Records button
+  const viewRecordsBtn = document.getElementById('view-records-btn');
   if (viewRecordsBtn) {
-    viewRecordsBtn.addEventListener('click', function() {
+    viewRecordsBtn.addEventListener('click', () => {
       window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
     });
   }
 
-  // Export PDF Button
-  var exportPdfBtn = document.getElementById('export-pdf-btn');
+  // Export PDF button
+  const exportPdfBtn = document.getElementById('export-pdf-btn');
   if (exportPdfBtn) {
     exportPdfBtn.addEventListener('click', exportAsPDF);
   }
 
-  // Initialize Calculations
+  // Initialize calculations
   updateIP2M1();
   updateIP3M2();
-  
-  console.log('All event listeners attached successfully');
 });
+</script> 
