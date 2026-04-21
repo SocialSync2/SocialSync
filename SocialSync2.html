@@ -1752,17 +1752,105 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
 
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
 
-document.addEventListener('DOMContentLoaded', () => {
-  // ============================================
-  // STATISTICS NAVIGATION
-  // ============================================
+// ============================================
+// FETCH STATISTICS FUNCTION (GLOBAL SCOPE)
+// ============================================
+function fetchStatistics() {
+  const STATS_URL = 'https://script.google.com/macros/s/AKfycby14OKUQqHUyw86pcdvX9ob5qYwzDGHMV3W6EZGD2vTx2jaTb9N26m32wCb2tXFuudA4A/exec';
+
+  fetch(STATS_URL)
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      return response.text();
+    })
+    .then(text => {
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.warn("Response is not JSON:", text.slice(0, 200));
+        return;
+      }
+
+      if (!data || typeof data !== 'object') return;
+
+      const reportMap = {
+        'buletin-daerah': 'BULETIN DAERAH',
+        'ip2m1': 'IP2M1',
+        'ip3m2': 'IP3M2'
+      };
+      const districtMap = {
+        'Pejabat Residen Bahagian Mukah': 'RESIDEN BAHAGIAN MUKAH',
+        'Pejabat Daerah Mukah': 'MUKAH',
+        'Pejabat Daerah Dalat': 'DALAT',
+        'Pejabat Daerah Matu': 'MATU',
+        'Pejabat Daerah Daro': 'DARO',
+        'Pejabat Daerah Tanjung Manis': 'TANJUNG MANIS',
+        'Pejabat Daerah Kecil Balingian': 'KECIL BALINGIAN',
+        'Pejabat Daerah Kecil Oya': 'KECIL OYA',
+        'Pejabat Daerah Kecil Igan': 'KECIL IGAN'
+      };
+
+      document.querySelectorAll('.stat-cell').forEach(cell => {
+        const districtKey = cell.dataset.district;
+        const reportKey = cell.dataset.report;
+
+        for (let [rawDistrict, reports] of Object.entries(data)) {
+          const displayDistrict = districtMap[rawDistrict] || rawDistrict;
+          
+          if (displayDistrict === districtKey && typeof reports === 'object') {
+            for (const [rawReport, value] of Object.entries(reports)) {
+              if (reportMap[rawReport] === reportKey) {
+                cell.textContent = Number(value) || 0;
+                break;
+              }
+            }
+          }
+        }
+      });
+
+      updateTotals();
+    })
+    .catch(error => {
+      console.error('Failed to fetch statistics:', error);
+    });
+}
+
+// ============================================
+// UPDATE TOTALS FUNCTION (GLOBAL SCOPE)
+// ============================================
+function updateTotals() {
+  document.querySelectorAll('.report-type-row').forEach(row => {
+    const statCells = row.querySelectorAll('td.stat-cell');
+    if (statCells.length === 0) return;
+    
+    let total = 0;
+    statCells.forEach(cell => {
+      const num = parseInt(cell.textContent.trim());
+      if (!isNaN(num)) total += num;
+    });
+    
+    const cells = row.querySelectorAll('td');
+    if (cells.length > 0) {
+      cells[cells.length - 1].textContent = total;
+    }
+  });
+}
+
+// ============================================
+// DOM CONTENT LOADED
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM fully loaded and parsed');
+  
+  // Statistics Navigation
   const viewStatisticsBtn = document.getElementById('view-statistics-btn');
   const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
   const dashboardView = document.getElementById('dashboard-view');
   const statisticsView = document.getElementById('statistics-view');
 
   if (viewStatisticsBtn && backToDashboardBtn && dashboardView && statisticsView) {
-    viewStatisticsBtn.addEventListener('click', () => {
+    viewStatisticsBtn.addEventListener('click', function() {
       dashboardView.classList.add('hidden');
       statisticsView.classList.remove('hidden');
       backToDashboardBtn.classList.remove('hidden');
@@ -1770,60 +1858,53 @@ document.addEventListener('DOMContentLoaded', () => {
       fetchStatistics();
     });
 
-    backToDashboardBtn.addEventListener('click', () => {
+    backToDashboardBtn.addEventListener('click', function() {
       statisticsView.classList.add('hidden');
       dashboardView.classList.remove('hidden');
       backToDashboardBtn.classList.add('hidden');
       viewStatisticsBtn.classList.remove('hidden');
     });
 
-    document.querySelectorAll('.stat-cell').forEach(cell => {
+    document.querySelectorAll('.stat-cell').forEach(function(cell) {
       cell.addEventListener('click', function() {
-        alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
+        alert('District: ' + this.dataset.district + '\nReport: ' + this.dataset.report + '\nCount: ' + this.textContent);
       });
-      cell.addEventListener('mouseenter', () => cell.classList.add('active'));
-      cell.addEventListener('mouseleave', () => cell.classList.remove('active'));
+      cell.addEventListener('mouseenter', function() { cell.classList.add('active'); });
+      cell.addEventListener('mouseleave', function() { cell.classList.remove('active'); });
     });
   }
 
-  // ============================================
-  // INITIALIZE SECTION SELECTION (This is enough)
-  // ============================================
+  // Initialize Section Selection
   setupSectionSelection();
 
-  // ============================================
-  // INITIALIZE PROGRESSIVE IMAGE UPLOAD
-  // ============================================
+  // Initialize Progressive Image Upload
   setupProgressiveImageUpload('buletin-daerah-images', 'buletin-daerah-image-preview', 'add-buletin-daerah-photo-btn');
   setupProgressiveImageUpload('ip2m1-images', 'ip2m1-image-preview', 'add-ip2m1-photo-btn');
   setupProgressiveImageUpload('ip3m2-images', 'ip3m2-image-preview', 'add-ip3m2-photo-btn');
 
-  // ============================================
-  // FORM SUBMISSION
-  // ============================================
-  document.getElementById('main-form')?.addEventListener('submit', submitForm);
+  // Form Submission
+  var form = document.getElementById('main-form');
+  if (form) {
+    form.addEventListener('submit', submitForm);
+  }
   
-  // ============================================
-  // VIEW RECORDS BUTTON
-  // ============================================
-  const viewRecordsBtn = document.getElementById('view-records-btn');
+  // View Records Button
+  var viewRecordsBtn = document.getElementById('view-records-btn');
   if (viewRecordsBtn) {
-    viewRecordsBtn.addEventListener('click', () => {
+    viewRecordsBtn.addEventListener('click', function() {
       window.open('https://docs.google.com/spreadsheets/d/1KNSvYqNMzTutX3gClleFDvR896jr_OI5hST0DwrEW94/edit', '_blank');
     });
   }
 
-  // ============================================
-  // EXPORT PDF BUTTON
-  // ============================================
-  const exportPdfBtn = document.getElementById('export-pdf-btn');
+  // Export PDF Button
+  var exportPdfBtn = document.getElementById('export-pdf-btn');
   if (exportPdfBtn) {
     exportPdfBtn.addEventListener('click', exportAsPDF);
   }
 
-  // ============================================
-  // INITIALIZE CALCULATIONS
-  // ============================================
+  // Initialize Calculations
   updateIP2M1();
   updateIP3M2();
+  
+  console.log('All event listeners attached successfully');
 });
