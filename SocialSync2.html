@@ -1777,7 +1777,6 @@ document.addEventListener('DOMContentLoaded', () => {
       viewStatisticsBtn.classList.remove('hidden');
     });
 
-    // Make cells clickable
     document.querySelectorAll('.stat-cell').forEach(cell => {
       cell.addEventListener('click', function() {
         alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
@@ -1788,29 +1787,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ============================================
-  // SECTION SELECTION WITH REPORT TYPE TRACKING
+  // INITIALIZE SECTION SELECTION (This is enough)
   // ============================================
-  const sectionBtns = document.querySelectorAll('.section-btn');
-  const form = document.getElementById('main-form');
-  const sections = {
-    'buletin-daerah': document.getElementById('section-buletin-daerah'),
-    'ip2m1': document.getElementById('section-ip2m1'),
-    'ip3m2': document.getElementById('section-ip3m2')
-  };
-  
-  sectionBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.getElementById('report-type').value = btn.dataset.section;
-      sectionBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      form.classList.remove('hidden');
-      Object.values(sections).forEach(section => section.classList.add('hidden'));
-      const sectionId = btn.dataset.section;
-      if (sections[sectionId]) {
-        sections[sectionId].classList.remove('hidden');
-      }
-    });
-  });
+  setupSectionSelection();
 
   // ============================================
   // INITIALIZE PROGRESSIVE IMAGE UPLOAD
@@ -1848,101 +1827,3 @@ document.addEventListener('DOMContentLoaded', () => {
   updateIP2M1();
   updateIP3M2();
 });
-
-// ============================================
-// FETCH STATISTICS FUNCTION (GLOBAL SCOPE)
-// ============================================
-function fetchStatistics() {
-  const STATS_URL = 'https://script.google.com/macros/s/AKfycby14OKUQqHUyw86pcdvX9ob5qYwzDGHMV3W6EZGD2vTx2jaTb9N26m32wCb2tXFuudA4A/exec';
-
-  fetch(STATS_URL)
-    .then(response => {
-      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      return response.text();
-    })
-    .then(text => {
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        console.warn("Response is not JSON. Assuming error page:", text.slice(0, 200));
-        throw new Error("Invalid response: Expected JSON, got HTML/error");
-      }
-
-      if (!data || typeof data !== 'object' || Array.isArray(data)) {
-        throw new Error("Unexpected data format: expected object");
-      }
-
-      const reportMap = {
-        'buletin-daerah': 'BULETIN DAERAH',
-        'ip2m1': 'IP2M1',
-        'ip3m2': 'IP3M2'
-      };
-      const districtMap = {
-        'Pejabat Residen Bahagian Mukah': 'RESIDEN BAHAGIAN MUKAH',
-        'Pejabat Daerah Mukah': 'MUKAH',
-        'Pejabat Daerah Dalat': 'DALAT',
-        'Pejabat Daerah Matu': 'MATU',
-        'Pejabat Daerah Daro': 'DARO',
-        'Pejabat Daerah Tanjung Manis': 'TANJUNG MANIS',
-        'Pejabat Daerah Kecil Balingian': 'KECIL BALINGIAN',
-        'Pejabat Daerah Kecil Oya': 'KECIL OYA',
-        'Pejabat Daerah Kecil Igan': 'KECIL IGAN'
-      };
-
-      let updatedAny = false;
-      document.querySelectorAll('.stat-cell').forEach(cell => {
-        const districtKey = cell.dataset.district;
-        const reportKey = cell.dataset.report;
-
-        let count = 0;
-        for (let [rawDistrict, reports] of Object.entries(data)) {
-          const displayDistrict = districtMap[rawDistrict] || rawDistrict;
-          
-          if (displayDistrict === districtKey && typeof reports === 'object') {
-            for (const [rawReport, value] of Object.entries(reports)) {
-              if (reportMap[rawReport] === reportKey) {
-                count = Number(value) || 0;
-                updatedAny = true;
-                break;
-              }
-            }
-          }
-        }
-
-        if (!isNaN(count)) {
-          cell.textContent = count;
-        }
-      });
-
-      updateTotals();
-
-      if (!updatedAny) {
-        console.warn("No valid statistics found in response. Keeping default values.");
-      }
-    })
-    .catch(error => {
-      console.error('Failed to fetch statistics:', error);
-    });
-}
-
-// ============================================
-// UPDATE TOTALS FUNCTION (GLOBAL SCOPE)
-// ============================================
-function updateTotals() {
-  document.querySelectorAll('.report-type-row').forEach(row => {
-    const statCells = row.querySelectorAll('td.stat-cell');
-    if (statCells.length === 0) return;
-    
-    let total = 0;
-    statCells.forEach(cell => {
-      const num = parseInt(cell.textContent.trim());
-      if (!isNaN(num)) total += num;
-    });
-    
-    const cells = row.querySelectorAll('td');
-    if (cells.length > 0) {
-      cells[cells.length - 1].textContent = total;
-    }
-  });
-}
