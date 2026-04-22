@@ -363,8 +363,8 @@ body {
           <div class="p-5 space-y-6">
             <!-- Tempat (styled like IP2M1 info blocks) -->
             <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
-              <h4 class="text-md font-semibold text-cyan-700 mb-4">Tempat</h4>
-              <input type="text" id="ip1-tempat" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Tempat">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">Tempat & Kapasiti</h4>
+              <input type="text" id="ip1-tempat" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Tempat dan Kapasiti">
             </div>
 
             <!-- Objektif -->
@@ -986,30 +986,27 @@ async function submitForm(e) {
       roi_percent: parseFloat(document.getElementById('ip3-roi-percent')?.textContent) || 0
     };
     
-    const imageFiles = {
-      'buletin-daerah': document.getElementById('buletin-daerah-images')?.files || [],
-      'ip2m1': document.getElementById('ip2m1-images')?.files || [],
-      'ip3m2': document.getElementById('ip3m2-images')?.files || []
-    };
-
-    const images = [];
-    const selectedImages = imageFiles[selectedSection] || [];
-    for (let i = 0; i < selectedImages.length; i++) {
-        const imageData = await fileToBase64(selectedImages[i]);
-        images.push(imageData);
-    }
-
-// STORE IMAGES FOR PDF EXPORT
-lastSubmittedImages[selectedSection] = images;
-    
-    const pdfs = [];
-    if (selectedSection === 'ip2m1') {
-      const pdfFiles = document.getElementById('supporting-docs-pdf')?.files || [];
-      for (let i = 0; i < pdfFiles.length; i++) {
-        pdfs.push(await fileToBase64(pdfFiles[i]));
+      // Use the stored image data from our enhanced preview system
+      const images = [];
+      if (window.imageDataStores && window.imageDataStores[`${selectedSection}-images`]) {
+        const storedImages = window.imageDataStores[`${selectedSection}-images`];
+        for (let i = 0; i < storedImages.length; i++) {
+          const imageData = await fileToBase64(storedImages[i]);
+          images.push(imageData);
+        }
       }
-    }
-    
+
+      // STORE IMAGES FOR PDF EXPORT
+      lastSubmittedImages[selectedSection] = images;
+
+      // Handle PDF files from our enhanced store
+      const pdfs = [];
+      if (selectedSection === 'ip2m1' && window.pdfFilesStore) {
+        for (let i = 0; i < window.pdfFilesStore.length; i++) {
+          pdfs.push(await fileToBase64(window.pdfFilesStore[i]));
+        }
+      }
+          
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbziW8N-lorPwmxAX4cKdap93l6cqSJZeOtE-5hPSPGB0PXENk77iyoI-u8oqyG8f6R5mQ/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
@@ -1090,6 +1087,13 @@ function setupSectionSelection() {
 }
 
 function setupImagePreview() {
+  // Track file lists for each uploader
+  const imageDataStores = {
+    'buletin-daerah-images': [],
+    'ip2m1-images': [],
+    'ip3m2-images': []
+  };
+  
   const imageInputs = [
     { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
     { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
@@ -1098,24 +1102,131 @@ function setupImagePreview() {
   
   imageInputs.forEach(({ input, preview }) => {
     const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
-          if (!file.type.match('image.*')) return;
-          const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
+    const previewEl = document.getElementById(preview);
+    if (!inputEl || !previewEl) return;
+    
+    // Store current files for this input
+    imageDataStores[input] = [];
+    
+    inputEl.addEventListener('change', (e) => {
+      const newFiles = Array.from(e.target.files);
+      
+      // Add new files to existing ones (allow multiple selections across different times)
+      newFiles.forEach(file => {
+        // Check if file already exists (by name + size)
+        const exists = imageDataStores[input].some(existing => 
+          existing.name === file.name && existing.size === file.size
+        );
+        if (!exists && file.type.match('image.*')) {
+          imageDataStores[input].push(file);
+        }
       });
-    }
+      
+      // Refresh preview
+      renderImagePreviews(input, previewEl, imageDataStores[input]);
+      
+      // IMPORTANT: Clear the input value so the same file can be selected again if needed
+      inputEl.value = '';
+    });
   });
+  
+  // Helper function to render previews with remove buttons
+  window.renderImagePreviews = function(inputKey, previewEl, filesArray) {
+    previewEl.innerHTML = '';
+    
+    filesArray.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'preview-thumb';
+        wrapper.setAttribute('data-index', index);
+        
+        const img = document.createElement('img');
+        img.src = ev.target.result;
+        img.className = 'w-24 h-24 object-cover rounded-lg border-2 border-slate-200';
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.innerHTML = '✕';
+        removeBtn.className = 'remove-preview';
+        removeBtn.onclick = (e) => {
+          e.stopPropagation();
+          // Remove file from array
+          filesArray.splice(index, 1);
+          // Re-render previews
+          renderImagePreviews(inputKey, previewEl, filesArray);
+          // Also update the actual file input's FileList is not possible, but we keep our store
+        };
+        
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        previewEl.appendChild(wrapper);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+  
+  // Store reference globally for submit access
+  window.imageDataStores = imageDataStores;
+}
+
+function setupPDFSupportingDocs() {
+  const pdfInput = document.getElementById('supporting-docs-pdf');
+  const pdfPreviewContainer = document.createElement('div');
+  pdfPreviewContainer.id = 'pdf-preview-container';
+  pdfPreviewContainer.className = 'mt-3 flex flex-wrap gap-2';
+  
+  // Insert preview container after the PDF input
+  if (pdfInput && pdfInput.parentNode) {
+    pdfInput.parentNode.appendChild(pdfPreviewContainer);
+  }
+  
+  let pdfFilesStore = [];
+  
+  if (pdfInput) {
+    pdfInput.addEventListener('change', (e) => {
+      const newFiles = Array.from(e.target.files);
+      
+      // Add unique PDF files
+      newFiles.forEach(file => {
+        if (file.type === 'application/pdf') {
+          const exists = pdfFilesStore.some(existing => 
+            existing.name === file.name && existing.size === file.size
+          );
+          if (!exists) {
+            pdfFilesStore.push(file);
+          }
+        }
+      });
+      
+      // Render PDF previews
+      renderPDFPreviews(pdfPreviewContainer, pdfFilesStore);
+      
+      // Clear input to allow re-selecting same file if needed
+      pdfInput.value = '';
+    });
+  }
+  
+  window.renderPDFPreviews = function(container, filesArray) {
+    container.innerHTML = '';
+    filesArray.forEach((file, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'pdf-preview-item';
+      wrapper.innerHTML = `
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        <span class="pdf-name">${file.name}</span>
+        <button class="remove-preview-pdf" data-index="${index}" style="background:#ef4444;color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;">✕</button>
+      `;
+      const removeBtn = wrapper.querySelector('.remove-preview-pdf');
+      removeBtn.onclick = () => {
+        pdfFilesStore.splice(index, 1);
+        renderPDFPreviews(container, pdfFilesStore);
+      };
+      container.appendChild(wrapper);
+    });
+  };
+  
+  // Store globally for submit
+  window.pdfFilesStore = pdfFilesStore;
 }
 
 function setupPrint() {
@@ -1198,7 +1309,7 @@ function setupPrint() {
         </div>
         ${createQAField('Daerah', document.getElementById('daerah-dropdown').options[document.getElementById('daerah-dropdown').selectedIndex]?.text || '')}
         ${createQAField('Pengelola', organizerText)}
-        ${createQAField('Tempat', document.getElementById('ip1-tempat').value)}
+        ${createQAField('Tempat dan Kapasiti', document.getElementById('ip1-tempat').value)}
         ${createQAField('Objektif/Deskripsi Program', document.getElementById('ip1-objektif').value)}
         ${createQAField('Impak Program', document.getElementById('ip1-impak').value)}
         ${createQAField('Tetamu Kehormat', vipGuestText)}
@@ -1392,7 +1503,7 @@ function exportAsPDF() {
           
           <table style="width:100%;border-collapse:collapse;margin-top:15px;font-size:14px">
             <tr>
-              <td style="padding:10px 0;width:35%;font-weight:600;color:#4b5563;background:#f8fafc;border-right:1px solid #e2e8f0">Tempat</td>
+              <td style="padding:10px 0;width:35%;font-weight:600;color:#4b5563;background:#f8fafc;border-right:1px solid #e2e8f0">Tempat & Kapasiti</td>
               <td style="padding:10px 0;color:#1e293b;border-bottom:1px solid #e2e8f0">${tempat}</td>
             </tr>
             <tr>
@@ -1552,61 +1663,30 @@ pdfContent.innerHTML += `
 `;
     document.body.appendChild(pdfContent);
 
-    // === HANDLE IMAGES ===
+    // === HANDLE IMAGES USING OUR STORED DATA ===
     const imageContainer = pdfContent.querySelector('#pdf-images-container');
-    const imageInput = document.getElementById(`${sectionId}-images`);
-    
     let imagePromises = [];
-    
-    // Check for stored images first
-    if (lastSubmittedImages && lastSubmittedImages[sectionId] && lastSubmittedImages[sectionId].length > 0) {
-      console.log('Using stored images from submission');
-      lastSubmittedImages[sectionId].forEach(imageData => {
-        const img = document.createElement('img');
-        img.src = `data:${imageData.mimeType};base64,${imageData.data}`;
-        // CONTROLLED size - not too big, not too small
-        img.style.maxWidth = '400px';  // Max width 400px
-        img.style.width = 'auto';
-        img.style.height = 'auto';
-        img.style.maxHeight = '300px';  // Max height 300px
-        img.style.marginBottom = '20px';
-        img.style.marginRight = '20px';
-        img.style.borderRadius = '8px';
-        img.style.border = '1px solid #e2e8f0';
-        img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-        img.style.display = 'inline-block';  // Allow images side by side
-        
+
+    // Use stored images from our enhanced preview system
+    const storeKey = `${sectionId}-images`;
+    if (window.imageDataStores && window.imageDataStores[storeKey] && window.imageDataStores[storeKey].length > 0) {
+      console.log('Using stored images from preview system');
+      for (const file of window.imageDataStores[storeKey]) {
         const promise = new Promise((resolve) => {
-          img.onload = () => resolve(img);
-          img.onerror = () => resolve(null);
-        });
-        imagePromises.push(promise);
-        imageContainer.appendChild(img);
-      });
-    } 
-    // Otherwise use current file input
-    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
-      console.log('Using current file input images');
-      const imageFiles = Array.from(imageInput.files);
-      imageFiles.forEach(file => {
-        if (!file.type.match('image.*')) return;
-        
-        const reader = new FileReader();
-        const promise = new Promise((resolve) => {
+          const reader = new FileReader();
           reader.onload = (e) => {
             const img = document.createElement('img');
             img.src = e.target.result;
-            // CONTROLLED size - not too big, not too small
-            img.style.maxWidth = '400px';  // Max width 400px
+            img.style.maxWidth = '400px';
             img.style.width = 'auto';
             img.style.height = 'auto';
-            img.style.maxHeight = '300px';  // Max height 300px
+            img.style.maxHeight = '300px';
             img.style.marginBottom = '20px';
             img.style.marginRight = '20px';
             img.style.borderRadius = '8px';
             img.style.border = '1px solid #e2e8f0';
             img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-            img.style.display = 'inline-block';  // Allow images side by side
+            img.style.display = 'inline-block';
             img.onload = () => resolve(img);
             img.onerror = () => resolve(null);
             imageContainer.appendChild(img);
@@ -1614,33 +1694,37 @@ pdfContent.innerHTML += `
           reader.readAsDataURL(file);
         });
         imagePromises.push(promise);
-      });
-    }
-    // Otherwise use current file input
-    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
-      console.log('Using current file input images');
-      const imageFiles = Array.from(imageInput.files).slice(0, 4);
-      imageFiles.forEach(file => {
-        if (!file.type.match('image.*')) return;
-        
-        const reader = new FileReader();
-        const promise = new Promise((resolve) => {
-          reader.onload = (e) => {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.style.width = '100%';
-            img.style.height = '150px';
-            img.style.objectFit = 'cover';
-            img.style.borderRadius = '8px';
-            img.style.border = '1px solid #e2e8f0';
-            img.onload = () => resolve(img);
-            img.onerror = () => resolve(null);
-            imageContainer.appendChild(img);
-          };
-          reader.readAsDataURL(file);
+      }
+    } 
+    // Fallback to direct file input if no stored data
+    else {
+      const imageInput = document.getElementById(`${sectionId}-images`);
+      if (imageInput && imageInput.files && imageInput.files.length > 0) {
+        const imageFiles = Array.from(imageInput.files);
+        imageFiles.forEach(file => {
+          if (!file.type.match('image.*')) return;
+          const promise = new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const img = document.createElement('img');
+              img.src = e.target.result;
+              img.style.maxWidth = '400px';
+              img.style.width = 'auto';
+              img.style.height = 'auto';
+              img.style.maxHeight = '300px';
+              img.style.marginBottom = '20px';
+              img.style.marginRight = '20px';
+              img.style.borderRadius = '8px';
+              img.style.border = '1px solid #e2e8f0';
+              img.onload = () => resolve(img);
+              img.onerror = () => resolve(null);
+              imageContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+          });
+          imagePromises.push(promise);
         });
-        imagePromises.push(promise);
-      });
+      }
     }
     
     if (imagePromises.length === 0) {
@@ -1924,5 +2008,9 @@ function updateTotals() {
   // Initialize calculations
   updateIP2M1();
   updateIP3M2();
+  setupImagePreview();
+  setupPDFSupportingDocs();
 });
 </script>
+
+
