@@ -413,33 +413,20 @@ body {
               <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
               
               <div class="flex flex-col gap-3">
-                <!-- Two options for adding photos -->
-                <div class="flex gap-3 items-center">
-                  <button type="button" id="add-buletin-daerah-photo-btn" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                    Add Photo One by One
-                  </button>
-                  
-                  <span class="text-slate-400">or</span>
-                  
-                  <label for="buletin-daerah-images" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2 cursor-pointer">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                    Select Multiple Photos
-                  </label>
-                </div>
+                <!-- Single button in CYAN color -->
+                <label for="buletin-daerah-images" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2 cursor-pointer w-fit">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  </svg>
+                  Upload Photos (Select one or multiple)
+                </label>
                 
-                <!-- Hidden file inputs -->
                 <input type="file" id="buletin-daerah-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
-                <input type="file" id="buletin-daerah-single-image" class="hidden" accept="image/jpeg,image/png,image/jpg">
                 
                 <!-- Preview container -->
                 <div id="buletin-daerah-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
               </div>
-              <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
+              <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail. Anda boleh pilih satu atau banyak gambar sekali gus.</p>
             </div>
           </div>
         </div>
@@ -566,40 +553,26 @@ body {
                   <p class="text-xs text-slate-500 mt-1">Upload PDF files for supporting documents (max 10MB each)</p>
                 </div>
               </div>
-
               <!-- Gambar Program - IP2M1 -->
               <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
                 <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 
                 <div class="flex flex-col gap-3">
-                  <!-- Two options for adding photos -->
-                  <div class="flex gap-3 items-center">
-                    <button type="button" id="add-ip2m1-photo-btn" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                      </svg>
-                      Add Photo One by One
-                    </button>
-                    
-                    <span class="text-slate-400">or</span>
-                    
-                    <label for="ip2m1-images" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2 cursor-pointer">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                      </svg>
-                      Select Multiple Photos
-                    </label>
-                  </div>
+                  <!-- Single button in CYAN color -->
+                  <label for="ip2m1-images" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2 cursor-pointer w-fit">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
+                    Upload Photos (Select one or multiple)
+                  </label>
                   
-                  <!-- Hidden file inputs -->
                   <input type="file" id="ip2m1-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
-                  <input type="file" id="ip2m1-single-image" class="hidden" accept="image/jpeg,image/png,image/jpg">
                   
                   <!-- Preview container -->
                   <div id="ip2m1-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                 </div>
-                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
+                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail. Anda boleh pilih satu atau banyak gambar sekali gus.</p>
               </div>
             </div>
           </div>
@@ -696,33 +669,20 @@ body {
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 
                 <div class="flex flex-col gap-3">
-                  <!-- Two options for adding photos -->
-                  <div class="flex gap-3 items-center">
-                    <button type="button" id="add-ip3m2-photo-btn" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                      </svg>
-                      Add Photo One by One
-                    </button>
-                    
-                    <span class="text-slate-400">or</span>
-                    
-                    <label for="ip3m2-images" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2 cursor-pointer">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                      </svg>
-                      Select Multiple Photos
-                    </label>
-                  </div>
+                  <!-- Single button in CYAN color -->
+                  <label for="ip3m2-images" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2 cursor-pointer w-fit">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
+                    Upload Photos (Select one or multiple)
+                  </label>
                   
-                  <!-- Hidden file inputs -->
                   <input type="file" id="ip3m2-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
-                  <input type="file" id="ip3m2-single-image" class="hidden" accept="image/jpeg,image/png,image/jpg">
                   
                   <!-- Preview container -->
                   <div id="ip3m2-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                 </div>
-                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
+                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail. Anda boleh pilih satu atau banyak gambar sekali gus.</p>
               </div>
             </div>
           </div>
@@ -1160,182 +1120,6 @@ function setupSectionSelection() {
   });
 }
 
-function setupProgressiveImageUpload(inputId, previewId, buttonId) {
-  const fileInput = document.getElementById(inputId);
-  const previewContainer = document.getElementById(previewId);
-  const addButton = document.getElementById(buttonId);
-  
-  // Store accumulated files
-  let accumulatedFiles = [];
-  
-  function updatePreview() {
-    previewContainer.innerHTML = '';
-    accumulatedFiles.forEach((file, index) => {
-      if (!file.type.match('image.*')) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const imgDiv = document.createElement('div');
-        imgDiv.className = 'relative group';
-        imgDiv.innerHTML = `
-          <img src="${ev.target.result}" class="w-full h-24 object-cover rounded-lg border border-slate-200">
-          <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" data-index="${index}">×</button>
-        `;
-        const removeBtn = imgDiv.querySelector('button');
-        removeBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          accumulatedFiles.splice(index, 1);
-          updatePreview();
-          // Update the actual file input's files property
-          updateFileInput();
-        });
-        previewContainer.appendChild(imgDiv);
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-  
-  function updateFileInput() {
-    const dataTransfer = new DataTransfer();
-    accumulatedFiles.forEach(file => dataTransfer.items.add(file));
-    fileInput.files = dataTransfer.files;
-  }
-  
-  // Handle add button click
-  addButton.addEventListener('click', () => {
-    console.log('Button clicked for:', inputId);
-    fileInput.click();
-  });
-  
-  // Handle file selection
-  fileInput.addEventListener('change', (e) => {
-    const newFiles = Array.from(e.target.files);
-    newFiles.forEach(file => {
-      if (file.type.match('image.*')) {
-        accumulatedFiles.push(file);
-      }
-    });
-    updatePreview();
-    updateFileInput();
-    fileInput.value = '';
-  });
-}
-
-function setupPDFUpload() {
-  const pdfInput = document.getElementById('supporting-docs-pdf');
-  const previewContainer = document.getElementById('pdf-preview');
-  const addButton = document.getElementById('add-pdf-btn');
-  
-  let accumulatedPDFs = [];
-  
-  function updatePreview() {
-    if (!previewContainer) return;
-    previewContainer.innerHTML = '';
-    accumulatedPDFs.forEach((file, index) => {
-      if (file.type !== 'application/pdf') return;
-      
-      const pdfDiv = document.createElement('div');
-      pdfDiv.className = 'relative group bg-slate-100 rounded-lg p-3 border border-slate-200';
-      pdfDiv.innerHTML = `
-        <div class="flex items-center gap-2">
-          <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-          </svg>
-          <div class="flex-1 truncate">
-            <p class="text-sm font-medium text-slate-700 truncate">${file.name}</p>
-            <p class="text-xs text-slate-500">${(file.size / 1024).toFixed(1)} KB</p>
-          </div>
-          <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" data-index="${index}">×</button>
-        </div>
-      `;
-      
-      const removeBtn = pdfDiv.querySelector('button');
-      removeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        accumulatedPDFs.splice(index, 1);
-        updatePreview();
-        updateFileInput();
-      });
-      
-      previewContainer.appendChild(pdfDiv);
-    });
-    
-    // Show/hide clear button
-    const clearPdfBtn = document.getElementById('clear-pdf-btn');
-    if (clearPdfBtn) {
-      if (accumulatedPDFs.length > 0) {
-        clearPdfBtn.classList.remove('hidden');
-      } else {
-        clearPdfBtn.classList.add('hidden');
-      }
-    }
-  }
-  
-  function updateFileInput() {
-    const dataTransfer = new DataTransfer();
-    accumulatedPDFs.forEach(file => dataTransfer.items.add(file));
-    pdfInput.files = dataTransfer.files;
-  }
-  
-  if (addButton) {
-    addButton.addEventListener('click', () => {
-      pdfInput.click();
-    });
-  }
-  
-  if (pdfInput) {
-    pdfInput.addEventListener('change', (e) => {
-      const newFiles = Array.from(e.target.files);
-      newFiles.forEach(file => {
-        if (file.type === 'application/pdf') {
-          accumulatedPDFs.push(file);
-        }
-      });
-      updatePreview();
-      updateFileInput();
-      pdfInput.value = '';
-    });
-  }
-  
-  const clearPdfBtn = document.getElementById('clear-pdf-btn');
-  if (clearPdfBtn) {
-    clearPdfBtn.addEventListener('click', () => {
-      accumulatedPDFs = [];
-      updatePreview();
-      updateFileInput();
-      clearPdfBtn.classList.add('hidden');
-    });
-  }
-}
-
-function setupImagePreview() {
-  const imageInputs = [
-    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
-    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
-    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
-  ];
-  
-  imageInputs.forEach(({ input, preview }) => {
-    const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
-          if (!file.type.match('image.*')) return;
-          const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-    }
-  });
-}
-
 function exportAsPDF() {
   const activeSectionBtn = document.querySelector('.section-btn.active');
   if (!activeSectionBtn) {
@@ -1749,9 +1533,6 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
     });
   }, 500);
 }
-
-document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
-
 document.addEventListener('DOMContentLoaded', () => {
   // Setup statistics navigation
   const viewStatisticsBtn = document.getElementById('view-statistics-btn');
@@ -1765,9 +1546,7 @@ document.addEventListener('DOMContentLoaded', () => {
       statisticsView.classList.remove('hidden');
       backToDashboardBtn.classList.remove('hidden');
       viewStatisticsBtn.classList.add('hidden');
-      
-      //FETCH REAL STATISTICS WHEN VIEWING
-      fetchStatistics();
+      fetchStatistics();  // This calls the GLOBAL function
     });
 
     backToDashboardBtn.addEventListener('click', () => {
@@ -1777,122 +1556,20 @@ document.addEventListener('DOMContentLoaded', () => {
       viewStatisticsBtn.classList.remove('hidden');
     });
 
-    // Make cells clickable (for debugging)
     document.querySelectorAll('.stat-cell').forEach(cell => {
       cell.addEventListener('click', function() {
         alert(`District: ${this.dataset.district}\nReport: ${this.dataset.report}\nCount: ${this.textContent}`);
       });
-      
       cell.addEventListener('mouseenter', () => cell.classList.add('active'));
       cell.addEventListener('mouseleave', () => cell.classList.remove('active'));
     });
   }
 
-function fetchStatistics() {
-  const STATS_URL = 'https://script.google.com/macros/s/AKfycby14OKUQqHUyw86pcdvX9ob5qYwzDGHMV3W6EZGD2vTx2jaTb9N26m32wCb2tXFuudA4A/exec';
+  // ❌ DELETE THESE EMPTY FUNCTIONS ❌
+  // function fetchStatistics() { }
+  // function updateTotals() { }
 
-  fetch(STATS_URL)
-    .then(response => {
-      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      return response.text(); // First get raw text
-    })
-    .then(text => {
-      // Try to parse as JSON; if fails, assume it's an error page
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        console.warn("Response is not JSON. Assuming error page:", text.slice(0, 200));
-        throw new Error("Invalid response: Expected JSON, got HTML/error");
-      }
-
-      // Validate structure
-      if (!data || typeof data !== 'object' || Array.isArray(data)) {
-        throw new Error("Unexpected data format: expected object");
-      }
-
-      // Map report types & districts
-      const reportMap = {
-        'buletin-daerah': 'BULETIN DAERAH',
-        'ip2m1': 'IP2M1',
-        'ip3m2': 'IP3M2'
-      };
-      const districtMap = {
-        'Pejabat Residen Bahagian Mukah': 'RESIDEN BAHAGIAN MUKAH',
-        'Pejabat Daerah Mukah': 'MUKAH',
-        'Pejabat Daerah Dalat': 'DALAT',
-        'Pejabat Daerah Matu': 'MATU',
-        'Pejabat Daerah Daro': 'DARO',
-        'Pejabat Daerah Tanjung Manis': 'TANJUNG MANIS',
-        'Pejabat Daerah Kecil Balingian': 'KECIL BALINGIAN',
-        'Pejabat Daerah Kecil Oya': 'KECIL OYA',
-        'Pejabat Daerah Kecil Igan': 'KECIL IGAN'
-      };
-
-      // Now process valid data
-      let updatedAny = false;
-      document.querySelectorAll('.stat-cell').forEach(cell => {
-        const districtKey = cell.dataset.district;
-        const reportKey = cell.dataset.report;
-
-        let count = 0;
-        for ([rawDistrict, reports] of Object.entries(data)) {
-          const displayDistrict = districtMap[rawDistrict] || rawDistrict;
-          
-          // Check if this is the district we're looking for
-          if (displayDistrict === districtKey && typeof reports === 'object') {
-            // Check all report types for this district
-            for (const [rawReport, value] of Object.entries(reports)) {
-              // Check if this report type matches
-              if (reportMap[rawReport] === reportKey) {
-                // Use value directly (no parseInt needed)
-                count = Number(value) || 0;
-                updatedAny = true;
-                break;
-              }
-            }
-          }
-        }
-
-        // Only update if we found a match AND count is number
-        if (!isNaN(count)) {
-          cell.textContent = count;
-        }
-      });
-
-      //Recalculate totals AFTER cells are updated
-      updateTotals();
-
-      if (!updatedAny) {
-        console.warn("No valid statistics found in response. Keeping default values.");
-      }
-
-    })
-    .catch(error => {
-      console.error('Failed to fetch statistics:', error);
-    });
-}
-
-function updateTotals() {
-  // Update row totals: Sum all district stat-cells → last cell (TOTAL column)
-  document.querySelectorAll('.report-type-row').forEach(row => {
-    const statCells = row.querySelectorAll('td.stat-cell');
-    if (statCells.length === 0) return; // Skip if no stat cells found
-    
-    let total = 0;
-    statCells.forEach(cell => {
-      const num = parseInt(cell.textContent.trim());
-      if (!isNaN(num)) total += num;
-    });
-    
-    // Update the last cell in the row (TOTAL column)
-    const cells = row.querySelectorAll('td');
-    if (cells.length > 0) {
-      cells[cells.length - 1].textContent = total;
-    }
-  });
-}
-  // Setup section selection WITH report type tracking
+  // Setup section selection
   const sectionBtns = document.querySelectorAll('.section-btn');
   const form = document.getElementById('main-form');
   const sections = {
@@ -1903,9 +1580,7 @@ function updateTotals() {
   
   sectionBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      // SET REPORT TYPE VALUE WHEN BUTTON CLICKED
       document.getElementById('report-type').value = btn.dataset.section;
-      
       sectionBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       form.classList.remove('hidden');
@@ -1917,33 +1592,80 @@ function updateTotals() {
     });
   });
 
-  // Setup image preview
-  const imageInputs = [
-    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
-    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
-    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
-  ];
-  
-  imageInputs.forEach(({ input, preview }) => {
-    const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
+  // Image preview setup
+  function setupImagePreview() {
+    console.log('Setting up image preview...');
+    
+    const buletinInput = document.getElementById('buletin-daerah-images');
+    const buletinPreview = document.getElementById('buletin-daerah-image-preview');
+    const ip2m1Input = document.getElementById('ip2m1-images');
+    const ip2m1Preview = document.getElementById('ip2m1-image-preview');
+    const ip3m2Input = document.getElementById('ip3m2-images');
+    const ip3m2Preview = document.getElementById('ip3m2-image-preview');
+    
+    function setupUploader(inputEl, previewEl, name) {
+      if (!inputEl) {
+        console.log('Input not found:', name);
+        return;
+      }
+      if (!previewEl) {
+        console.log('Preview not found:', name);
+        return;
+      }
+      
+      console.log('Setting up:', name);
+      let accumulatedFiles = [];
+      
+      function updatePreview() {
         previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
+        accumulatedFiles.forEach((file, idx) => {
           if (!file.type.match('image.*')) return;
           const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
+          reader.onload = (e) => {
+            const div = document.createElement('div');
+            div.className = 'relative group';
+            div.innerHTML = `
+              <img src="${e.target.result}" class="w-full h-24 object-cover rounded-lg border border-slate-200">
+              <button type="button" class="remove-btn absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center hover:bg-red-600 transition-colors">×</button>
+            `;
+            div.querySelector('.remove-btn').onclick = () => {
+              accumulatedFiles.splice(idx, 1);
+              updatePreview();
+              updateInput();
+            };
+            previewEl.appendChild(div);
           };
           reader.readAsDataURL(file);
         });
+      }
+      
+      function updateInput() {
+        const dt = new DataTransfer();
+        accumulatedFiles.forEach(f => dt.items.add(f));
+        inputEl.files = dt.files;
+      }
+      
+      inputEl.addEventListener('change', (e) => {
+        console.log('Files selected for:', name, e.target.files.length);
+        const newFiles = Array.from(e.target.files);
+        newFiles.forEach(f => {
+          if (f.type.match('image.*')) accumulatedFiles.push(f);
+        });
+        updatePreview();
+        updateInput();
+        inputEl.value = '';
       });
     }
-  });
+    
+    setupUploader(buletinInput, buletinPreview, 'Buletin Daerah');
+    setupUploader(ip2m1Input, ip2m1Preview, 'IP2M1');
+    setupUploader(ip3m2Input, ip3m2Preview, 'IP3M2');
+    
+    console.log('Image preview setup complete');
+  }
+
+  // CALL THE FUNCTION
+  setupImagePreview();
 
   // Form submission
   document.getElementById('main-form')?.addEventListener('submit', submitForm);
@@ -1965,5 +1687,5 @@ function updateTotals() {
   // Initialize calculations
   updateIP2M1();
   updateIP3M2();
-});
-</script> 
+  
+}); // <-- MAKE SURE THIS CLOSING BRACKET EXISTS
