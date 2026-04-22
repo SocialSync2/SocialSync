@@ -407,26 +407,16 @@ body {
               <textarea id="ip1-pihak-media" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Pihak Media yang hadir"></textarea>
             </div>
 
-            <!-- Gambar Program - BULETIN DAERAH -->
+            <!-- Gambar Program (consistent with IP2M1 image upload block) -->
             <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
               <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
               <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
-              
               <div class="flex flex-col gap-3">
-                <!-- Single button in CYAN color -->
-                <label for="buletin-daerah-images" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2 cursor-pointer w-fit">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                  </svg>
-                  Upload Photos (Select one or multiple)
-                </label>
-                
-                <input type="file" id="buletin-daerah-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
-                
-                <!-- Preview container -->
+                <label for="buletin-daerah-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
+                <input type="file" id="buletin-daerah-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
                 <div id="buletin-daerah-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
               </div>
-              <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail. Anda boleh pilih satu atau banyak gambar sekali gus.</p>
+              <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
             </div>
           </div>
         </div>
@@ -520,47 +510,48 @@ body {
                 <p class="text-sm text-slate-600 mt-2">(Average of Media Coverage + Survey Satisfaction + Participant Involvement)</p>
               </div>
 
-                <!-- Supporting Documents PDF Upload - IP2M1 -->
-                <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
-                  <h4 class="text-md font-semibold text-cyan-700 mb-4">Supporting Documents (PDF)</h4>
-                  
-                  <div class="flex flex-col gap-3">
-                    <label for="ip2m1-pdfs" class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2 cursor-pointer w-fit">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                      Add PDF Files (Cumulative)
-                    </label>
-                    
-                    <input type="file" id="ip2m1-pdfs" class="hidden" accept=".pdf" multiple>
-                    
-                    <!-- PDF Preview Container -->
-                    <div id="ip2m1-pdf-preview" class="mt-3 space-y-2"></div>
-                  </div>
-                  <p class="text-xs text-slate-500 mt-2">Sokongan: PDF sahaja. Anda boleh tambah fail satu persatu atau berbilang.</p>
+              <!-- Supporting Documents -->
+              <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+                <h4 class="text-md font-semibold text-cyan-700 mb-4">Checklist for Supporting Documents (Softcopy)</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <label class="flex items-center gap-3 cursor-pointer group p-2 rounded-lg hover:bg-white/50 transition-colors">
+                    <input type="checkbox" id="doc-kertas-kerja" class="w-5 h-5 rounded checkbox-custom">
+                    <span class="text-slate-700 group-hover:text-slate-900 transition-colors">Kertas kerja program / slide pembentangan</span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer group p-2 rounded-lg hover:bg-white/50 transition-colors">
+                    <input type="checkbox" id="doc-surat-mesyuarat" class="w-5 h-5 rounded checkbox-custom">
+                    <span class="text-slate-700 group-hover:text-slate-900 transition-colors">Surat mesyuarat penyelarasan / jemputan program</span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer group p-2 rounded-lg hover:bg-white/50 transition-colors">
+                    <input type="checkbox" id="doc-laporan-kpi" class="w-5 h-5 rounded checkbox-custom">
+                    <span class="text-slate-700 group-hover:text-slate-900 transition-colors">Laporan selepas program - borang KPI BULETIN DAERAH</span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer group p-2 rounded-lg hover:bg-white/50 transition-colors">
+                    <input type="checkbox" id="doc-gambar" class="w-5 h-5 rounded checkbox-custom">
+                    <span class="text-slate-700 group-hover:text-slate-900 transition-colors">Gambar program / tangkap layar media</span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer group p-2 rounded-lg hover:bg-white/50 transition-colors md:col-span-2">
+                    <input type="checkbox" id="doc-laporan-sms" class="w-5 h-5 rounded checkbox-custom">
+                    <span class="text-slate-700 group-hover:text-slate-900 transition-colors">Laporan Maklum Balas dari Survey Management System (SMS)</span>
+                  </label>
+                </div>
+                <div class="mt-4 pt-4 border-t border-cyan-200">
+                  <label for="supporting-docs-pdf" class="block text-sm font-medium text-slate-700 mb-2">Upload Supporting Documents (PDF)</label>
+                  <input type="file" id="supporting-docs-pdf" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept=".pdf" multiple>
+                  <p class="text-xs text-slate-500 mt-1">Upload PDF files for supporting documents (max 10MB each)</p>
                 </div>
               </div>
 
-              <!-- Gambar Program - IP2M1 -->
+              <!-- Gambar Program -->
               <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
                 <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
-                
                 <div class="flex flex-col gap-3">
-                  <!-- Single button in CYAN color -->
-                  <label for="ip2m1-images" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2 cursor-pointer w-fit">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                    Upload Photos (Select one or multiple)
-                  </label>
-                  
-                  <input type="file" id="ip2m1-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
-                  
-                  <!-- Preview container -->
+                  <label for="ip2m1-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
+                  <input type="file" id="ip2m1-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
                   <div id="ip2m1-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                 </div>
-                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail. Anda boleh pilih satu atau banyak gambar sekali gus.</p>
+                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
               </div>
             </div>
           </div>
@@ -651,27 +642,17 @@ body {
                 </div>
               </div>
 
-              <!-- Gambar Program - IP3M2 -->
+              <!-- Gambar Program -->
               <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
                 <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
-                
                 <div class="flex flex-col gap-3">
-                  <!-- Single button in CYAN color -->
-                  <label for="ip3m2-images" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg text-sm font-medium transition-all flex items-center gap-2 cursor-pointer w-fit">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                    Upload Photos (Select one or multiple)
-                  </label>
-                  
-                  <input type="file" id="ip3m2-images" class="hidden" accept="image/jpeg,image/png,image/jpg" multiple>
-                  
-                  <!-- Preview container -->
+                  <label for="ip3m2-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
+                  <input type="file" id="ip3m2-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
                   <div id="ip3m2-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                 </div>
-                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail. Anda boleh pilih satu atau banyak gambar sekali gus.</p>
-              </div>      
+                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -871,15 +852,6 @@ let lastSubmittedImages = {
     'ip2m1': [],
     'ip3m2': []
 };
-
-// === CUMULATIVE FILE STORAGE ===
-const fileStorage = {
-  'buletin-daerah': { images: [], pdfs: [] },
-  'ip2m1': { images: [], pdfs: [] },
-  'ip3m2': { images: [], pdfs: [] }
-};
-
-let currentSection = null; // Track active section for file uploads
 
 async function submitForm(e) {
   e.preventDefault();
@@ -1580,45 +1552,118 @@ pdfContent.innerHTML += `
 `;
     document.body.appendChild(pdfContent);
 
-  // === HANDLE IMAGES FOR PDF EXPORT ===
-  const imageContainer = pdfContent.querySelector('#pdf-images-container');
-  const storedImages = fileStorage[sectionId]?.images || [];
-
-  if (storedImages.length > 0) {
-    let loadedCount = 0;
+    // === HANDLE IMAGES ===
+    const imageContainer = pdfContent.querySelector('#pdf-images-container');
+    const imageInput = document.getElementById(`${sectionId}-images`);
     
-    for (const file of storedImages) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
+    let imagePromises = [];
+    
+    // Check for stored images first
+    if (lastSubmittedImages && lastSubmittedImages[sectionId] && lastSubmittedImages[sectionId].length > 0) {
+      console.log('Using stored images from submission');
+      lastSubmittedImages[sectionId].forEach(imageData => {
         const img = document.createElement('img');
-        img.src = e.target.result;
-        // Controlled sizing
-        img.style.maxWidth = '400px';
-        img.style.maxHeight = '300px';
+        img.src = `data:${imageData.mimeType};base64,${imageData.data}`;
+        // CONTROLLED size - not too big, not too small
+        img.style.maxWidth = '400px';  // Max width 400px
         img.style.width = 'auto';
         img.style.height = 'auto';
-        img.style.margin = '0 15px 20px 0';
+        img.style.maxHeight = '300px';  // Max height 300px
+        img.style.marginBottom = '20px';
+        img.style.marginRight = '20px';
         img.style.borderRadius = '8px';
         img.style.border = '1px solid #e2e8f0';
         img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-        img.style.display = 'inline-block';
+        img.style.display = 'inline-block';  // Allow images side by side
         
+        const promise = new Promise((resolve) => {
+          img.onload = () => resolve(img);
+          img.onerror = () => resolve(null);
+        });
+        imagePromises.push(promise);
         imageContainer.appendChild(img);
-        loadedCount++;
+      });
+    } 
+    // Otherwise use current file input
+    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
+      console.log('Using current file input images');
+      const imageFiles = Array.from(imageInput.files);
+      imageFiles.forEach(file => {
+        if (!file.type.match('image.*')) return;
         
-        // Generate PDF after all images loaded
-        if (loadedCount === storedImages.length) {
-          generatePDF(pdfContent, programmeName, btn, originalText);
-        }
-      };
-      reader.readAsDataURL(file);
+        const reader = new FileReader();
+        const promise = new Promise((resolve) => {
+          reader.onload = (e) => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            // CONTROLLED size - not too big, not too small
+            img.style.maxWidth = '400px';  // Max width 400px
+            img.style.width = 'auto';
+            img.style.height = 'auto';
+            img.style.maxHeight = '300px';  // Max height 300px
+            img.style.marginBottom = '20px';
+            img.style.marginRight = '20px';
+            img.style.borderRadius = '8px';
+            img.style.border = '1px solid #e2e8f0';
+            img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            img.style.display = 'inline-block';  // Allow images side by side
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            imageContainer.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+        imagePromises.push(promise);
+      });
     }
-  } else {
-    imageContainer.innerHTML = '<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>';
-    generatePDF(pdfContent, programmeName, btn, originalText);
+    // Otherwise use current file input
+    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
+      console.log('Using current file input images');
+      const imageFiles = Array.from(imageInput.files).slice(0, 4);
+      imageFiles.forEach(file => {
+        if (!file.type.match('image.*')) return;
+        
+        const reader = new FileReader();
+        const promise = new Promise((resolve) => {
+          reader.onload = (e) => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.width = '100%';
+            img.style.height = '150px';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '8px';
+            img.style.border = '1px solid #e2e8f0';
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            imageContainer.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+        imagePromises.push(promise);
+      });
+    }
+    
+    if (imagePromises.length === 0) {
+      imageContainer.innerHTML = '<div style="grid-column:span 2;text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>';
+      generatePDF(pdfContent, programmeName, btn, originalText);
+    } else {
+      Promise.all(imagePromises).then(() => {
+        generatePDF(pdfContent, programmeName, btn, originalText);
+      }).catch(() => {
+        generatePDF(pdfContent, programmeName, btn, originalText);
+      });
+    }
+    
+  } catch (error) {
+    console.error('Export error:', error);
+    alert('⚠️ Ralat semasa menjana PDF: ' + error.message);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
   }
+}
 
-// === MOVE generatePDF OUTSIDE exportAsPDF ===
 function generatePDF(pdfContent, programmeName, btn, originalText) {
   setTimeout(() => {
     html2canvas(pdfContent, {
@@ -1658,319 +1703,13 @@ function generatePDF(pdfContent, programmeName, btn, originalText) {
       if (document.body.contains(pdfContent)) {
         document.body.removeChild(pdfContent);
       }
-      if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = originalText;
-      }
+      btn.disabled = false;
+      btn.innerHTML = originalText;
     });
   }, 500);
 }
 
-// === EXPORT AS PDF FUNCTION (CORRECTED) ===
-function exportAsPDF() {
-  const activeSectionBtn = document.querySelector('.section-btn.active');
-  if (!activeSectionBtn) {
-    alert('❌ Please select a report type first.');
-    return;
-  }
-
-  const btn = document.getElementById('export-pdf-btn');
-  const originalText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<span>Generating PDF...</span>';
-
-  try {
-    const sectionId = activeSectionBtn.dataset.section;
-    const pdfContent = document.createElement('div');
-    pdfContent.id = 'pdf-export-content';
-    pdfContent.style.width = '800px';
-    pdfContent.style.padding = '30px 40px';
-    pdfContent.style.fontFamily = '"DM Sans", sans-serif';
-    pdfContent.style.color = '#1e293b';
-    pdfContent.style.backgroundColor = 'white';
-    pdfContent.style.lineHeight = '1.5';
-    pdfContent.style.margin = '0 auto';
-    pdfContent.style.boxSizing = 'border-box';
-    pdfContent.style.position = 'relative';
-
-    // === GET FORM DATA ===
-    let programmeName = document.getElementById('programme')?.value?.trim() || 'Programme';
-    let programmeDate = document.getElementById('date')?.value || 'Date';
-    let organizerText = 'Organizer';
-    let daerah = 'Daerah';
-    
-    const isFormEmpty = !document.getElementById('programme').value.trim();
-    if (lastSubmittedData && isFormEmpty) {
-      programmeName = lastSubmittedData.programme_name;
-      programmeDate = lastSubmittedData.programme_date;
-      organizerText = lastSubmittedData.organizer;
-      daerah = lastSubmittedData.daerah;
-    } else {
-      const organizerInputs = document.querySelectorAll('input[name="organizer[]"]');
-      const organizerValues = Array.from(organizerInputs)
-        .map(input => input.value.trim())
-        .filter(value => value !== '');
-      organizerText = organizerValues.join(', ') || organizerText;
-      
-      const daerahEl = document.getElementById('daerah-dropdown');
-      if (daerahEl && daerahEl.selectedIndex >= 0) {
-        daerah = daerahEl.options[daerahEl.selectedIndex]?.text || daerah;
-      }
-    }
-
-    // === HEADER ===
-    pdfContent.innerHTML = `
-      <div style="position:relative;height:100px;margin-bottom:25px;border-bottom:2px solid #1e40af">
-        <div style="text-align:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
-          <div style="font-size:24px;font-weight:bold;color:#000;margin-bottom:5px">${daerah}</div>
-        </div>
-      </div>
-    `;
-
-    // === CONTENT BY SECTION (same as your original, abbreviated for brevity) ===
-    if (sectionId === 'buletin-daerah') {
-      // ... your BULETIN DAERAH content here (same as original) ...
-      pdfContent.innerHTML += `<div style="margin-bottom:25px"><h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase">BULETIN DAERAH</h2><!-- Add your table content here --></div>`;
-    } else if (sectionId === 'ip2m1') {
-      // ... your IP2M1 content here ...
-      pdfContent.innerHTML += `<div style="margin-bottom:25px"><h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase">IP2M1</h2><!-- Add your content here --></div>`;
-    } else if (sectionId === 'ip3m2') {
-      // ... your IP3M2 content here ...
-      pdfContent.innerHTML += `<div style="margin-bottom:25px"><h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #267589;text-transform:uppercase">IP3M2</h2><!-- Add your content here --></div>`;
-    }
-
-    // === IMAGES SECTION ===
-    pdfContent.innerHTML += `
-      <div style="margin-top:30px">
-        <h3 style="font-size:16px;font-weight:bold;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">GAMBAR PROGRAM</h3>
-        <div id="pdf-images-container" style="margin-top:15px;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-start;"></div>
-      </div>
-      <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:12px">
-        <p style="margin-top:8px;font-size:11px;color:#64748b">Dijana pada: ${new Date().toLocaleDateString('ms-MY', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
-      </div>
-    `;
-    
-    document.body.appendChild(pdfContent);
-
-    // === HANDLE IMAGES FROM fileStorage ===
-    const imageContainer = pdfContent.querySelector('#pdf-images-container');
-    const storedImages = fileStorage[sectionId]?.images || [];
-
-    if (storedImages.length > 0) {
-      let loadedCount = 0;
-      for (const file of storedImages) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          img.style.maxWidth = '400px';
-          img.style.maxHeight = '300px';
-          img.style.width = 'auto';
-          img.style.height = 'auto';
-          img.style.margin = '0 15px 20px 0';
-          img.style.borderRadius = '8px';
-          img.style.border = '1px solid #e2e8f0';
-          img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-          img.style.display = 'inline-block';
-          imageContainer.appendChild(img);
-          loadedCount++;
-          if (loadedCount === storedImages.length) {
-            generatePDF(pdfContent, programmeName, btn, originalText);
-          }
-        };
-        reader.readAsDataURL(file);
-      }
-    } else {
-      imageContainer.innerHTML = '<div style="text-align:center;padding:20px;color:#64748b;background:#f8fafc;border-radius:8px">Tiada gambar dimuat naik untuk laporan ini</div>';
-      generatePDF(pdfContent, programmeName, btn, originalText);
-    }
-    
-  } catch (error) {
-    console.error('Export error:', error);
-    alert('⚠️ Ralat semasa menjana PDF: ' + error.message);
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-    }
-  }
-}
-
 document.getElementById('export-pdf-btn')?.addEventListener('click', exportAsPDF);
-
-// === CUMULATIVE FILE UPLOAD HANDLER ===
-function handleFileSelect(event, fileType, sectionId = null) {
-  const section = sectionId || currentSection;
-  if (!section) {
-    alert('⚠️ Please select a report type first.');
-    event.target.value = '';
-    return;
-  }
-  
-  const newFiles = Array.from(event.target.files);
-  const storage = fileStorage[section];
-  
-  // Filter by type
-  const validFiles = newFiles.filter(file => {
-    if (fileType === 'image') {
-      return file.type.match('image/(jpeg|png|jpg|gif|webp)');
-    } else if (fileType === 'pdf') {
-      return file.type === 'application/pdf';
-    }
-    return true;
-  });
-  
-  if (validFiles.length === 0) {
-    alert('⚠️ Please select valid ' + fileType + ' files only.');
-    event.target.value = '';
-    return;
-  }
-  
-  // ✅ Add to storage (cumulative - doesn't replace)
-  if (fileType === 'image') {
-    storage.images.push(...validFiles);
-  } else if (fileType === 'pdf') {
-    storage.pdfs.push(...validFiles);
-  }
-  
-  // ✅ Refresh preview
-  refreshFilePreview(section);
-  
-  // ✅ Reset input so same file can be re-selected if needed
-  event.target.value = '';
-}
-
-// === REFRESH FILE PREVIEW ===
-function refreshFilePreview(sectionId) {
-  const storage = fileStorage[sectionId];
-  
-  // Update image previews
-  const imagePreview = document.getElementById(`${sectionId}-image-preview`);
-  if (imagePreview) {
-    imagePreview.innerHTML = '';
-    if (storage.images.length === 0) {
-      imagePreview.innerHTML = '<p class="text-sm text-slate-400 italic">No images selected</p>';
-      return;
-    }
-    
-    storage.images.forEach((file, index) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'relative group';
-        wrapper.innerHTML = `
-          <img src="${e.target.result}" class="w-full h-24 object-cover rounded-lg border border-slate-200 cursor-pointer hover:opacity-90 transition" 
-               onclick="openImagePreview('${e.target.result}', '${file.name.replace(/'/g, "\\'")}')">
-          <button type="button" 
-                  class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition"
-                  onclick="removeFile('${sectionId}', 'image', ${index})"
-                  title="Remove">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-          <p class="text-xs text-slate-500 mt-1 truncate" title="${file.name}">${file.name}</p>
-        `;
-        imagePreview.appendChild(wrapper);
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-  
-  // Update PDF previews (for IP2M1 only)
-  if (sectionId === 'ip2m1') {
-    const pdfPreview = document.getElementById('ip2m1-pdf-preview');
-    if (pdfPreview) {
-      pdfPreview.innerHTML = '';
-      if (storage.pdfs.length === 0) {
-        pdfPreview.innerHTML = '<p class="text-sm text-slate-400 italic">No PDFs selected</p>';
-        return;
-      }
-      
-      storage.pdfs.forEach((file, index) => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'flex items-center gap-2 p-2 bg-slate-50 rounded-lg border border-slate-200';
-        wrapper.innerHTML = `
-          <svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-          </svg>
-          <span class="text-sm text-slate-700 truncate flex-1" title="${file.name}">${file.name}</span>
-          <button type="button" 
-                  class="w-6 h-6 bg-red-100 hover:bg-red-200 text-red-600 rounded flex items-center justify-center transition"
-                  onclick="removeFile('ip2m1', 'pdf', ${index})"
-                  title="Remove">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
-        `;
-        pdfPreview.appendChild(wrapper);
-      });
-    }
-  }
-}
-
-// === REMOVE FILE FROM STORAGE ===
-function removeFile(sectionId, fileType, index) {
-  if (fileType === 'image') {
-    fileStorage[sectionId].images.splice(index, 1);
-  } else if (fileType === 'pdf') {
-    fileStorage[sectionId].pdfs.splice(index, 1);
-  }
-  refreshFilePreview(sectionId);
-}
-
-// === LIGHTBOX FOR IMAGE PREVIEW ===
-function openImagePreview(src, filename) {
-  const modal = document.createElement('div');
-  modal.className = 'fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4';
-  modal.innerHTML = `
-    <div class="relative max-w-4xl max-h-[90vh]">
-      <img src="${src}" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl">
-      <p class="text-white text-center mt-2 text-sm">${filename}</p>
-      <button class="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition"
-              onclick="this.closest('.fixed').remove()">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-  `;
-  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-  document.body.appendChild(modal);
-}
-
-// === SETUP FILE UPLOAD EVENT LISTENERS ===
-function setupFileUploads() {
-  // Image upload handlers (all sections)
-  ['buletin-daerah', 'ip2m1', 'ip3m2'].forEach(section => {
-    const input = document.getElementById(`${section}-images`);
-    if (input) {
-      // Clone to remove old listeners, then add new one
-      const newInput = input.cloneNode(true);
-      input.parentNode.replaceChild(newInput, input);
-      newInput.addEventListener('change', (e) => {
-        handleFileSelect(e, 'image', section);
-      });
-    }
-  });
-  
-  // PDF upload handler (IP2M1 only)
-  const pdfInput = document.getElementById('ip2m1-pdfs');
-  if (pdfInput) {
-    pdfInput.addEventListener('change', (e) => {
-      handleFileSelect(e, 'pdf', 'ip2m1');
-    });
-  }
-}
-
-// === CLEAR FILE STORAGE (for form reset) ===
-function clearFileStorage(sectionId) {
-  if (fileStorage[sectionId]) {
-    fileStorage[sectionId].images = [];
-    fileStorage[sectionId].pdfs = [];
-    refreshFilePreview(sectionId);
-  }
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   // Setup statistics navigation
@@ -2185,7 +1924,5 @@ function updateTotals() {
   // Initialize calculations
   updateIP2M1();
   updateIP3M2();
-  setupSectionSelection();
-  setupFileUploads();
 });
 </script>
