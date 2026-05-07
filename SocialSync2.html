@@ -208,7 +208,7 @@ body {
     border: 2px solid #3b82f6;
   }
   .district-header {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #6ed2e4 0%, #0891b2 100%);
     color: white;
     font-weight: 600;
   }
@@ -233,7 +233,7 @@ body {
           </svg>
         </div>
         <div>
-          <h1 id="app-title" class="title-font text-xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">SocialSync</h1>
+          <h1 id="app-title" class="title-font text-xl font-bold bg-gradient-to-r from-cyan-600 to-cyan-600 bg-clip-text text-transparent">SocialSync</h1>
           <p id="app-tagline" class="text-xs text-slate-600">Event & Programme Management System</p>
         </div>
       </div>
@@ -307,7 +307,7 @@ body {
             <div class="p-5 space-y-4 bg-white rounded-xl border border-slate-100">
               <!-- DAERAH Dropdown -->
               <div>
-                <h4 class="text-sm font-semibold text-blue-600 mb-3">Pilih Pejabat</h4>
+                <h4 class="text-sm font-semibold text-cyan-600 mb-3">Pilih Pejabat</h4>
                 <select id="daerah-dropdown" class="w-full px-4 py-3 rounded-lg input-style text-slate-800">
                   <option value="">-- Pilih Pejabat --</option>
                   <option value="Pejabat Residen Bahagian Mukah">Pejabat Residen Bahagian Mukah</option>
@@ -349,87 +349,94 @@ body {
         </div>
 
         <!-- Sections Container -->
-        <div id="sections-container" class="p-6 space-y-6">
-          <!-- BULETIN DAERAH Section - FIXED -->
-          <div id="section-buletin-daerah" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
-            <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
-              <h3 class="text-md font-semibold text-blue-700 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                BULETIN DAERAH - Programme Details
-              </h3>
+        <div id="sections-container" class="p-6 space-y-8">
+        <div id="section-buletin-daerah" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
+          <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
+            <h3 class="text-md font-semibold text-cyan-700 flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              BULETIN DAERAH - Programme Details
+            </h3>
+          </div>
+          
+          <div class="p-5 space-y-6">
+            <!-- Tempat (styled like IP2M1 info blocks) -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">Tempat</h4>
+              <input type="text" id="ip1-tempat" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Tempat">
             </div>
-            <div class="p-5 space-y-4">
-              <div>
-                <label for="ip1-tempat" class="block text-sm text-slate-700 mb-1">Tempat</label>
-                <input type="text" id="ip1-tempat" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Tempat dan Kapasiti">
-              </div>
-              <div>
-                <label for="ip1-objektif" class="block text-sm text-slate-700 mb-1">Objektif/Deskripsi Program</label>
-                <textarea id="ip1-objektif" name="ip1-objektif" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Objektif Program"></textarea>
-              </div>
-              <div>
-                <label for="ip1-impak" class="block text-sm text-slate-700 mb-1">Impak Program/PCDS2030 & SDG2030</label>
-                <textarea id="ip1-impak" name="ip1-impak" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Impak Program"></textarea>
-              </div>
-              
-              <!-- Attendance Info -->
+
+            <!-- Objektif -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">Objektif/Deskripsi Program</h4>
+              <textarea id="ip1-objektif" rows="3" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Objektif Program"></textarea>
+            </div>
+
+            <!-- Impak -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">Impak Program / PCDS2030 & SDG2030</h4>
+              <textarea id="ip1-impak" rows="3" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Impak Program"></textarea>
+            </div>
+
+            <!-- Tetamu Kehormat & Bilangan Tetamu (grid layout same as IP2M1 satisfaction grid) -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">Kehadiran & VIP</h4>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm text-slate-700 mb-1">Tetamu Kehormat</label>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Tetamu Kehormat</label>
                   <div id="vip-guests-container" class="space-y-2">
                     <div class="flex gap-2">
-                      <input type="text" name="vip_guest[]" class="flex-1 px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Nama tetamu kehormat">
+                      <input type="text" name="vip_guest[]" class="flex-1 px-4 py-3 rounded-lg input-style text-slate-800" placeholder="Nama tetamu kehormat">
                       <button type="button" class="px-3 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700" onclick="addVipGuest()">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                       </button>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <label for="ip1-bil-tetamu" class="block text-sm text-slate-700 mb-1">Bilangan Tetamu Yang Hadir</label>
+                  <label for="ip1-bil-tetamu" class="block text-sm font-medium text-slate-700 mb-1">Bilangan Tetamu Yang Hadir</label>
                   <input type="number" id="ip1-bil-tetamu" min="0" class="w-full px-4 py-3 rounded-lg input-style text-slate-800" placeholder="Bilangan Tetamu">
                 </div>
-                <div class="md:col-span-2">
-                  <label for="ip1-pihak-media" class="block text-sm text-slate-700 mb-1">Pihak Media Yang Hadir</label>
-                  <textarea id="ip1-pihak-media" name="ip1-pihak-media" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Pihak Media yang hadir"></textarea>
-                </div>
-              </div>
-
-              <!-- Gambar Program -->
-              <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                <h4 class="text-md font-semibold text-blue-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
-                <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
-                <div class="flex flex-col gap-3">
-                  <label for="buletin-daerah-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
-                  <input type="file" id="buletin-daerah-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
-                  <div id="buletin-daerah-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
-                </div>
-                <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
               </div>
             </div>
-          </div>
 
+            <!-- Pihak Media -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">Pihak Media Yang Hadir</h4>
+              <textarea id="ip1-pihak-media" rows="2" class="w-full px-4 py-3 rounded-lg input-style text-slate-800 placeholder-slate-400" placeholder="Pihak Media yang hadir"></textarea>
+            </div>
+
+            <!-- Gambar Program (consistent with IP2M1 image upload block) -->
+            <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+              <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
+              <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
+              <div class="flex flex-col gap-3">
+                <label for="buletin-daerah-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
+                <input type="file" id="buletin-daerah-images" class="w-full px-4 py-2 rounded-lg input-style text-slate-800" accept="image/jpeg,image/png,image/jpg" multiple>
+                <div id="buletin-daerah-image-preview" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+              </div>
+              <p class="text-xs text-slate-500 mt-2">Sokongan: JPG, PNG. Saiz maksimum disyorkan: 5MB setiap fail.</p>
+            </div>
+          </div>
+        </div>
           <!-- IP2M1:2 Section -->
           <div id="section-ip2m1" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
             <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
-              <h3 class="text-md font-semibold text-blue-700 flex items-center justify-between">
+              <h3 class="text-md font-semibold text-cyan-700 flex items-center justify-between">
                 <span class="flex items-center gap-2">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                   IP2M1 - Community Engagement Index
                 </span>
-                <span class="text-sm font-normal text-blue-600">Performance & Feedback Analysis</span>
+                <span class="text-sm font-normal text-cyan-600">Performance & Feedback Analysis</span>
               </h3>
             </div>
             <div class="p-5 space-y-6">
               <!-- Section A: Information Sharing -->
-              <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                <h4 class="text-md font-semibold text-blue-700 mb-4">A. Information Sharing and Publication (100%)</h4>
+              <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+                <h4 class="text-md font-semibold text-cyan-700 mb-4">A. Information Sharing and Publication (100%)</h4>
                 <div class="mb-4">
                   <label class="flex items-center gap-3 cursor-pointer group">
                     <input type="checkbox" id="media-cetak-checkbox" class="w-5 h-5 rounded checkbox-custom">
@@ -459,8 +466,8 @@ body {
 
               <!-- Section B: Survey -->
               <!-- Satisfaction -->
-              <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                <h4 class="text-md font-semibold text-blue-700 mb-4">Participant Satisfaction Level</h4>
+              <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+                <h4 class="text-md font-semibold text-cyan-700 mb-4">Participant Satisfaction Level</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="ip2-total-respondent" class="block text-sm text-slate-700 mb-1">Total Respondent</label>
@@ -472,14 +479,14 @@ body {
                   </div>
                 </div>
                 <div class="mt-4 p-3 bg-white rounded-lg border border-blue-200">
-                  <p class="text-sm text-slate-700">Percentages of Response Positively: <span id="ip2-satisfaction-percent" class="text-blue-600 font-semibold">0%</span></p>
+                  <p class="text-sm text-slate-700">Percentages of Response Positively: <span id="ip2-satisfaction-percent" class="text-cyan-600 font-semibold">0%</span></p>
                   <p class="text-xs text-slate-500">(Positive Respondent / Total Respondent) × 100%</p>
                 </div>
               </div>
 
               <!-- Section C: Participation -->
-              <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                <h4 class="text-md font-semibold text-blue-700 mb-4">C. Participant Involvement (100%)</h4>
+              <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+                <h4 class="text-md font-semibold text-cyan-700 mb-4">C. Participant Involvement (100%)</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="crowd-size" class="block text-sm text-slate-700 mb-1">Crowd Size (Actual Attendance)</label>
@@ -536,8 +543,8 @@ body {
               </div>
 
               <!-- Gambar Program -->
-              <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                <h4 class="text-md font-semibold text-blue-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
+              <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+                <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
                   <label for="ip2m1-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
@@ -552,20 +559,20 @@ body {
           <!-- IP3M2 Section -->
           <div id="section-ip3m2" class="hidden bg-white rounded-xl border border-blue-200 overflow-hidden shadow-sm">
             <div class="section-header p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
-              <h3 class="text-md font-semibold text-blue-700 flex items-center justify-between">
+              <h3 class="text-md font-semibold text-cyan-700 flex items-center justify-between">
                 <span class="flex items-center gap-2">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   IP3M2 - Event Management Effectiveness Index
                 </span>
-                <span class="text-sm font-normal text-blue-600">Economic Impact & ROI</span>
+                <span class="text-sm font-normal text-cyan-600">Economic Impact & ROI</span>
               </h3>
             </div>
             <div class="p-5 space-y-6">
               <!-- Promotion & Outreach -->
-              <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                <h4 class="text-md font-semibold text-blue-700 mb-4">Promotion & Outreach (Media Coverage)</h4>
+              <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+                <h4 class="text-md font-semibold text-cyan-700 mb-4">Promotion & Outreach (Media Coverage)</h4>
                 <div class="space-y-4">
                   <div>
                     <label for="ip3-media-list" class="block text-sm text-slate-700 mb-1">List of Media</label>
@@ -573,14 +580,14 @@ body {
                     <p class="text-xs text-slate-500 mt-1">Requires at least 3 media outlets for 100% coverage</p>
                   </div>
                   <div class="p-3 bg-white rounded-lg border border-blue-200">
-                    <p class="text-sm text-slate-700">Percentage of Media Coverage: <span id="ip3-media-percent" class="text-blue-600 font-semibold">0%</span></p>
+                    <p class="text-sm text-slate-700">Percentage of Media Coverage: <span id="ip3-media-percent" class="text-cyan-600 font-semibold">0%</span></p>
                   </div>
                 </div>
               </div>
 
               <!-- Participation -->
-              <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                <h4 class="text-md font-semibold text-blue-700 mb-4">Participation</h4>
+              <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+                <h4 class="text-md font-semibold text-cyan-700 mb-4">Participation</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="ip3-actual-attendance" class="block text-sm text-slate-700 mb-1">Actual Attendance</label>
@@ -592,14 +599,14 @@ body {
                   </div>
                 </div>
                 <div class="mt-4 p-3 bg-white rounded-lg border border-blue-200">
-                  <p class="text-sm text-slate-700">Mark: <span id="ip3-participation-percent" class="text-blue-600 font-semibold">0%</span></p>
+                  <p class="text-sm text-slate-700">Mark: <span id="ip3-participation-percent" class="text-cyan-600 font-semibold">0%</span></p>
                   <p class="text-xs text-slate-500">(Actual Attendance / Target Attendance) × 100% (max 100%)</p>
                 </div>
               </div>
 
               <!-- Satisfaction -->
-              <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                <h4 class="text-md font-semibold text-blue-700 mb-4">Participant Satisfaction Level</h4>
+              <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+                <h4 class="text-md font-semibold text-cyan-700 mb-4">Participant Satisfaction Level</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="ip3-total-respondent" class="block text-sm text-slate-700 mb-1">Total Respondent</label>
@@ -611,14 +618,14 @@ body {
                   </div>
                 </div>
                 <div class="mt-4 p-3 bg-white rounded-lg border border-blue-200">
-                  <p class="text-sm text-slate-700">Percentages of Response Positively: <span id="ip3-satisfaction-percent" class="text-blue-600 font-semibold">0%</span></p>
+                  <p class="text-sm text-slate-700">Percentages of Response Positively: <span id="ip3-satisfaction-percent" class="text-cyan-600 font-semibold">0%</span></p>
                   <p class="text-xs text-slate-500">(Positive Respondent / Total Respondent) × 100%</p>
                 </div>
               </div>
 
               <!-- Economic Generation -->
-              <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                <h4 class="text-md font-semibold text-blue-700 mb-4">Economic Generation</h4>
+              <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+                <h4 class="text-md font-semibold text-cyan-700 mb-4">Economic Generation</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="ip3-targeted-enterpreneur-involvement" class="block text-sm text-slate-700 mb-1">No of Targeted Enterpreneur Involvement</label>
@@ -630,14 +637,14 @@ body {
                   </div>
                 </div>
                 <div class="mt-4 p-3 bg-white rounded-lg border border-blue-200">
-                  <p class="text-sm text-slate-700">ROI: <span id="ip3-roi-percent" class="text-blue-600 font-semibold">0%</span></p>
+                  <p class="text-sm text-slate-700">ROI: <span id="ip3-roi-percent" class="text-cyan-600 font-semibold">0%</span></p>
                   <p class="text-xs text-slate-500">(No of Targeted Enterpreneur Involvement - No of Actual Enterpreneur Involvement) / No of Actual Enterpreneur Involvement × 100%</p>
                 </div>
               </div>
 
               <!-- Gambar Program -->
-              <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                <h4 class="text-md font-semibold text-blue-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
+              <div class="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
+                <h4 class="text-md font-semibold text-cyan-700 mb-4">Gambar Program / Tangkap Layar Media</h4>
                 <p class="text-sm text-slate-600 mb-3">Muat naik gambar aktiviti program atau tangkapan skrin liputan media.</p>
                 <div class="flex flex-col gap-3">
                   <label for="ip3m2-images" class="block text-sm text-slate-700">Pilih satu atau lebih fail gambar (JPEG, PNG)</label>
@@ -693,9 +700,9 @@ body {
         <!-- BULETIN DAERAH Row -->
         <tr class="report-type-row">
           <td class="px-6 py-4 whitespace-nowrap font-medium text-cyan-700">BULETIN DAERAH</td>
-          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-grey-600 hover:text-cyan-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="BULETIN DAERAH">12</td>
-          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-grey-600 hover:text-cyan-800" data-district="MUKAH" data-report="BULETIN DAERAH">8</td>
-          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-grey-600 hover:text-cyan-800" data-district="DARO" data-report="BULETIN DAERAH">5</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="BULETIN DAERAH">12</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="MUKAH" data-report="BULETIN DAERAH">8</td>
+          <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="DARO" data-report="BULETIN DAERAH">5</td>
           <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="DALAT" data-report="BULETIN DAERAH">7</td>
           <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover:text-cyan-800" data-district="MATU" data-report="BULETIN DAERAH">4</td>
           <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-cyan-600 hover-text-cyan-800" data-district="TANJUNG MANIS" data-report="BULETIN DAERAH">6</td>
@@ -707,7 +714,7 @@ body {
         
         <!-- IP2M1 Row -->
         <tr class="report-type-row">
-          <td class="px-6 py-4 whitespace-nowrap font-medium text-grey-700">IP2M1</td>
+          <td class="px-6 py-4 whitespace-nowrap font-medium text-blue-700">IP2M1</td>
           <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="RESIDEN BAHAGIAN MUKAH" data-report="IP2M1">9</td>
           <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="MUKAH" data-report="IP2M1">11</td>
           <td class="stat-cell px-6 py-4 text-center text-lg font-bold text-blue-600 hover-text-blue-800" data-district="DARO" data-report="IP2M1">6</td>
@@ -979,30 +986,27 @@ async function submitForm(e) {
       roi_percent: parseFloat(document.getElementById('ip3-roi-percent')?.textContent) || 0
     };
     
-    const imageFiles = {
-      'buletin-daerah': document.getElementById('buletin-daerah-images')?.files || [],
-      'ip2m1': document.getElementById('ip2m1-images')?.files || [],
-      'ip3m2': document.getElementById('ip3m2-images')?.files || []
-    };
-
-    const images = [];
-    const selectedImages = imageFiles[selectedSection] || [];
-    for (let i = 0; i < selectedImages.length; i++) {
-        const imageData = await fileToBase64(selectedImages[i]);
-        images.push(imageData);
-    }
-
-// STORE IMAGES FOR PDF EXPORT
-lastSubmittedImages[selectedSection] = images;
-    
-    const pdfs = [];
-    if (selectedSection === 'ip2m1') {
-      const pdfFiles = document.getElementById('supporting-docs-pdf')?.files || [];
-      for (let i = 0; i < pdfFiles.length; i++) {
-        pdfs.push(await fileToBase64(pdfFiles[i]));
+      // Use the stored image data from our enhanced preview system
+      const images = [];
+      if (window.imageDataStores && window.imageDataStores[`${selectedSection}-images`]) {
+        const storedImages = window.imageDataStores[`${selectedSection}-images`];
+        for (let i = 0; i < storedImages.length; i++) {
+          const imageData = await fileToBase64(storedImages[i]);
+          images.push(imageData);
+        }
       }
-    }
-    
+
+      // STORE IMAGES FOR PDF EXPORT
+      lastSubmittedImages[selectedSection] = images;
+
+      // Handle PDF files from our enhanced store
+      const pdfs = [];
+      if (selectedSection === 'ip2m1' && window.pdfFilesStore) {
+        for (let i = 0; i < window.pdfFilesStore.length; i++) {
+          pdfs.push(await fileToBase64(window.pdfFilesStore[i]));
+        }
+      }
+          
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbziW8N-lorPwmxAX4cKdap93l6cqSJZeOtE-5hPSPGB0PXENk77iyoI-u8oqyG8f6R5mQ/exec';
     fetch(WEB_APP_URL, {
       method: 'POST',
@@ -1083,6 +1087,13 @@ function setupSectionSelection() {
 }
 
 function setupImagePreview() {
+  // Track file lists for each uploader
+  const imageDataStores = {
+    'buletin-daerah-images': [],
+    'ip2m1-images': [],
+    'ip3m2-images': []
+  };
+  
   const imageInputs = [
     { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
     { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
@@ -1091,24 +1102,131 @@ function setupImagePreview() {
   
   imageInputs.forEach(({ input, preview }) => {
     const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
-          if (!file.type.match('image.*')) return;
-          const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
+    const previewEl = document.getElementById(preview);
+    if (!inputEl || !previewEl) return;
+    
+    // Store current files for this input
+    imageDataStores[input] = [];
+    
+    inputEl.addEventListener('change', (e) => {
+      const newFiles = Array.from(e.target.files);
+      
+      // Add new files to existing ones (allow multiple selections across different times)
+      newFiles.forEach(file => {
+        // Check if file already exists (by name + size)
+        const exists = imageDataStores[input].some(existing => 
+          existing.name === file.name && existing.size === file.size
+        );
+        if (!exists && file.type.match('image.*')) {
+          imageDataStores[input].push(file);
+        }
       });
-    }
+      
+      // Refresh preview
+      renderImagePreviews(input, previewEl, imageDataStores[input]);
+      
+      // IMPORTANT: Clear the input value so the same file can be selected again if needed
+      inputEl.value = '';
+    });
   });
+  
+  // Helper function to render previews with remove buttons
+  window.renderImagePreviews = function(inputKey, previewEl, filesArray) {
+    previewEl.innerHTML = '';
+    
+    filesArray.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'preview-thumb';
+        wrapper.setAttribute('data-index', index);
+        
+        const img = document.createElement('img');
+        img.src = ev.target.result;
+        img.className = 'w-24 h-24 object-cover rounded-lg border-2 border-slate-200';
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.innerHTML = '✕';
+        removeBtn.className = 'remove-preview';
+        removeBtn.onclick = (e) => {
+          e.stopPropagation();
+          // Remove file from array
+          filesArray.splice(index, 1);
+          // Re-render previews
+          renderImagePreviews(inputKey, previewEl, filesArray);
+          // Also update the actual file input's FileList is not possible, but we keep our store
+        };
+        
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        previewEl.appendChild(wrapper);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+  
+  // Store reference globally for submit access
+  window.imageDataStores = imageDataStores;
+}
+
+function setupPDFSupportingDocs() {
+  const pdfInput = document.getElementById('supporting-docs-pdf');
+  const pdfPreviewContainer = document.createElement('div');
+  pdfPreviewContainer.id = 'pdf-preview-container';
+  pdfPreviewContainer.className = 'mt-3 flex flex-wrap gap-2';
+  
+  // Insert preview container after the PDF input
+  if (pdfInput && pdfInput.parentNode) {
+    pdfInput.parentNode.appendChild(pdfPreviewContainer);
+  }
+  
+  let pdfFilesStore = [];
+  
+  if (pdfInput) {
+    pdfInput.addEventListener('change', (e) => {
+      const newFiles = Array.from(e.target.files);
+      
+      // Add unique PDF files
+      newFiles.forEach(file => {
+        if (file.type === 'application/pdf') {
+          const exists = pdfFilesStore.some(existing => 
+            existing.name === file.name && existing.size === file.size
+          );
+          if (!exists) {
+            pdfFilesStore.push(file);
+          }
+        }
+      });
+      
+      // Render PDF previews
+      renderPDFPreviews(pdfPreviewContainer, pdfFilesStore);
+      
+      // Clear input to allow re-selecting same file if needed
+      pdfInput.value = '';
+    });
+  }
+  
+  window.renderPDFPreviews = function(container, filesArray) {
+    container.innerHTML = '';
+    filesArray.forEach((file, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'pdf-preview-item';
+      wrapper.innerHTML = `
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        <span class="pdf-name">${file.name}</span>
+        <button class="remove-preview-pdf" data-index="${index}" style="background:#ef4444;color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;">✕</button>
+      `;
+      const removeBtn = wrapper.querySelector('.remove-preview-pdf');
+      removeBtn.onclick = () => {
+        pdfFilesStore.splice(index, 1);
+        renderPDFPreviews(container, pdfFilesStore);
+      };
+      container.appendChild(wrapper);
+    });
+  };
+  
+  // Store globally for submit
+  window.pdfFilesStore = pdfFilesStore;
 }
 
 function setupPrint() {
@@ -1191,7 +1309,7 @@ function setupPrint() {
         </div>
         ${createQAField('Daerah', document.getElementById('daerah-dropdown').options[document.getElementById('daerah-dropdown').selectedIndex]?.text || '')}
         ${createQAField('Pengelola', organizerText)}
-        ${createQAField('Tempat dan Kapasiti', document.getElementById('ip1-tempat').value)}
+        ${createQAField('Tempat', document.getElementById('ip1-tempat').value)}
         ${createQAField('Objektif/Deskripsi Program', document.getElementById('ip1-objektif').value)}
         ${createQAField('Impak Program', document.getElementById('ip1-impak').value)}
         ${createQAField('Tetamu Kehormat', vipGuestText)}
@@ -1385,7 +1503,7 @@ function exportAsPDF() {
           
           <table style="width:100%;border-collapse:collapse;margin-top:15px;font-size:14px">
             <tr>
-              <td style="padding:10px 0;width:35%;font-weight:600;color:#4b5563;background:#f8fafc;border-right:1px solid #e2e8f0">Tempat & Kapasiti</td>
+              <td style="padding:10px 0;width:35%;font-weight:600;color:#4b5563;background:#f8fafc;border-right:1px solid #e2e8f0">Tempat</td>
               <td style="padding:10px 0;color:#1e293b;border-bottom:1px solid #e2e8f0">${tempat}</td>
             </tr>
             <tr>
@@ -1470,7 +1588,7 @@ function exportAsPDF() {
             <p style="margin:8px 0"><strong>Markah:</strong> <span style="color:#000;font-weight:bold;font-size:18px">${participantPercent}</span></p>
           </div>
           
-          <div style="background:linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);color:white;padding:25px;border-radius:14px;text-align:center;margin:25px 0;box-shadow:0 8px 20px rgba(6, 182, 212, 0.25)">
+          <div style="background:#267589; (135deg, #3b82f6 0%, #2563eb 100%);color:white;padding:25px;border-radius:14px;text-align:center;margin:25px 0;box-shadow:0 8px 20px rgba(6, 182, 212, 0.25)">
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:26px;margin:0 0 12px;letter-spacing:-0.5px">JUMLAH SKOR</h3>
             <p style="font-size:48px;font-weight:800;margin:0;letter-spacing:-1.5px">${totalScore}%</p>
             <p style="opacity:0.95;margin:12px 0 0;font-size:15px">(Purata: Liputan Media + Kepuasan + Penyertaan)</p>
@@ -1501,7 +1619,7 @@ function exportAsPDF() {
         </div>
         
         <div style="margin-bottom:25px">
-          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe;text-transform:uppercase;letter-spacing:0.5px">IP3M2 - INDEKS KECEKAPAN PENGURUSAN ACARA</h2>
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:bold;font-size:24px;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #267589;text-transform:uppercase;letter-spacing:0.5px">IP3M2 - INDEKS KECEKAPAN PENGURUSAN ACARA</h2>
           
           <div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:16px;margin-bottom:20px;border-radius:0 6px 6px 0">
             <h3 style="font-weight:700;color:#000;margin-bottom:10px;font-size:17px">A. Promosi & Jangkauan (Liputan Media)</h3>
@@ -1536,7 +1654,7 @@ function exportAsPDF() {
 // === ADD IMAGES SECTION (with controlled image sizes) ===
 pdfContent.innerHTML += `
   <div style="margin-top:30px">
-    <h3 style="font-size:16px;font-weight:bold;color:#1e40af;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">GAMBAR PROGRAM</h3>
+    <h3 style="font-size:16px;font-weight:bold;color:#000;margin-bottom:15px;padding-bottom:8px;border-bottom:2px solid #bfdbfe">GAMBAR PROGRAM</h3>
     <div id="pdf-images-container" style="margin-top:15px;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-start;"></div>
   </div>
   <div style="margin-top:35px;padding-top:20px;border-top:1px solid #cbd5e1;text-align:center;color:#4b5563;font-size:12px">
@@ -1545,61 +1663,30 @@ pdfContent.innerHTML += `
 `;
     document.body.appendChild(pdfContent);
 
-    // === HANDLE IMAGES ===
+    // === HANDLE IMAGES USING OUR STORED DATA ===
     const imageContainer = pdfContent.querySelector('#pdf-images-container');
-    const imageInput = document.getElementById(`${sectionId}-images`);
-    
     let imagePromises = [];
-    
-    // Check for stored images first
-    if (lastSubmittedImages && lastSubmittedImages[sectionId] && lastSubmittedImages[sectionId].length > 0) {
-      console.log('Using stored images from submission');
-      lastSubmittedImages[sectionId].forEach(imageData => {
-        const img = document.createElement('img');
-        img.src = `data:${imageData.mimeType};base64,${imageData.data}`;
-        // CONTROLLED size - not too big, not too small
-        img.style.maxWidth = '400px';  // Max width 400px
-        img.style.width = 'auto';
-        img.style.height = 'auto';
-        img.style.maxHeight = '300px';  // Max height 300px
-        img.style.marginBottom = '20px';
-        img.style.marginRight = '20px';
-        img.style.borderRadius = '8px';
-        img.style.border = '1px solid #e2e8f0';
-        img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-        img.style.display = 'inline-block';  // Allow images side by side
-        
+
+    // Use stored images from our enhanced preview system
+    const storeKey = `${sectionId}-images`;
+    if (window.imageDataStores && window.imageDataStores[storeKey] && window.imageDataStores[storeKey].length > 0) {
+      console.log('Using stored images from preview system');
+      for (const file of window.imageDataStores[storeKey]) {
         const promise = new Promise((resolve) => {
-          img.onload = () => resolve(img);
-          img.onerror = () => resolve(null);
-        });
-        imagePromises.push(promise);
-        imageContainer.appendChild(img);
-      });
-    } 
-    // Otherwise use current file input
-    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
-      console.log('Using current file input images');
-      const imageFiles = Array.from(imageInput.files);
-      imageFiles.forEach(file => {
-        if (!file.type.match('image.*')) return;
-        
-        const reader = new FileReader();
-        const promise = new Promise((resolve) => {
+          const reader = new FileReader();
           reader.onload = (e) => {
             const img = document.createElement('img');
             img.src = e.target.result;
-            // CONTROLLED size - not too big, not too small
-            img.style.maxWidth = '400px';  // Max width 400px
+            img.style.maxWidth = '400px';
             img.style.width = 'auto';
             img.style.height = 'auto';
-            img.style.maxHeight = '300px';  // Max height 300px
+            img.style.maxHeight = '300px';
             img.style.marginBottom = '20px';
             img.style.marginRight = '20px';
             img.style.borderRadius = '8px';
             img.style.border = '1px solid #e2e8f0';
             img.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-            img.style.display = 'inline-block';  // Allow images side by side
+            img.style.display = 'inline-block';
             img.onload = () => resolve(img);
             img.onerror = () => resolve(null);
             imageContainer.appendChild(img);
@@ -1607,33 +1694,37 @@ pdfContent.innerHTML += `
           reader.readAsDataURL(file);
         });
         imagePromises.push(promise);
-      });
-    }
-    // Otherwise use current file input
-    else if (imageInput && imageInput.files && imageInput.files.length > 0) {
-      console.log('Using current file input images');
-      const imageFiles = Array.from(imageInput.files).slice(0, 4);
-      imageFiles.forEach(file => {
-        if (!file.type.match('image.*')) return;
-        
-        const reader = new FileReader();
-        const promise = new Promise((resolve) => {
-          reader.onload = (e) => {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.style.width = '100%';
-            img.style.height = '150px';
-            img.style.objectFit = 'cover';
-            img.style.borderRadius = '8px';
-            img.style.border = '1px solid #e2e8f0';
-            img.onload = () => resolve(img);
-            img.onerror = () => resolve(null);
-            imageContainer.appendChild(img);
-          };
-          reader.readAsDataURL(file);
+      }
+    } 
+    // Fallback to direct file input if no stored data
+    else {
+      const imageInput = document.getElementById(`${sectionId}-images`);
+      if (imageInput && imageInput.files && imageInput.files.length > 0) {
+        const imageFiles = Array.from(imageInput.files);
+        imageFiles.forEach(file => {
+          if (!file.type.match('image.*')) return;
+          const promise = new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const img = document.createElement('img');
+              img.src = e.target.result;
+              img.style.maxWidth = '400px';
+              img.style.width = 'auto';
+              img.style.height = 'auto';
+              img.style.maxHeight = '300px';
+              img.style.marginBottom = '20px';
+              img.style.marginRight = '20px';
+              img.style.borderRadius = '8px';
+              img.style.border = '1px solid #e2e8f0';
+              img.onload = () => resolve(img);
+              img.onerror = () => resolve(null);
+              imageContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+          });
+          imagePromises.push(promise);
         });
-        imagePromises.push(promise);
-      });
+      }
     }
     
     if (imagePromises.length === 0) {
@@ -1869,34 +1960,6 @@ function updateTotals() {
     });
   });
 
-  // Setup image preview
-  const imageInputs = [
-    { input: 'buletin-daerah-images', preview: 'buletin-daerah-image-preview' },
-    { input: 'ip2m1-images', preview: 'ip2m1-image-preview' },
-    { input: 'ip3m2-images', preview: 'ip3m2-image-preview' }
-  ];
-  
-  imageInputs.forEach(({ input, preview }) => {
-    const inputEl = document.getElementById(input);
-    if (inputEl) {
-      inputEl.addEventListener('change', (e) => {
-        const previewEl = document.getElementById(preview);
-        previewEl.innerHTML = '';
-        Array.from(e.target.files).forEach(file => {
-          if (!file.type.match('image.*')) return;
-          const reader = new FileReader();
-          reader.onload = ev => {
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.className = 'w-full h-24 object-cover rounded-lg border border-slate-200';
-            previewEl.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-    }
-  });
-
   // Form submission
   document.getElementById('main-form')?.addEventListener('submit', submitForm);
   
@@ -1914,8 +1977,14 @@ function updateTotals() {
     exportPdfBtn.addEventListener('click', exportAsPDF);
   }
 
-  // Initialize calculations
-  updateIP2M1();
-  updateIP3M2();
+// Initialize calculations
+updateIP2M1();
+updateIP3M2();
+
+// Initialize the enhanced multi-file upload systems (ONCE)
+setupImagePreview();
+setupPDFSupportingDocs();
 });
 </script>
+
+
